@@ -1,0 +1,19 @@
+{
+  "name": "node-git-server",
+  "version": "0.0.0",
+  "description": "a git server built in node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielcsapo/node-git-server.git"
+  },
+  "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gabrielcsapo/node-git-server/issues"
+  },
+  "homepage": "https://github.com/gabrielcsapo/node-git-server#readme"
+}
