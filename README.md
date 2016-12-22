@@ -2,7 +2,7 @@
 
 A almost zero dependency git-server built with nodejs
 
-[![Build Status](https://secure.travis-ci.org/gabrielcsapo/node-git-server.png)](http://travis-ci.org/gabrielcsapo/node-git-server)
+[![Build Status](https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master)](https://travis-ci.org/gabrielcsapo/node-git-server)
 [![Coverage Status](https://coveralls.io/repos/github/gabrielcsapo/node-git-server/badge.svg?branch=master)](https://coveralls.io/github/gabrielcsapo/node-git-server?branch=master)
 
 This library makes it super easy to set up custom git push deploy logic.
