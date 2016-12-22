@@ -4,7 +4,8 @@
   "description": "a git server built in node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/tap test/*.js --coverage",
+    "coverage": "./node_modules/.bin/tap --coverage-report=lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,18 @@
   "bugs": {
     "url": "https://github.com/gabrielcsapo/node-git-server/issues"
   },
-  "homepage": "https://github.com/gabrielcsapo/node-git-server#readme"
+  "homepage": "https://github.com/gabrielcsapo/node-git-server#readme",
+  "dependencies": {
+    "http-duplex": "~0.0.2",
+    "through": "~2.2.7"
+  },
+  "devDependencies": {
+    "async": "^2.1.4",
+    "coveralls": "^2.11.15",
+    "tap": "^8.0.1",
+    "tape": "^4.6.3"
+  },
+  "engine": {
+      "node": "> 4 < 6"
+  }
 }
