@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var http = require('http');
 var inherits = require('util').inherits
+var handle = require('./lib/handle');
 
 var spawn = require('child_process').spawn;
 var EventEmitter = require('events').EventEmitter;
@@ -80,4 +81,9 @@ Git.prototype.create = function (repo, cb) {
     }
 };
 
-Git.prototype.handle = require('./lib/handle');
+Git.prototype.handle = handle;
+Git.prototype.listen = function(port, callback) {
+    http.createServer(function (req, res) {
+        handle(req, res);
+    }).listen(port, callback);
+}

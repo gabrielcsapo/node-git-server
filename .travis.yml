@@ -4,7 +4,7 @@ before_install:
   - "npm install npm@4 -g"
 language: node_js
 script:
-  - npm run test
+  - npm run coverage
 node_js:
   - "4"
   - "5"
