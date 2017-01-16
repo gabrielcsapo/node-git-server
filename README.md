@@ -2,8 +2,13 @@
 
 A almost zero dependency git-server built with nodejs
 
+[![Npm Version](https://img.shields.io/npm/v/github-metrics.svg)](https://www.npmjs.com/package/node-git-server)
 [![Build Status](https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master)](https://travis-ci.org/gabrielcsapo/node-git-server)
 [![Coverage Status](https://coveralls.io/repos/github/gabrielcsapo/node-git-server/badge.svg?branch=master)](https://coveralls.io/github/gabrielcsapo/node-git-server?branch=master)
+[![Dependency Status](https://david-dm.org/gabrielcsapo/node-git-server.svg)](https://david-dm.org/gabrielcsapo/node-git-server)
+[![devDependency Status](https://david-dm.org/gabrielcsapo/node-git-server/dev-status.svg)](https://david-dm.org/gabrielcsapo/node-git-server#info=devDependencies)
+[![npm](https://img.shields.io/npm/dt/node-git-server.svg)]()
+[![npm](https://img.shields.io/npm/dm/node-git-server.svg)]()
 
 This library makes it super easy to set up custom git push deploy logic.
 
