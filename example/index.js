@@ -1,7 +1,6 @@
 var path = require('path');
 var gitserver = require('../');
 var repos = gitserver(path.resolve(__dirname, 'tmp'), { autoCreate : true });
-var http = require('http');
 var port = process.env.PORT || 7005;
 
 repos.on('push', function (push) {
@@ -16,8 +15,6 @@ repos.on('fetch', function (fetch) {
     fetch.accept();
 });
 
-http.createServer(function(request, response){
-    repos.handle(request, response);
-}).listen(port, function() {
+repos.listen(port, function() {
     console.log(`node-git-server running at http://localhost:${port}`)
 });
