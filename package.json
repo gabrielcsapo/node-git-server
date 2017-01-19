@@ -1,6 +1,6 @@
 {
   "name": "node-git-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a git server built in node",
   "main": "index.js",
   "scripts": {
