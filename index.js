@@ -83,7 +83,12 @@ Git.prototype.create = function (repo, cb) {
 
 Git.prototype.handle = handle;
 Git.prototype.listen = function(port, callback) {
-    http.createServer(function (req, res) {
-        handle(req, res);
-    }).listen(port, callback);
+    var self = this;
+    this.server = http.createServer(function (req, res) {
+        self.handle(req, res);
+    });
+    this.server.listen(port, callback);
+}
+Git.prototype.close = function() {
+    this.server.close();
 }

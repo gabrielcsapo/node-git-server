@@ -34,7 +34,7 @@ test('create git server via listen() command', function (t) {
         },
     ], function(err) {
         t.ok(!err, 'no errors');
-        server.close();
+        repos.close();
         t.end();
     })
 });
