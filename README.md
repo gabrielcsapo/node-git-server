@@ -2,7 +2,7 @@
 
 A almost zero dependency git-server built with nodejs
 
-[![Npm Version](https://img.shields.io/npm/v/github-metrics.svg)](https://www.npmjs.com/package/node-git-server)
+[![Npm Version](https://img.shields.io/npm/v/node-git-server.svg)](https://www.npmjs.com/package/node-git-server)
 [![Build Status](https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master)](https://travis-ci.org/gabrielcsapo/node-git-server)
 [![Coverage Status](https://coveralls.io/repos/github/gabrielcsapo/node-git-server/badge.svg?branch=master)](https://coveralls.io/github/gabrielcsapo/node-git-server?branch=master)
 [![Dependency Status](https://david-dm.org/gabrielcsapo/node-git-server.svg)](https://david-dm.org/gabrielcsapo/node-git-server)
