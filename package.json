@@ -4,7 +4,7 @@
   "description": "a git server built in node",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/*.js",
+    "test": "tape test/*.js | tap-diff",
     "coverage": "tap test/*.js --coverage"
   },
   "repository": {
@@ -25,6 +25,7 @@
     "async": "^2.1.4",
     "coveralls": "^2.11.16",
     "tap": "^10.1.0",
+    "tap-diff": "^0.1.1",
     "tape": "^4.6.3"
   },
   "engine": {
