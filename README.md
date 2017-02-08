@@ -245,7 +245,7 @@ This library is aimed to have a zero dependency footprint. If you are reading th
 
 # thanks
 
-This is a hard fork from [pushover](https://github.com/substack/pushover) and [substack](https://github.com/substack). Their work has helped make this library great!
+This is a hard fork from [pushover](https://github.com/substack/pushover). 
 
 # license
 
