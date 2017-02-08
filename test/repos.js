@@ -1,5 +1,5 @@
 var test = require('tape');
-var pushover = require('../');
+var gitserver = require('../');
 
 var fs = require('fs');
 var path = require('path');
@@ -23,7 +23,7 @@ test('create, push to, and clone a repo', function (t) {
     fs.mkdirSync(srcDir, 0700);
     fs.mkdirSync(dstDir, 0700);
 
-    var repos = pushover(repoDir, { autoCreate : true });
+    var repos = gitserver(repoDir, { autoCreate : true });
     var port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
     var server = http.createServer(function (req, res) {
         repos.handle(req, res);
@@ -153,4 +153,30 @@ test('create, push to, and clone a repo', function (t) {
         tag.accept();
         firstTag = false;
     });
+});
+
+test('repos.list', function(t) {
+  const workingRepoDir = path.resolve(__dirname, 'fixtures', 'server', 'tmp');
+  const notWorkingRepoDir = path.resolve(__dirname, 'fixtures', 'server', 'temp');
+  t.plan(2);
+
+  t.test('should return back with one directory in server', function(t) {
+      const repos = gitserver(workingRepoDir, { autoCreate : true });
+      repos.list(function(err, results) {
+        t.ok(err === null, 'there is no error');
+        t.deepEqual([ 'test.git' ], results);
+        t.end();
+      });
+  });
+
+  t.test('should return back with one directory in server', function(t) {
+      const repos = gitserver(notWorkingRepoDir, { autoCreate : true });
+      repos.list(function(err, results) {
+        t.ok(err !== null, 'there is an error');
+        t.ok(results === undefined);
+        t.end();
+      });
+  });
+
+  t.end();
 });

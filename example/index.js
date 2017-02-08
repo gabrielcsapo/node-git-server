@@ -17,4 +17,9 @@ repos.on('fetch', function (fetch) {
 
 repos.listen(port, function() {
     console.log(`node-git-server running at http://localhost:${port}`)
+    setInterval(function() {
+      repos.list(function(err, result) {
+          console.log(result);
+      });
+    }, 1000)
 });

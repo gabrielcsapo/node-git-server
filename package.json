@@ -23,8 +23,8 @@
   },
   "devDependencies": {
     "async": "^2.1.4",
-    "coveralls": "^2.11.15",
-    "tap": "^9.0.3",
+    "coveralls": "^2.11.16",
+    "tap": "^10.1.0",
     "tape": "^4.6.3"
   },
   "engine": {
