@@ -169,7 +169,7 @@ test('repos.list', function(t) {
       });
   });
 
-  t.test('should return back with one directory in server', function(t) {
+  t.test('should return back error directory does not exist', function(t) {
       const repos = gitserver(notWorkingRepoDir, { autoCreate : true });
       repos.list(function(err, results) {
         t.ok(err !== null, 'there is an error');
