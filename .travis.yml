@@ -5,6 +5,7 @@ before_install:
 language: node_js
 script:
   - npm run coverage
+  - npm run coverage-analytics
 node_js:
   - "4"
   - "5"

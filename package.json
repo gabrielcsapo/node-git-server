@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.js | tap-diff",
-    "coverage": "tap test/*.js --coverage"
+    "coverage": "tap test/*.js --coverage",
+    "coverage-analytics": "tap test/**/*.js --coverage-report=text-lcov | node-coverage-cli --url https://node-coverage-server.herokuapp.com"
   },
   "repository": {
     "type": "git",
@@ -23,8 +24,8 @@
   },
   "devDependencies": {
     "async": "^2.1.4",
-    "coveralls": "^2.11.16",
-    "tap": "^10.1.0",
+    "node-coverage-server": "^0.1.1",
+    "tap": "^10.1.1",
     "tap-diff": "^0.1.1",
     "tape": "^4.6.3"
   },
