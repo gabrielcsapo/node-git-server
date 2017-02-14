@@ -1,0 +1,99 @@
+body {
+  padding-bottom: 175px;
+}
+
+.wrapper {
+  width: 100%;
+  height: auto;
+  padding-bottom: 20px;
+  color: white;
+  background-color: rgba(33, 136, 182, 0.79);
+  box-shadow: 0px 10px 0px 0px rgba(30, 125, 167, 0.06);
+  text-align: center;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+.wrapper > .main {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.footer {
+  height: 175px;
+  width: 100%;
+  color: white;
+  background-color: #2188b6;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  box-shadow: 0px -10px 0px 0px rgba(30, 125, 167, 0.06);
+}
+.footer > .footer-wrapper {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.btn {
+  box-sizing: border-box;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  display: inline-block;
+  height: 63px;
+  letter-spacing: 0.48px;
+  text-align: center;
+  text-decoration: none;
+  text-size-adjust: 100%;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  column-rule-color: rgb(255, 255, 255);
+  perspective-origin: 108px 31.5px;
+  transform-origin: 108px 31.5px;
+  user-select: none;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 4.8px 4.8px 4.8px 4.8px;
+  font: normal normal bold normal 19.2px / 24px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  outline: rgb(255, 255, 255) none 0px;
+  padding: 18px 36px;
+  margin: 5px;
+}
+.btn:hover {
+  box-sizing: border-box;
+  color: rgb(33, 136, 182);
+  cursor: pointer;
+  display: inline-block;
+  height: 63px;
+  letter-spacing: 0.48px;
+  text-align: center;
+  text-decoration: none;
+  text-size-adjust: 100%;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  column-rule-color: rgb(33, 136, 182);
+  perspective-origin: 108px 31.5px;
+  transform-origin: 108px 31.5px;
+  user-select: none;
+  background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 4.8px 4.8px 4.8px 4.8px;
+  font: normal normal bold normal 19.2px / 24px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  outline: rgb(33, 136, 182) none 0px;
+  padding: 18px 36px;
+}
+blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 17.5px;
+  border-left: 5px solid #eee;
+}
+small {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px
+}

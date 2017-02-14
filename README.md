@@ -27,23 +27,23 @@ npm install node-git-server
 # example
 
 ```javascript
-var gitserver = require('node-git-server');
-var repos = gitserver('/tmp/repos');
-var port = process.env.PORT || 7005;
+const gitserver = require('node-git-server');
+const repos = gitserver('/tmp/repos');
+const port = process.env.PORT || 7005;
 
-repos.on('push', function (push) {
+repos.on('push', (push) => {
     console.log('push ' + push.repo + '/' + push.commit
         + ' (' + push.branch + ')'
     );
     push.accept();
 });
 
-repos.on('fetch', function (fetch) {
+repos.on('fetch', (fetch) => {
     console.log('fetch ' + fetch.commit);
     fetch.accept();
 });
 
-repos.listen(port, function() {
+repos.listen(port, () => {
     console.log(`node-git-server running at http://localhost:${port}`)
 });
 ```
