@@ -1,115 +1,114 @@
-var test = require('tape');
-var pushover = require('../');
+const test = require('tape');
+const fs = require('fs');
+const path = require('path');
+const spawn = require('child_process').spawn;
+const http = require('http');
+const async = require('async');
 
-var fs = require('fs');
-var path = require('path');
+const gitserver = require('../');
 
-var spawn = require('child_process').spawn;
-var http = require('http');
-
-var async = require('async');
-
-var repoDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-var srcDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-var dstDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-var targetDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
+const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+const targetDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
 fs.mkdirSync(repoDir, 0700);
 fs.mkdirSync(srcDir, 0700);
 fs.mkdirSync(dstDir, 0700);
 fs.mkdirSync(targetDir, 0700);
 
-var repos;
-var server = http.createServer(function (req, res) {
+let repos;
+
+const server = http.createServer((req, res) => {
     repos.handle(req, res);
 });
 
 test(function (t) {
-    server.listen(0, function () {
+    server.listen(0, () => {
         setTimeout(t.end.bind(t), 1000);
     });
 });
 
-test('clone into programatic directories', function (t) {
+test('clone into programatic directories', (t) => {
     t.plan(21);
 
-    repos = pushover(function (dir) {
+    repos = gitserver((dir) => {
         t.equal(dir, 'doom.git');
         return path.join(targetDir, dir);
     });
-    var port = server.address().port;
+    const port = server.address().port;
 
     process.chdir(srcDir);
     async.waterfall([
-        function (callback) {
+        (callback) => {
             spawn('git', [ 'init' ])
-            .on('exit', function (code) {
+            .on('exit', (code) => {
                 t.equal(code, 0);
                 callback();
             });
         },
-        function (callback) {
-            fs.writeFile(srcDir + '/a.txt', 'abcd', function(err) {
+        (callback) => {
+            fs.writeFile(srcDir + '/a.txt', 'abcd', (err) => {
                 t.ok(!err, 'no error on write');
                 callback();
             });
         },
-        function (callback) {
+        (callback) => {
             spawn('git', [ 'add', 'a.txt' ], {
                 cwd: srcDir
             })
-            .on('exit', function (code) {
+            .on('exit', (code) => {
                 t.equal(code, 0);
                 callback();
             });
         },
-        function (callback) {
+        (callback) => {
             spawn('git', [ 'commit', '-am', 'a!!' ], {
                 cwd: srcDir
             })
-            .on('exit', function (code) {
+            .on('exit', (code) => {
                 t.equal(code, 0);
                 callback();
             });
         },
-        function (callback) {
-            var ps = spawn('git', [
+        (callback) => {
+            spawn('git', [
                 'push', 'http://localhost:' + port + '/doom.git', 'master'
             ], {
                 cwd: srcDir
             })
-            .on('exit', function (code) {
+            .on('exit', (code) => {
                 t.equal(code, 0);
                 callback();
             });
         },
-        function (callback) {
+        (callback) => {
             process.chdir(dstDir);
             spawn('git', [ 'clone', 'http://localhost:' + port + '/doom.git' ])
-                .on('exit', function (code) {
+                .on('exit', (code) => {
                     t.equal(code, 0);
                     callback();
                 });
         },
-        function (callback) {
-            fs.stat(dstDir + '/doom/a.txt', function (ex) {
+        (callback) => {
+            fs.stat(dstDir + '/doom/a.txt', (ex) => {
                 t.ok(!ex, 'a.txt exists');
                 callback();
-            })
+            });
         },
-        function (callback) {
-            fs.stat(targetDir + '/doom.git/HEAD', function (ex) {
+        (callback) => {
+            fs.stat(targetDir + '/doom.git/HEAD', (ex) => {
                 t.ok(!ex, 'INFO exists');
                 callback();
-            })
+            });
         }
-    ], function(err) {
+    ], (err) => {
         t.ok(!err, 'no errors');
         server.close();
         t.end();
-    })
+    });
 
-    repos.on('push', function (push) {
+    repos.on('push', (push) => {
         t.equal(push.repo, 'doom.git');
         push.accept();
     });

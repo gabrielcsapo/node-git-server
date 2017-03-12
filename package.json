@@ -4,6 +4,7 @@
   "description": "a git server built in node",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "tape test/*.js | tap-diff",
     "coverage": "tap test/*.js --coverage",
     "coverage-analytics": "tap test/**/*.js --coverage-report=text-lcov | node-coverage-cli --url https://node-coverage-server.herokuapp.com"
@@ -30,6 +31,6 @@
     "tape": "^4.6.3"
   },
   "engine": {
-    "node": "> 4 < 7"
+    "node": ">= 4"
   }
 }

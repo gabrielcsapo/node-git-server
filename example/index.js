@@ -1,25 +1,24 @@
-var path = require('path');
-var gitserver = require('../');
-var repos = gitserver(path.resolve(__dirname, 'tmp'), { autoCreate : true });
-var port = process.env.PORT || 7005;
+const path = require('path');
 
-repos.on('push', function (push) {
-    console.log('push ' + push.repo + '/' + push.commit
-        + ' (' + push.branch + ')'
-    );
+const gitserver = require('../');
+const repos = gitserver(path.resolve(__dirname, 'tmp'), { autoCreate : true });
+const port = process.env.PORT || 7005;
+
+repos.on('push', (push) => {
+    console.log(`push ${push.repo} / ${push.commit} ( ${push.branch} )`); // eslint-disable-line
     push.accept();
 });
 
-repos.on('fetch', function (fetch) {
-    console.log('fetch ' + fetch.repo + '/' + fetch.commit);
+repos.on('fetch', (fetch) => {
+    console.log('fetch ' + fetch.repo + '/' + fetch.commit); // eslint-disable-line
     fetch.accept();
 });
 
-repos.listen(port, function() {
-    console.log(`node-git-server running at http://localhost:${port}`)
-    setInterval(function() {
-      repos.list(function(err, result) {
-          console.log(result);
+repos.listen(port, () => {
+    console.log(`node-git-server running at http://localhost:${port}`); // eslint-disable-line
+    setInterval(() => {
+      repos.list((err, result) => {
+          console.log(result); // eslint-disable-line
       });
-    }, 1000)
+    }, 1000);
 });

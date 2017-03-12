@@ -1,135 +1,135 @@
-var test = require('tape');
-var gitserver = require('../');
+const test = require('tape');
+const fs = require('fs');
+const path = require('path');
+const exists = fs.exists || path.exists;
+const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
+const http = require('http');
+const async = require('async');
 
-var fs = require('fs');
-var path = require('path');
-var exists = fs.exists || path.exists;
+const gitserver = require('../');
 
-var spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
-var http = require('http');
-
-var async = require('async');
-
-test('create, push to, and clone a repo', function (t) {
+test('create, push to, and clone a repo', (t) => {
     t.plan(28);
 
-    var repoDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-    var srcDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-    var dstDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-    var lastCommit;
+    const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+    const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+    const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+    let lastCommit;
 
     fs.mkdirSync(repoDir, 0700);
     fs.mkdirSync(srcDir, 0700);
     fs.mkdirSync(dstDir, 0700);
 
-    var repos = gitserver(repoDir, { autoCreate : true });
-    var port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
-    var server = http.createServer(function (req, res) {
+    const repos = gitserver(repoDir, {
+        autoCreate: true
+    });
+    const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
+    const server = http.createServer((req, res) => {
         repos.handle(req, res);
     });
     server.listen(port);
 
     process.chdir(srcDir);
     async.waterfall([
-        function (callback) {
-            repos.create('doom', function() {
-                callback();
-            })
-        },
-        function (callback) {
-            spawn('git', [ 'init' ])
-            .on('exit', function (code) {
-                t.equal(code, 0);
+        (callback) => {
+            repos.create('doom', () => {
                 callback();
             });
         },
-        function (callback) {
-            fs.writeFile(srcDir + '/a.txt', 'abcd', function(err) {
-                t.ok(!err, 'no error on write');
-                callback();
-            });
-        },
-        function (callback) {
-            spawn('git', [ 'add', 'a.txt' ])
-            .on('exit', function (code) {
-                t.equal(code, 0);
-                callback();
-            });
-        },
-        function (callback) {
-            spawn('git', [ 'commit', '-am', 'a!!' ])
-            .on('exit', function (code) {
-                t.equal(code, 0);
-                callback();
-            });
-        },
-        function (callback) {
-            spawn('git', ['tag', '0.0.1'])
-            .on('exit', function (code) {
-                t.equal(code, 0);
-                callback();
-            });
-        },
-        function (callback) {
-            fs.writeFile(srcDir + '/a.txt', 'efgh', function(err) {
-                t.ok(!err, 'no error on write');
-                callback();
-            });
-        },
-        function (callback) {
-            spawn('git', [ 'add', 'a.txt' ])
-            .on('exit', function (code) {
-                t.equal(code, 0);
-                callback();
-            });
-        },
-        function (callback) {
-            spawn('git', [ 'commit', '-am', 'a!!' ])
-            .on('exit', function () {
-                exec('git log | head -n1', function (err, stdout) {
-                    lastCommit = stdout.split(/\s+/)[1];
+        (callback) => {
+            spawn('git', ['init'])
+                .on('exit', (code) => {
+                    t.equal(code, 0);
                     callback();
                 });
+        },
+        (callback) => {
+            fs.writeFile(srcDir + '/a.txt', 'abcd', (err) => {
+                t.ok(!err, 'no error on write');
+                callback();
             });
         },
-        function (callback) {
+        (callback) => {
+            spawn('git', ['add', 'a.txt'])
+                .on('exit', (code) => {
+                    t.equal(code, 0);
+                    callback();
+                });
+        },
+        (callback) => {
+            spawn('git', ['commit', '-am', 'a!!'])
+                .on('exit', (code) => {
+                    t.equal(code, 0);
+                    callback();
+                });
+        },
+        (callback) => {
+            spawn('git', ['tag', '0.0.1'])
+                .on('exit', (code) => {
+                    t.equal(code, 0);
+                    callback();
+                });
+        },
+        (callback) => {
+            fs.writeFile(srcDir + '/a.txt', 'efgh', (err) => {
+                t.ok(!err, 'no error on write');
+                callback();
+            });
+        },
+        (callback) => {
+            spawn('git', ['add', 'a.txt'])
+                .on('exit', (code) => {
+                    t.equal(code, 0);
+                    callback();
+                });
+        },
+        (callback) => {
+            spawn('git', ['commit', '-am', 'a!!'])
+                .on('exit', () => {
+                    exec('git log | head -n1', (err, stdout) => {
+                        lastCommit = stdout.split(/\s+/)[1];
+                        callback();
+                    });
+                });
+        },
+        (callback) => {
             spawn('git', ['tag', '0.0.2'])
-            .on('exit', function (code) {
-                t.equal(code, 0);
-                callback();
-            });
+                .on('exit', (code) => {
+                    t.equal(code, 0);
+                    callback();
+                });
         },
-        function (callback) {
+        (callback) => {
             spawn('git', [
-                'push', '--tags', 'http://localhost:' + port + '/doom', 'master'
-            ])
-            .on('exit', function (code) {
-                t.equal(code, 0);
-                callback();
-            });
+                    'push', '--tags', 'http://localhost:' + port + '/doom', 'master'
+                ])
+                .on('exit', (code) => {
+                    t.equal(code, 0);
+                    callback();
+                });
         },
-        function (callback) {
+        (callback) => {
             process.chdir(dstDir);
-            spawn('git', [ 'clone', 'http://localhost:' + port + '/doom' ])
-            .on('exit', function (code) {
-                t.equal(code, 0);
-                callback();
-            });
+            spawn('git', ['clone', 'http://localhost:' + port + '/doom'])
+                .on('exit', (code) => {
+                    t.equal(code, 0);
+                    callback();
+                });
         },
-        function (callback) {
-            exists(dstDir + '/doom/a.txt', function (ex) {
+        (callback) => {
+            exists(dstDir + '/doom/a.txt', (ex) => {
                 t.ok(ex, 'a.txt exists');
                 callback();
-            })
+            });
         }
-    ], function(err) {
+    ], (err) => {
         t.ok(!err, 'no errors');
         server.close();
         t.end();
-    })
+    });
 
-    repos.on('push', function (push) {
+    repos.on('push', (push) => {
         t.equal(push.repo, 'doom', 'repo name');
         t.equal(push.commit, lastCommit, 'commit ok');
         t.equal(push.branch, 'master', 'master branch');
@@ -142,9 +142,9 @@ test('create, push to, and clone a repo', function (t) {
     });
 
     var firstTag = true;
-    repos.on('tag', function (tag) {
+    repos.on('tag', (tag) => {
         t.equal(tag.repo, 'doom', 'repo name');
-        t.equal(tag.version, '0.0.' + (firstTag? 1 : 2), 'tag received');
+        t.equal(tag.version, '0.0.' + (firstTag ? 1 : 2), 'tag received');
 
         t.equal(tag.headers.host, 'localhost:' + port, 'http host');
         t.equal(tag.method, 'POST', 'is a post');
@@ -155,28 +155,33 @@ test('create, push to, and clone a repo', function (t) {
     });
 });
 
-test('repos.list', function(t) {
-  const workingRepoDir = path.resolve(__dirname, 'fixtures', 'server', 'tmp');
-  const notWorkingRepoDir = path.resolve(__dirname, 'fixtures', 'server', 'temp');
-  t.plan(2);
+test('repos.list', (t) => {
+    t.plan(2);
 
-  t.test('should return back with one directory in server', function(t) {
-      const repos = gitserver(workingRepoDir, { autoCreate : true });
-      repos.list(function(err, results) {
-        t.ok(err === null, 'there is no error');
-        t.deepEqual([ 'test.git' ], results);
-        t.end();
-      });
-  });
+    const workingRepoDir = path.resolve(__dirname, 'fixtures', 'server', 'tmp');
+    const notWorkingRepoDir = path.resolve(__dirname, 'fixtures', 'server', 'temp');
 
-  t.test('should return back error directory does not exist', function(t) {
-      const repos = gitserver(notWorkingRepoDir, { autoCreate : true });
-      repos.list(function(err, results) {
-        t.ok(err !== null, 'there is an error');
-        t.ok(results === undefined);
-        t.end();
-      });
-  });
+    t.test('should return back with one directory in server', (t) => {
+        const repos = gitserver(workingRepoDir, {
+            autoCreate: true
+        });
+        repos.list((err, results) => {
+            t.ok(err === null, 'there is no error');
+            t.deepEqual(['test.git'], results);
+            t.end();
+        });
+    });
 
-  t.end();
+    t.test('should return back error directory does not exist', (t) => {
+        const repos = gitserver(notWorkingRepoDir, {
+            autoCreate: true
+        });
+        repos.list((err, results) => {
+            t.ok(err !== null, 'there is an error');
+            t.ok(results === undefined);
+            t.end();
+        });
+    });
+
+    t.end();
 });
