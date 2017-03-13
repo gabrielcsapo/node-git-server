@@ -12,7 +12,7 @@ const gitserver = require('../');
 test('create, push to, and clone a repo', (t) => {
     t.plan(12);
 
-    let lastCommit;
+    var lastCommit;
 
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;

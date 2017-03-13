@@ -17,7 +17,7 @@ fs.mkdirSync(srcDir, 0700);
 fs.mkdirSync(dstDir, 0700);
 fs.mkdirSync(targetDir, 0700);
 
-let repos;
+var repos;
 
 const server = http.createServer((req, res) => {
     repos.handle(req, res);

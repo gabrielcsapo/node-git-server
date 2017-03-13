@@ -21,7 +21,7 @@ const gitserver = require('../');
 test('create, push to, and clone a repo', (t) => {
     t.plan(13);
 
-    let lastCommit;
+    var lastCommit;
 
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
@@ -93,7 +93,7 @@ test('create, push to, and clone a repo', (t) => {
                 t.equal(code, 128);
                 callback();
             });
-            let data = '';
+            var data = '';
             glog.stderr.on('data', (buf) => data += buf );
             glog.stderr.on('end', () => {
                 const res = /fatal: bad default revision 'HEAD'/.test(data) || /fatal: your current branch 'master' does not have any commits yet/.test(data);

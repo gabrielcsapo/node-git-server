@@ -15,7 +15,7 @@ test('create, push to, and clone a repo', (t) => {
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
-    let lastCommit;
+    var lastCommit;
 
     fs.mkdirSync(repoDir, 0700);
     fs.mkdirSync(srcDir, 0700);
