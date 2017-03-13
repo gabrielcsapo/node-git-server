@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <title>node-git-server</title>
-    <link href="./normalize.css" rel="stylesheet" type="text/css" />
-    <link href="./main.css" rel="stylesheet" type="text/css" />
-    <link href="./default.css" rel="stylesheet" type="text/css" />
-    <script src="./highlight.js"></script>
-    <script>(function() {
-      hljs.initHighlightingOnLoad();
-    }());</script>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <title>node-git-server</title>
+        <link href="./normalize.css" rel="stylesheet" type="text/css"/>
+        <link href="./main.css" rel="stylesheet" type="text/css"/>
+        <link href="./default.css" rel="stylesheet" type="text/css"/>
+        <script src="./highlight.js"></script>
+        <script>
+            (function () {
+                hljs.initHighlightingOnLoad();
+            }());
+        </script>
+    </head>
 
-<body>
-    <section class="wrapper">
-        <section class="main">
-            <br>
-            <h1> node-git-server </h1>
-            <h3><i> An almost zero dependency git-server built with `nodejs` ⚙</i></h3>
-            <p>
-                <a href="https://www.npmjs.com/package/node-git-server"><img src="https://img.shields.io/npm/v/node-git-server.svg" alt="Npm Version" /></a>
-                <a href="https://david-dm.org/gabrielcsapo/node-git-server"><img src="https://david-dm.org/gabrielcsapo/node-git-server.svg" alt="Dependency Status" /></a>
-                <a href="https://david-dm.org/gabrielcsapo/node-git-server#info=devDependencies"><img src="https://david-dm.org/gabrielcsapo/node-git-server/dev-status.svg" alt="devDependency Status" /></a>
-                <a href="https://travis-ci.org/gabrielcsapo/node-git-server"><img src="https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master" alt="Build Status" /></a>
-                <a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm" /></a>
-                <a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm" /></a>
-            </p>
-            <a href="https://github.com/gabrielcsapo/node-git-server" class="btn"> Source </a>
-            <a href="https://github.com/gabrielcsapo/node-git-server/issues" class="btn"> Contribute </a>
-        </section>
-        <br/>
-        <h3><b>Usage</b></h3>
-        <pre>
+    <body>
+        <section class="wrapper">
+            <section class="main">
+                <br>
+                <h1>
+                    node-git-server
+                </h1>
+                <h3>
+                    <i>
+                        An almost zero dependency git-server built with `nodejs` ⚙</i>
+                </h3>
+                <p>
+                    <a href="https://www.npmjs.com/package/node-git-server"><img src="https://img.shields.io/npm/v/node-git-server.svg" alt="Npm Version"/></a>
+                    <a href="https://david-dm.org/gabrielcsapo/node-git-server"><img src="https://david-dm.org/gabrielcsapo/node-git-server.svg" alt="Dependency Status"/></a>
+                    <a href="https://david-dm.org/gabrielcsapo/node-git-server#info=devDependencies"><img src="https://david-dm.org/gabrielcsapo/node-git-server/dev-status.svg" alt="devDependency Status"/></a>
+                    <a href="https://travis-ci.org/gabrielcsapo/node-git-server"><img src="https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master" alt="Build Status"/></a>
+                    <a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm"/></a>
+                    <a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm"/></a>
+                </p>
+                <a href="https://github.com/gabrielcsapo/node-git-server" class="btn">
+                    Source
+                </a>
+                <a href="https://github.com/gabrielcsapo/node-git-server/issues" class="btn">
+                    Contribute
+                </a>
+            </section>
+            <br/>
+            <h3>
+                <b>Usage</b>
+            </h3>
+            <pre>
           <code class="javascript" style="width:700px;text-align:left;margin:0 auto;padding:10px;border-radius:5px;">
 const gitserver = require('node-git-server');
 const repos = gitserver('/tmp/repos');
@@ -55,7 +68,7 @@ repos.listen(port, () => {
 });
           </code>
         </pre>
-    </section>
-</body>
+        </section>
+    </body>
 
 </html>
