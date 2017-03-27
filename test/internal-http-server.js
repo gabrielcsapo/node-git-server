@@ -1,40 +1,38 @@
-var test = require('tape');
-var pushover = require('../');
+const test = require('tape');
+const fs = require('fs');
+const spawn = require('child_process').spawn;
+const async = require('async');
 
-var fs = require('fs');
+const gitserver = require('../');
 
-var spawn = require('child_process').spawn;
-
-var async = require('async');
-
-test('create git server via listen() command', function (t) {
+test('create git server via listen() command', (t) => {
     t.plan(2);
 
-    var repoDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-    var srcDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-    var dstDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
+    const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+    const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+    const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
     fs.mkdirSync(repoDir, 0700);
     fs.mkdirSync(srcDir, 0700);
     fs.mkdirSync(dstDir, 0700);
 
-    var repos = pushover(repoDir);
-    var port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
-    repos.listen(port)
+    const repos = gitserver(repoDir);
+    const port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
+    repos.listen(port);
 
     process.chdir(srcDir);
     async.waterfall([
-        function (callback) {
+        (callback) => {
             process.chdir(dstDir);
             spawn('git', [ 'clone', 'http://localhost:' + port + '/doom' ])
-            .on('exit', function (code) {
+            .on('exit', (code) => {
                 t.equal(code, 0);
                 callback();
             });
         },
-    ], function(err) {
+    ], (err) => {
         t.ok(!err, 'no errors');
         repos.close();
         t.end();
-    })
+    });
 });

@@ -1,114 +1,112 @@
-var test = require('tape');
-var pushover = require('../');
-
-var fs = require('fs');
-var path = require('path');
-var os = require('os');
-
-var spawn_ = require('child_process').spawn;
-function spawn (cmd, args, opts) {
+const test = require('tape');
+const fs = require('fs');
+const spawn_ = require('child_process').spawn;
+function spawn(cmd, args, opts) {
     var ps = spawn_(cmd, args, opts);
-    ps.on('error', function (err) {
-        console.error(
+    ps.on('error', (err) => {
+        console.error( // eslint-disable-line
             err.message + ' while executing: '
             + cmd + ' ' + args.join(' ')
         );
     });
     return ps;
 }
-var exec = require('child_process').exec;
-var http = require('http');
 
-var async = require('async');
+const exec = require('child_process').exec;
+const http = require('http');
+const async = require('async');
 
-test('create, push to, and clone a repo', function (t) {
+const gitserver = require('../');
+
+test('create, push to, and clone a repo', (t) => {
     t.plan(13);
 
-    var repoDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-    var srcDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
-    var dstDir = '/tmp/' + Math.floor(Math.random() * (1<<30)).toString(16);
     var lastCommit;
+
+    const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+    const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+    const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
     fs.mkdirSync(repoDir, 0700);
     fs.mkdirSync(srcDir, 0700);
     fs.mkdirSync(dstDir, 0700);
 
-    var repos = pushover(repoDir, { autoCreate : true });
-    var port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
-    var server = http.createServer(function (req, res) {
+    const repos = gitserver(repoDir, { autoCreate : true });
+    const port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
+    const server = http.createServer((req, res) => {
         repos.handle(req, res);
     });
     server.listen(port);
 
-    t.on('end', function () {
+    t.on('end', () => {
         server.close();
     });
 
     process.chdir(srcDir);
     async.waterfall([
-        function (callback) {
-            repos.create('doom', function() {
+        (callback) => {
+            repos.create('doom', () => {
                 callback();
-            })
+            });
         },
-        function (callback) {
-            var ps = spawn('git', [ 'init' ])
-            .on('exit', function (code) {
+        (callback) => {
+            spawn('git', [ 'init' ])
+            .on('exit', (code) => {
                 t.equal(code, 0);
                 callback();
             });
         },
-        function (callback) {
-            fs.writeFile(srcDir + '/a.txt', 'abcd', function(err) {
+        (callback) => {
+            fs.writeFile(srcDir + '/a.txt', 'abcd', (err) => {
                 t.ok(!err, 'no error on write');
                 callback();
             });
         },
-        function (callback) {
+        (callback) => {
             spawn('git', [ 'add', 'a.txt' ])
-            .on('exit', function (code) {
+            .on('exit', (code) => {
                 t.equal(code, 0);
                 callback();
             });
         },
-        function (callback) {
-            var ps = spawn('git', [ 'commit', '-am', 'a!!' ]);
-            ps.on('exit', function () {
-                exec('git log | head -n1', function (err, stdout) {
+        (callback) => {
+            spawn('git', [ 'commit', '-am', 'a!!' ])
+            .on('exit', () => {
+                exec('git log | head -n1', (err, stdout) => {
                     lastCommit = stdout.split(/\s+/)[1];
                     callback();
                 });
             });
         },
-        function (callback) {
+        (callback) => {
             spawn('git', [
                 'push', 'http://localhost:' + port + '/doom', 'master'
             ])
-            .on('exit', function (code) {
+            .on('exit', (code) => {
                 t.notEqual(code, 0);
                 callback();
             });
         },
-        function (callback) {
-            var glog = spawn('git', [ 'log', '--all'], { cwd : repoDir + '/doom.git' });
-            glog.on('exit', function (code) {
+        (callback) => {
+            const glog = spawn('git', [ 'log', '--all'], { cwd : repoDir + '/doom.git' });
+            glog.on('exit', (code) => {
                 t.equal(code, 128);
                 callback();
             });
             var data = '';
-            glog.stderr.on('data', function (buf) { data += buf });
-            glog.stderr.on('end', function (buf) {
-                var res = /fatal: bad default revision 'HEAD'/.test(data) || /fatal: your current branch 'master' does not have any commits yet/.test(data);
+            glog.stderr.on('data', (buf) => data += buf );
+            glog.stderr.on('end', () => {
+                const res = /fatal: bad default revision 'HEAD'/.test(data) || /fatal: your current branch 'master' does not have any commits yet/.test(data);
                 t.ok(res);
             });
         }
-    ], function(err) {
+    ], (err) => {
         t.ok(!err, 'no errors');
         server.close();
         t.end();
-    })
+    });
 
-    repos.on('push', function (push) {
+    repos.on('push', (push) => {
         t.equal(push.repo, 'doom', 'repo name');
         t.equal(push.commit, lastCommit, 'commit ok');
         t.equal(push.branch, 'master', 'master branch');

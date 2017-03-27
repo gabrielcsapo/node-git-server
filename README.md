@@ -1,6 +1,6 @@
 # node-git-server
 
-An almost zero dependency git-server built with `nodejs`
+> An almost zero dependency git-server built with `nodejs`
 
 [![Npm Version](https://img.shields.io/npm/v/node-git-server.svg)](https://www.npmjs.com/package/node-git-server)
 [![Build Status](https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master)](https://travis-ci.org/gabrielcsapo/node-git-server)
@@ -243,10 +243,6 @@ Reject the pending request.
 
 This library is aimed to have a zero dependency footprint. If you are reading this and you see dependencies, help to remove them 🐒.
 
-# thanks
+# Thanks
 
 This is a hard fork from [pushover](https://github.com/substack/pushover).
-
-# license
-
-MIT
