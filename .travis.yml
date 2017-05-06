@@ -4,7 +4,7 @@ before_install:
   - "npm install npm@4 -g"
 language: node_js
 script:
-  - npm install node-coverage -g
+  - npm install node-coverage-server -g
   - npm run lint
   - npm run coverage
   - cat coverage/lcov.info | node-coverage-cli --url https://node-coverage-server.herokuapp.com
