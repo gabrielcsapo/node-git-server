@@ -11,16 +11,18 @@ var onexit = require('./lib/onexit');
 
 module.exports = function (repoDir, opts) {
     if (!opts) opts = {};
-    var dirMap = typeof repoDir === 'function'
-        ? repoDir
-        : function (dir) {
+    var dirMap;
+    if(typeof repoDir === 'function') {
+        dirMap = repoDir;
+    } else {
+        dirMap = (dir) => {
           if(dir) {
-            return path.join(repoDir, dir);
+            return path.resolve(repoDir, dir);
           } else {
             return repoDir;
           }
-        }
-    ;
+        };
+    }
     return new Git(dirMap, opts);
 };
 
@@ -43,13 +45,13 @@ Git.prototype.exists = function (repo, cb) {
 };
 
 Git.prototype.mkdir = function (dir, cb) {
-    this.dirMap(dir).split('/').forEach(function(dir, index, splits) {
-      var curParent = splits.slice(0, index).join('/');
-      var dirPath = path.resolve(curParent, dir);
-      if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath);
-      }
-    });
+    const parts = this.dirMap(dir).split('/');
+    for(var i = 0; i <= parts.length; i++) {
+        const directory = parts.slice(0, i).join('/');
+        if(directory && !fs.existsSync(directory)) {
+            fs.mkdirSync(directory);
+        }
+    }
     cb();
 };
 
