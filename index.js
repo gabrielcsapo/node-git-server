@@ -30,6 +30,7 @@ function Git (dirMap, opts) {
     EventEmitter.call(this);
 
     this.dirMap = dirMap;
+    this.repos = opts.repos || {};
     this.autoCreate = opts.autoCreate === false ? false : true;
     this.checkout = opts.checkout;
 }
@@ -94,7 +95,7 @@ Git.prototype.create = function (repo, cb) {
 Git.prototype.handle = handle;
 Git.prototype.listen = function(port, callback) {
     var self = this;
-    this.server = http.createServer(function (req, res) {
+    this.server = http.createServer(function(req, res) {
         self.handle(req, res);
     });
     this.server.listen(port, callback);
