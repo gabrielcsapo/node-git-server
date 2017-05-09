@@ -2,7 +2,13 @@ const path = require('path');
 
 const gitserver = require('../');
 const repos = gitserver(path.resolve(__dirname, 'tmp'), {
-    autoCreate: true
+    autoCreate: true,
+    repos: {
+        'test': {
+            password: 'root',
+            username: 'root'
+        }
+    }
 });
 const port = process.env.PORT || 7005;
 
