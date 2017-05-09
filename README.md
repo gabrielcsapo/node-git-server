@@ -90,7 +90,7 @@ fetch beep.git/d5013a53a0e139804e729a12107fc212f11e64c3
 
 var gitserver = require('node-git-server')
 
-## var repos = node-git-server(repoDir, opts={autoCreate:true})
+## var repos = node-git-server(repoDir, opts={ autoCreate:true })
 
 Create a new repository collection from the directory `repoDir`.
 `repoDir` should be entirely empty except for git repo directories.
@@ -105,6 +105,19 @@ in the events section.
 
 By default, repository targets will be created if they don't exist. You can
 disable that behavior with `opts.autoCreate`.
+
+If `opts.repos` is set as a hash table that looks like
+
+```javascript
+repos: {
+    $name: {
+        $username,
+        $password
+    }
+}
+```
+
+Any request to that repository must go through a basic http auth request to push or retrieve data.
 
 If `opts.checkout` is true, create and expected checked-out repos instead of
 bare repos.
