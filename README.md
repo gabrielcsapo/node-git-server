@@ -57,13 +57,13 @@ $ node example/index.js
 meanwhile...
 
 ```
-$ git push http://localhost:7000/beep master
+$ git push http://localhost:7005/beep master
 Counting objects: 356, done.
 Delta compression using up to 2 threads.
 Compressing objects: 100% (133/133), done.
 Writing objects: 100% (356/356), 46.20 KiB, done.
 Total 356 (delta 210), reused 355 (delta 210)
-To http://localhost:7000/beep
+To http://localhost:7005/beep
  * [new branch]      master -> master
 ```
 
@@ -77,7 +77,7 @@ push beep.git/d5013a53a0e139804e729a12107fc212f11e64c3 (master)
 or...
 
 ```
-$ git clone http://localhost:7000/beep.git
+$ git clone http://localhost:7005/beep.git
 ```
 
 and then...
@@ -138,7 +138,7 @@ created.
 
 ## repos.mkdir(dir, cb)
 
-Create a subdirectory `dir` in the repo dir with an errback `cb(err)`.
+Create a subdirectory `dir` in the repo dir with a callback `cb(err)`.
 
 ## repos.list(cb)
 
@@ -213,7 +213,7 @@ no listeners, `head.accept()` is called automatically.
 
 ## push.on('response', function(response, done) { ... })
 
-Emitted when node-git-server creates a resposne stream that will be sent to the git client on the other end.
+Emitted when node-git-server creates a response stream that will be sent to the git client on the other end.
 
 This should really only be used if you want to send verbose or error messages to the remote git client.
 
@@ -247,7 +247,6 @@ Reject the pending request.
 
 # TODO
 
-- [ ] add user authentication mechanism
 - [ ] remove dependency on http-duplex
 - [ ] remove dependency on through
 - [ ] add jsdoc
