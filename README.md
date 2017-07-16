@@ -1,5 +1,7 @@
 # node-git-server
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/gabrielcsapo/node-git-server.svg)](https://greenkeeper.io/)
+
 > An almost zero dependency git-server built with `nodejs`
 
 [![Npm Version](https://img.shields.io/npm/v/node-git-server.svg)](https://www.npmjs.com/package/node-git-server)
