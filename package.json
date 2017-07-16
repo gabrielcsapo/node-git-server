@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "async": "^2.4.0",
-    "eslint": "^3.19.0",
+    "eslint": "^4.2.0",
     "tap": "^10.3.2",
     "tape": "^4.6.3"
   },
