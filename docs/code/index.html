@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Git.html">Git</a></li><li><a href="Service.html">Service</a></li></ul><h3>Modules</h3><ul><li><a href="module-lib_util.html">lib/util</a><ul class='methods'><li data-type='method'><a href="module-lib_util.html#~basicAuth">basicAuth</a></li><li data-type='method'><a href="module-lib_util.html#~createAction">createAction</a></li><li data-type='method'><a href="module-lib_util.html#~noCache">noCache</a></li><li data-type='method'><a href="module-lib_util.html#~onExit">onExit</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#exists">exists</a></li><li><a href="global.html#handle">handle</a></li><li><a href="global.html#list">list</a></li><li><a href="global.html#mkdir">mkdir</a></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>node-git-server</h1><blockquote>
+<p>An almost zero dependency git-server built with <code>nodejs</code></p>
+</blockquote>
+<p><a href="https://www.npmjs.com/package/node-git-server"><img src="https://img.shields.io/npm/v/node-git-server.svg" alt="Npm Version"></a>
+<a href="https://travis-ci.org/gabrielcsapo/node-git-server"><img src="https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master" alt="Build Status"></a>
+<a href="https://node-coverage-server.herokuapp.com/coverage/github%2Ecom/gabrielcsapo/node-git-server"><img src="https://node-coverage-server.herokuapp.com/badge/github%2Ecom/gabrielcsapo/node-git-server.svg" alt="Coverage Status"></a>
+<a href="https://david-dm.org/gabrielcsapo/node-git-server"><img src="https://david-dm.org/gabrielcsapo/node-git-server.svg" alt="Dependency Status"></a>
+<a href="https://david-dm.org/gabrielcsapo/node-git-server#info=devDependencies"><img src="https://david-dm.org/gabrielcsapo/node-git-server/dev-status.svg" alt="devDependency Status"></a>
+<a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm"></a>
+<a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm"></a></p>
+<p>This library makes it super easy to set up custom git push deploy logic.</p>
+<h1>requirements</h1><pre class="prettyprint source"><code>- git (^ 2.7)</code></pre><h1>install</h1><pre class="prettyprint source"><code>npm install node-git-server</code></pre><h1>example</h1><pre class="prettyprint source lang-javascript"><code>const Server = require('node-git-server');
+const repos = Server('/tmp/repos');
+const port = process.env.PORT || 7005;
+
+repos.on('push', (push) => {
+    console.log('push ' + push.repo + '/' + push.commit
+        + ' (' + push.branch + ')'
+    );
+    push.accept();
+});
+
+repos.on('fetch', (fetch) => {
+    console.log('fetch ' + fetch.commit);
+    fetch.accept();
+});
+
+repos.listen(port, () => {
+    console.log(`node-git-server running at http://localhost:${port}`)
+});</code></pre><p>then start up the node-git-server server...</p>
+<pre class="prettyprint source"><code>$ node example/index.js</code></pre><p>meanwhile...</p>
+<pre class="prettyprint source"><code>$ git push http://localhost:7005/beep master
+Counting objects: 356, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (133/133), done.
+Writing objects: 100% (356/356), 46.20 KiB, done.
+Total 356 (delta 210), reused 355 (delta 210)
+To http://localhost:7005/beep
+ * [new branch]      master -> master</code></pre><p>and then...</p>
+<pre class="prettyprint source"><code>$ node example/simple.js
+push beep.git/d5013a53a0e139804e729a12107fc212f11e64c3 (master)</code></pre><p>or...</p>
+<pre class="prettyprint source"><code>$ git clone http://localhost:7005/beep.git</code></pre><p>and then...</p>
+<pre class="prettyprint source"><code>fetch beep.git/d5013a53a0e139804e729a12107fc212f11e64c3</code></pre><h1>Philosophy</h1><p>This library is aimed to have a zero dependency footprint. If you are reading this and you see dependencies, help to remove them 🐒.</p>
+<h1>Thanks</h1><p>This is a hard fork from <a href="https://github.com/substack/pushover">pushover</a>.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Tue Sep 05 2017 23:17:38 GMT-0400 (EDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

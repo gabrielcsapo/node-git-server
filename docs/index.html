@@ -1,75 +1,60 @@
 <!DOCTYPE html>
 <html>
-
-    <head>
-        <meta charset="utf-8">
-        <title>node-git-server</title>
-        <link href="./normalize.css" rel="stylesheet" type="text/css"/>
-        <link href="./main.css" rel="stylesheet" type="text/css"/>
-        <link href="./default.css" rel="stylesheet" type="text/css"/>
-        <script src="./highlight.js"></script>
-        <script>
-            (function () {
-                hljs.initHighlightingOnLoad();
-            }());
-        </script>
-    </head>
-
-    <body>
-        <section class="wrapper">
-            <section class="main">
-                <br>
-                <h1>
-                    node-git-server
-                </h1>
-                <h3>
-                    <i>
-                        An almost zero dependency git-server built with `nodejs` ⚙</i>
-                </h3>
-                <p>
-                    <a href="https://www.npmjs.com/package/node-git-server"><img src="https://img.shields.io/npm/v/node-git-server.svg" alt="Npm Version"/></a>
-                    <a href="https://david-dm.org/gabrielcsapo/node-git-server"><img src="https://david-dm.org/gabrielcsapo/node-git-server.svg" alt="Dependency Status"/></a>
-                    <a href="https://david-dm.org/gabrielcsapo/node-git-server#info=devDependencies"><img src="https://david-dm.org/gabrielcsapo/node-git-server/dev-status.svg" alt="devDependency Status"/></a>
-                    <a href="https://travis-ci.org/gabrielcsapo/node-git-server"><img src="https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master" alt="Build Status"/></a>
-                    <a href="https://node-coverage-server.herokuapp.com/coverage/github%2Ecom/gabrielcsapo/node-git-server"><img src="https://node-coverage-server.herokuapp.com/badge/github%2Ecom/gabrielcsapo/node-git-server.svg" alt="Coverage Badge"/></a>
-                    <a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm"/></a>
-                    <a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm"/></a>
-                </p>
-                <a href="https://github.com/gabrielcsapo/node-git-server" class="btn">
-                    Source
-                </a>
-                <a href="https://github.com/gabrielcsapo/node-git-server/issues" class="btn">
-                    Contribute
-                </a>
-            </section>
-            <br/>
-            <h3>
-                <b>Usage</b>
-            </h3>
-            <pre>
-          <code class="javascript" style="width:700px;text-align:left;margin:0 auto;padding:10px;border-radius:5px;">
-const gitserver = require('node-git-server');
-const repos = gitserver('/tmp/repos');
+  <head>
+    <meta charset="utf-8">
+    <title>node-git-server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./psychic-min.css" rel="stylesheet" type="text/css"/>
+    <style media="screen">
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+      * {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-center">
+      <div class="container">
+        <div class="navbar-title">
+          <span class="text-black">node-git-server</span>
+        </div>
+        <div class="nav">
+          <a class="text-black" href="https://github.com/gabrielcsapo/node-git-server">Source</a>
+          <a class="text-black" href="./code/index.html">Code</a>
+        </div>
+      </div>
+    </div>
+    <div style="width:100%;position:absolute;top:50%;transform:translateY(-50%);">
+      <h3 class="text-center"> A configurable git server written in Node.js </h3>
+      <pre style="white-space: pre; width: 80%; margin: 0 auto;">
+const Server = require('node-git-server');
+const repos = new Server('/tmp/repos');
 const port = process.env.PORT || 7005;
 
 repos.on('push', (push) => {
-    console.log('push ' + push.repo + '/' + push.commit
-        + ' (' + push.branch + ')'
-    );
-    push.accept();
+  console.log('push ' + push.repo + '/' + push.commit
+    + ' (' + push.branch + ')'
+  );
+  push.accept();
 });
 
 repos.on('fetch', (fetch) => {
-    console.log('fetch ' + fetch.commit);
-    fetch.accept();
+  console.log('fetch ' + fetch.commit);
+  fetch.accept();
 });
 
 repos.listen(port, () => {
-    console.log(`node-git-server running at http://localhost:${port}`)
+  console.log(`node-git-server running at http://localhost:${port}`)
 });
-          </code>
-        </pre>
-        </section>
-    </body>
-
+      </pre>
+    </div>
+    <div class="navbar navbar-center" style="bottom:0px;position:absolute;">
+      <div class="container text-center">
+        <div class="text-black">Made with ❤️ by <a href="https://www.gabrielcsapo.com">@gabrielcsapo</a></div>
+      </div>
+    </div>
+  </body>
 </html>
