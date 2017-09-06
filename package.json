@@ -1,7 +1,7 @@
 {
   "name": "node-git-server",
-  "version": "0.1.0",
-  "description": "a git server built in node",
+  "version": "0.2.0",
+  "description": "A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -16,19 +16,22 @@
   "scripts": {
     "lint": "eslint .",
     "test": "tape test/*.js",
-    "coverage": "tap test/*.js --coverage --coverage-report=lcov"
+    "coverage": "tap test/*.js --coverage --coverage-report=lcov",
+    "generate-docs": "jsdoc -c jsdoc.json"
   },
   "dependencies": {
     "http-duplex": "~0.0.2",
     "through": "^2.3.8"
   },
   "devDependencies": {
-    "async": "^2.4.0",
-    "eslint": "^3.19.0",
-    "tap": "^10.3.2",
-    "tape": "^4.6.3"
+    "async": "^2.5.0",
+    "docdash": "^0.4.0",
+    "eslint": "^4.6.1",
+    "jsdoc": "^3.5.4",
+    "tap": "^10.7.2",
+    "tape": "^4.8.0"
   },
   "engine": {
-    "node": ">= 4"
+    "node": ">= 6"
   }
 }

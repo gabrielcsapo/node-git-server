@@ -1,0 +1,2 @@
+- [ ] remove dependency on http-duplex
+- [ ] remove dependency on through
