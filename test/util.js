@@ -1,12 +1,9 @@
 const test = require('tape');
 
-const {
-  basicAuth,
-  noCache
-} = require('../lib/util');
+const { basicAuth, noCache, parseGitName } = require('../lib/util');
 
 test('util', (t) => {
-  t.plan(2);
+  t.plan(3);
 
   t.test('basicAuth', (t) => {
     t.plan(2);
@@ -74,6 +71,21 @@ test('util', (t) => {
       'cache-control': 'no-cache, max-age=0, must-revalidate'
     });
     t.end();
+  });
+
+  t.test('parseGitName', (t) => {
+    t.plan(2);
+
+    t.test('should remove .git from repo name', (t) => {
+      t.equal(parseGitName('test.git'), 'test');
+      t.end();
+    });
+
+    t.test('should remove .git from the end of repo name but not in the middle', (t) => {
+      t.equal(parseGitName('test.git.git'), 'test.git');
+      t.end();
+    });
+
   });
 
 });

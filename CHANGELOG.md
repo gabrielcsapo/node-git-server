@@ -1,3 +1,8 @@
+# 0.2.1 (09/15/2017)
+
+- fixes bug that would let anyone publish to a repo regardless of permissions that were set
+- fixes bug in test that didn't properly test auth based operations
+
 # 0.2.0 (09/05/2017)
 
 - abstracts server into lib/git.js

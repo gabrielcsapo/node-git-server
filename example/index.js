@@ -8,8 +8,8 @@ const git = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     repos: {
         'test': {
-            password: 'root',
-            username: 'root'
+            username: 'admin',
+            password: 'root'
         }
     }
 });

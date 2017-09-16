@@ -644,9 +644,15 @@ test('git', (t) => {
           },
           (callback) => {
               process.chdir(dstDir);
-              const clone = spawn('git', [ 'clone', 'http://root:world@localhost:' + port + '/doom' ]);
+              const clone = spawn('git', [ 'clone', 'http://root:world@localhost:' + port + '/doom doom1' ]);
+              let error = '';
+              
+              clone.stderr.on('data', (d) => {
+                error += d.toString('utf8');
+              });
 
               clone.on('close', function(code) {
+                  t.equal(error, 'Cloning into \'doom doom1\'...\nfatal: unable to access \'http://root:world@localhost:'+port+'/doom doom1/\': Empty reply from server\n');
                   t.equal(code, 128);
                   callback();
               });
@@ -658,6 +664,8 @@ test('git', (t) => {
       });
 
   });
+
+
 
   t.end();
 });
