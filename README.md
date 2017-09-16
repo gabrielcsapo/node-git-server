@@ -4,7 +4,7 @@
 
 [![Npm Version](https://img.shields.io/npm/v/node-git-server.svg)](https://www.npmjs.com/package/node-git-server)
 [![Build Status](https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master)](https://travis-ci.org/gabrielcsapo/node-git-server)
-[![Coverage Status](https://node-coverage-server.herokuapp.com/badge/github%2Ecom/gabrielcsapo/node-git-server.svg)](https://node-coverage-server.herokuapp.com/coverage/github%2Ecom/gabrielcsapo/node-git-server)
+[![Coverage Status](https://lcov-server.herokuapp.com/badge/github%2Ecom/gabrielcsapo/node-git-server.svg)](https://lcov-server.herokuapp.com/coverage/github%2Ecom/gabrielcsapo/node-git-server)
 [![Dependency Status](https://david-dm.org/gabrielcsapo/node-git-server.svg)](https://david-dm.org/gabrielcsapo/node-git-server)
 [![devDependency Status](https://david-dm.org/gabrielcsapo/node-git-server/dev-status.svg)](https://david-dm.org/gabrielcsapo/node-git-server#info=devDependencies)
 [![npm](https://img.shields.io/npm/dt/node-git-server.svg)]()
