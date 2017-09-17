@@ -1,6 +1,7 @@
 # Unreleased
 
 - removes authentication logic and makes it a configurable middleware
+- passes username to listener objects
 
 # 0.2.1 (09/15/2017)
 
