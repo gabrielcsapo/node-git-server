@@ -1,3 +1,7 @@
+# Unreleased
+
+- removes authentication logic and makes it a configurable middleware
+
 # 0.2.1 (09/15/2017)
 
 - fixes bug that would let anyone publish to a repo regardless of permissions that were set

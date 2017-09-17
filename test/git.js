@@ -621,11 +621,12 @@ test('git', (t) => {
 
       const repos = new GitServer(repoDir, {
           autoCreate: true,
-          repos: {
-              'doom': {
-                  password: 'root',
-                  username: 'root'
-              }
+          authenticate: (repo, username, password, next) => {
+            if(repo == 'doom' && username == 'root' && password == 'root') {
+              next();
+            } else {
+              next('incorrect password');
+            }
           }
       });
       const port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
@@ -635,7 +636,7 @@ test('git', (t) => {
       async.waterfall([
           (callback) => {
               process.chdir(dstDir);
-              const clone = spawn('git', [ 'clone', 'http://root:root@localhost:' + port + '/doom' ]);
+              const clone = spawn('git', [ 'clone', `http://root:root@localhost:${port}/doom.git` ]);
 
               clone.on('close', function(code) {
                   t.equal(code, 0);
@@ -644,15 +645,15 @@ test('git', (t) => {
           },
           (callback) => {
               process.chdir(dstDir);
-              const clone = spawn('git', [ 'clone', 'http://root:world@localhost:' + port + '/doom doom1' ]);
+              const clone = spawn('git', [ 'clone', `http://root:world@localhost:${port}/doom.git doom1` ]);
               let error = '';
-              
+
               clone.stderr.on('data', (d) => {
                 error += d.toString('utf8');
               });
 
               clone.on('close', function(code) {
-                  t.equal(error, 'Cloning into \'doom doom1\'...\nfatal: unable to access \'http://root:world@localhost:'+port+'/doom doom1/\': Empty reply from server\n');
+                  t.equal(error, `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://root:world@localhost:${port}/doom.git doom1/': Empty reply from server\n`);
                   t.equal(code, 128);
                   callback();
               });
@@ -664,8 +665,6 @@ test('git', (t) => {
       });
 
   });
-
-
 
   t.end();
 });
