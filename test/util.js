@@ -74,7 +74,7 @@ test('util', (t) => {
   });
 
   t.test('parseGitName', (t) => {
-    t.plan(2);
+    t.plan(3);
 
     t.test('should remove .git from repo name', (t) => {
       t.equal(parseGitName('test.git'), 'test');
@@ -83,6 +83,11 @@ test('util', (t) => {
 
     t.test('should remove .git from the end of repo name but not in the middle', (t) => {
       t.equal(parseGitName('test.git.git'), 'test.git');
+      t.end();
+    });
+
+    t.test('if .git does not exist in the string, don\'t remove it', (t) => {
+      t.equal(parseGitName('test'), 'test');
       t.end();
     });
 

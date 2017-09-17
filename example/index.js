@@ -6,11 +6,9 @@ const port = process.env.PORT || 7005;
 
 const git = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
-    repos: {
-        'test': {
-            username: 'admin',
-            password: 'root'
-        }
+    authenticate: (type, repo, username, password, next) => {
+      console.log(type, repo, username, password); // eslint-disable-line
+      next();
     }
 });
 
@@ -23,6 +21,7 @@ git.on('push', (push) => {
 });
 
 git.on('fetch', (fetch) => {
+    console.log('username', fetch.username); // eslint-disable-line
     console.log('fetch ' + fetch.repo + '/' + fetch.commit); // eslint-disable-line
     fetch.accept();
 });
