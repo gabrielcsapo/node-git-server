@@ -625,7 +625,7 @@ test('git', (t) => {
             if(repo == 'doom' && username == 'root' && password == 'root') {
               next();
             } else {
-              next('incorrect password');
+              next('that is not the correct password');
             }
           }
       });

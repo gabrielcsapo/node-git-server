@@ -8,7 +8,7 @@ const git = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: (repo, username, password, next) => {
       console.log(repo, username, password); // eslint-disable-line
-      next();
+      next('no one shall enter here!');
     }
 });
 
