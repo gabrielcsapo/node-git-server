@@ -1,6 +1,6 @@
 {
   "name": "node-git-server",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
   "license": "MIT",

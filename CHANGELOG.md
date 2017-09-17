@@ -1,4 +1,4 @@
-# Unreleased
+# 0.3.0
 
 - removes authentication logic and makes it a configurable middleware
 - passes username to listener objects
