@@ -621,8 +621,8 @@ test('git', (t) => {
 
       const repos = new GitServer(repoDir, {
           autoCreate: true,
-          authenticate: (repo, username, password, next) => {
-            if(repo == 'doom' && username == 'root' && password == 'root') {
+          authenticate: (type, repo, username, password, next) => {
+            if(type == 'download', repo == 'doom' && username == 'root' && password == 'root') {
               next();
             } else {
               next('that is not the correct password');
