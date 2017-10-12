@@ -1,3 +1,7 @@
+# Unreleased
+
+- allow authenticate to handle promises
+
 # 0.3.0
 
 - removes authentication logic and makes it a configurable middleware
