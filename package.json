@@ -20,7 +20,7 @@
     "lint": "eslint .",
     "test": "tape test/*.js",
     "coverage": "tap test/*.js --coverage --coverage-report=lcov",
-    "generate-docs": "jsdoc -c jsdoc.json"
+    "generate-docs": "tryitout --template=landing --output=./docs && jsdoc -c jsdoc.json"
   },
   "dependencies": {
     "http-duplex": "~0.0.2",
@@ -29,9 +29,10 @@
   "devDependencies": {
     "async": "^2.5.0",
     "docdash": "^0.4.0",
-    "eslint": "^4.6.1",
-    "jsdoc": "^3.5.4",
+    "eslint": "^4.8.0",
+    "jsdoc": "^3.5.5",
     "tap": "^10.7.2",
-    "tape": "^4.8.0"
+    "tape": "^4.8.0",
+    "tryitout": "^0.3.1"
   }
 }
