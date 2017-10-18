@@ -43,4 +43,4 @@ module.exports = {
       author: 'Made with ❤️ Gabriel J. Csapo',
       website: 'http://www.gabrielcsapo.com'
     }
-}
+};
