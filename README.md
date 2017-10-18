@@ -10,25 +10,23 @@
 [![npm](https://img.shields.io/npm/dt/node-git-server.svg)]()
 [![npm](https://img.shields.io/npm/dm/node-git-server.svg)]()
 
-This library makes it super easy to set up custom git push deploy logic.
-
-# requirements
-
-```
-- git (^ 2.7)
-```
-
-# install
+# Install
 
 ```
 npm install node-git-server
 ```
 
-# example
+# Usage
 
 ```javascript
 const Server = require('node-git-server');
-const repos = Server('/tmp/repos');
+const repo = new Server(path.resolve(__dirname, 'tmp'), {
+    autoCreate: true,
+    authenticate: (type, repo, username, password, next) => {
+      console.log(type, repo, username, password);
+      next();
+    }
+});
 const port = process.env.PORT || 7005;
 
 repos.on('push', (push) => {
@@ -66,6 +64,8 @@ Total 356 (delta 210), reused 355 (delta 210)
 To http://localhost:7005/beep
  * [new branch]      master -> master
 ```
+
+For more information please visit the [docs](http://www.gabrielcsapo.com/node-git-server/code/index.html)
 
 # Philosophy   
 
