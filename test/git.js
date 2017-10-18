@@ -10,7 +10,7 @@ const async = require('async');
 const GitServer = require('../');
 
 test('git', (t) => {
-  t.plan(5);
+  t.plan(6);
 
   t.test('create, push to, and clone a repo', (t) => {
       var lastCommit;
@@ -627,6 +627,63 @@ test('git', (t) => {
             } else {
               next('that is not the correct password');
             }
+          }
+      });
+      const port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
+      repos.listen(port);
+
+      process.chdir(srcDir);
+      async.waterfall([
+          (callback) => {
+              process.chdir(dstDir);
+              const clone = spawn('git', [ 'clone', `http://root:root@localhost:${port}/doom.git` ]);
+
+              clone.on('close', function(code) {
+                  t.equal(code, 0);
+                  callback();
+              });
+          },
+          (callback) => {
+              process.chdir(dstDir);
+              const clone = spawn('git', [ 'clone', `http://root:world@localhost:${port}/doom.git doom1` ]);
+              let error = '';
+
+              clone.stderr.on('data', (d) => {
+                error += d.toString('utf8');
+              });
+
+              clone.on('close', function(code) {
+                  t.equal(error, `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://root:world@localhost:${port}/doom.git doom1/': Empty reply from server\n`);
+                  t.equal(code, 128);
+                  callback();
+              });
+          }
+      ], (err) => {
+          t.ok(!err, 'no errors');
+          repos.close();
+          t.end();
+      });
+
+  });
+
+  t.test('should be able to protect certain routes with a promised authenticate', (t) => {
+      const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+      const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+      const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+
+      fs.mkdirSync(repoDir, 0700);
+      fs.mkdirSync(srcDir, 0700);
+      fs.mkdirSync(dstDir, 0700);
+
+      const repos = new GitServer(repoDir, {
+          autoCreate: true,
+          authenticate: (type, repo, username, password) => {
+            return new Promise(function(resolve, reject) {
+              if(type == 'download', repo == 'doom' && username == 'root' && password == 'root') {
+                return resolve();
+              }
+              return reject('that is not the correct password');
+            });
           }
       });
       const port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
