@@ -1,4 +1,4 @@
-# Unreleased
+# 0.3.1 (10/17/2017)
 
 - allow authenticate to handle promises
 
