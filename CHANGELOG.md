@@ -1,3 +1,7 @@
+# 0.3.2 (11/02/2017)
+
+- fixes pathing issues on non linux/unix based operating systems (windows)
+
 # 0.3.1 (10/17/2017)
 
 - allow authenticate to handle promises
