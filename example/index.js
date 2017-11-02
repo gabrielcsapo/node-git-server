@@ -4,7 +4,7 @@ const Server = require('../');
 
 const port = process.env.PORT || 7005;
 
-const git = new Server(path.resolve(__dirname, 'tmp'), {
+const git = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
     autoCreate: true,
     authenticate: (type, repo, username, password, next) => {
       console.log(type, repo, username, password); // eslint-disable-line
