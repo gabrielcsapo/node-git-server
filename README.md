@@ -1,6 +1,6 @@
 # node-git-server
 
-> A configurable git server written in Node.js
+> 🎡 A configurable git server written in Node.js
 
 [![Npm Version](https://img.shields.io/npm/v/node-git-server.svg)](https://www.npmjs.com/package/node-git-server)
 [![Build Status](https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master)](https://travis-ci.org/gabrielcsapo/node-git-server)

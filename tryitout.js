@@ -1,13 +1,15 @@
+const { name, description } = require('./package.json');
+
 module.exports = {
-    title: 'node-git-server',
+    title: name,
     nav: {
       Source: 'https://github.com/gabrielcsapo/node-git-server',
       Docs: './code/index.html'
     },
     body: `
-      <div style="width:80%;position:absolute;top:50%;transform:translateY(-50%);">
-        <h3 class="text-center" style="font-weight: 100"> A configurable git server written in Node.js </h3>
-        <pre style="white-space: pre; width: 80%; margin: 0 auto;">
+      <div style="width:80%;position: absolute;left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);transform: translate(-50%, -50%);">
+        <h3 class="text-center" style="font-weight: 100"> ${description} </h3>
+        <pre style="background-color:rgb(7, 7, 7);color:rgb(228, 228, 228);white-space: pre;text-align:left;width: auto;display:inline-block;">
       const Server = require('node-git-server');
       const repo = new Server(path.resolve(__dirname, 'tmp'), {
           autoCreate: true,
@@ -17,18 +19,6 @@ module.exports = {
           }
       });
       const port = process.env.PORT || 7005;
-
-      repos.on('push', (push) =&gt; {
-        console.log('push ' + push.repo + '/' + push.commit
-          + ' (' + push.branch + ')'
-        );
-        push.accept();
-      });
-
-      repos.on('fetch', (fetch) =&gt; {
-        console.log('fetch ' + fetch.commit);
-        fetch.accept();
-      });
 
       repos.listen(port, () =&gt; {
         console.log(\`node-git-server running at http://localhost:{port}\`)

@@ -1,7 +1,7 @@
 {
   "name": "node-git-server",
   "version": "0.3.1",
-  "description": "A configurable git server written in Node.js",
+  "description": "🎡 A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -29,10 +29,10 @@
   "devDependencies": {
     "async": "^2.5.0",
     "docdash": "^0.4.0",
-    "eslint": "^4.8.0",
+    "eslint": "^4.10.0",
     "jsdoc": "^3.5.5",
     "tap": "^10.7.2",
     "tape": "^4.8.0",
-    "tryitout": "^0.3.3"
+    "tryitout": "^0.3.8"
   }
 }
