@@ -23,7 +23,6 @@
     "generate-docs": "tryitout --template=landing --output=./docs && jsdoc -c jsdoc.json"
   },
   "dependencies": {
-    "http-duplex": "~0.0.2",
     "through": "^2.3.8"
   },
   "devDependencies": {
