@@ -1,3 +1,8 @@
+# 0.3.3 (11/05/2017)
+
+- Removes dependency on http-duplex package replacing w/ internal replacement lib
+- updates tryitout@1.0.0 and updates Docs
+
 # 0.3.2 (11/02/2017)
 
 - fixes pathing issues on non linux/unix based operating systems (windows)

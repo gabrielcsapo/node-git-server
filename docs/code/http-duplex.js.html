@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>http-duplex.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Git.html">Git</a></li><li><a href="HttpDuplex.html">HttpDuplex</a></li><li><a href="Service.html">Service</a></li></ul><h3>Modules</h3><ul><li><a href="module-lib_util.html">lib/util</a><ul class='methods'><li data-type='method'><a href="module-lib_util.html#~basicAuth">basicAuth</a></li><li data-type='method'><a href="module-lib_util.html#~createAction">createAction</a></li><li data-type='method'><a href="module-lib_util.html#~noCache">noCache</a></li><li data-type='method'><a href="module-lib_util.html#~onExit">onExit</a></li><li data-type='method'><a href="module-lib_util.html#~parseGitName">parseGitName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#exists">exists</a></li><li><a href="global.html#handle">handle</a></li><li><a href="global.html#list">list</a></li><li><a href="global.html#mkdir">mkdir</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">http-duplex.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const EventEmitter = require('events');
+
+/** Updated/Simplified http-duplex replacement.
+ * Creates a unified stream from the passed in streams input and output.
+ * Generally meant to combine http.req (input) and http.res (output) streams
+ * @class HttpDuplex
+ * @extends EventEmitter
+ */
+
+class HttpDuplex extends EventEmitter {
+    /**
+     * Constructs a proxy object over input and output.
+     * @constructor
+     * @param {stream.readable} input - http request object
+     * @param {stream.writeable} output - http response object
+     */
+    constructor(input, output) {
+        super();
+
+        this.req = input;
+        this.res = output;
+
+        var self = this;
+
+        // request / input proxy events
+        ['data', 'end', 'error', 'close'].forEach(function (name) {
+            self.req.on(name, self.emit.bind(self, name));
+        });
+
+        // respone / output proxy events
+        ['error', 'drain'].forEach(function (name) {
+            self.res.on(name, self.emit.bind(self, name));
+        });
+    }
+
+    // input / request wrapping
+    get client() {
+        return this.req.client;
+    }
+
+    get complete() {
+        return this.req.complete;
+    }
+
+    get connection() {
+        return this.req.connection;
+    }
+
+    get headers() {
+        return this.req.headers;
+    }
+
+    get httpVersion() {
+        return this.req.httpVersion;
+    }
+
+    get httpVersionMajor() {
+        return this.req.httpVersionMajor;
+    }
+
+    get httpVersionMinor() {
+        return this.req.httpVersionMinor;
+    }
+
+    get method() {
+        return this.req.method;
+    }
+
+    get readable() {
+        return this.req.readable;
+    }
+
+    get socket() {
+        return this.req.socket;
+    }
+
+    get trailers() {
+        return this.req.trailers;
+    }
+
+    get upgrade() {
+        return this.req.upgrade;
+    }
+
+    get url() {
+        return this.req.url;
+    }
+
+    // output / response wrapping
+    get writable() {
+        return this.res.writable;
+    }
+
+    get statusCode() {
+        return this.res.statusCode;
+    }
+
+    set statusCode(val) {
+        this.res.statusCode = val;
+    }
+
+}
+
+// proxy request methods
+['pause', 'resume', 'setEncoding'].forEach(function (name) {
+    HttpDuplex.prototype[name] = function () {
+        return this.req[name].apply(this.req, Array.from(arguments));
+    };
+});
+
+// proxy respone methods
+[
+    'cork', 'uncork', 'setDefaultEncoding', 'write', 'end', 'flush', 'writeHeader', 'writeHead', 'writeContinue',
+    'setHeader', 'getHeader', 'removeHeader', 'addTrailers'
+].forEach(function (name) {
+    HttpDuplex.prototype[name] = function () {
+        return this.res[name].apply(this.res, Array.from(arguments));
+    };
+});
+
+/**
+  * destroys stream object and it's bound streams
+  * @method destroy
+  */
+HttpDuplex.prototype.destroy = function () {
+    this.req.destroy();
+    this.res.destroy();
+};
+
+module.exports = HttpDuplex;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

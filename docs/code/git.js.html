@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Git.html">Git</a></li><li><a href="Service.html">Service</a></li></ul><h3>Modules</h3><ul><li><a href="module-lib_util.html">lib/util</a><ul class='methods'><li data-type='method'><a href="module-lib_util.html#~basicAuth">basicAuth</a></li><li data-type='method'><a href="module-lib_util.html#~createAction">createAction</a></li><li data-type='method'><a href="module-lib_util.html#~noCache">noCache</a></li><li data-type='method'><a href="module-lib_util.html#~onExit">onExit</a></li><li data-type='method'><a href="module-lib_util.html#~parseGitName">parseGitName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#exists">exists</a></li><li><a href="global.html#handle">handle</a></li><li><a href="global.html#list">list</a></li><li><a href="global.html#mkdir">mkdir</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Git.html">Git</a></li><li><a href="HttpDuplex.html">HttpDuplex</a></li><li><a href="Service.html">Service</a></li></ul><h3>Modules</h3><ul><li><a href="module-lib_util.html">lib/util</a><ul class='methods'><li data-type='method'><a href="module-lib_util.html#~basicAuth">basicAuth</a></li><li data-type='method'><a href="module-lib_util.html#~createAction">createAction</a></li><li data-type='method'><a href="module-lib_util.html#~noCache">noCache</a></li><li data-type='method'><a href="module-lib_util.html#~onExit">onExit</a></li><li data-type='method'><a href="module-lib_util.html#~parseGitName">parseGitName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#exists">exists</a></li><li><a href="global.html#handle">handle</a></li><li><a href="global.html#list">list</a></li><li><a href="global.html#mkdir">mkdir</a></li></ul>
 </nav>
 
 <div id="main">
@@ -42,7 +42,7 @@ const path = require('path');
 const http = require('http');
 const url = require('url');
 const qs = require('querystring');
-const httpDuplex = require('http-duplex');
+const httpDuplex = require('./http-duplex');
 
 const { spawn } = require('child_process');
 const { EventEmitter } = require('events');
@@ -184,11 +184,7 @@ class Git extends EventEmitter {
         this.dirMap = repoDir;
     } else {
         this.dirMap = (dir) => {
-          if(dir) {
-            return path.resolve(repoDir, dir);
-          } else {
-            return repoDir;
-          }
+            return (path.normalize(dir ? path.resolve(repoDir, dir) : repoDir));
         };
     }
 
@@ -228,9 +224,9 @@ class Git extends EventEmitter {
    */
   mkdir(dir, callback) {
       // TODO: remove sync operations
-      const parts = this.dirMap(dir).split('/');
+      const parts = this.dirMap(dir).split(path.sep);
       for(var i = 0; i &lt;= parts.length; i++) {
-          const directory = parts.slice(0, i).join('/');
+          const directory = parts.slice(0, i).join(path.sep);
           if(directory &amp;&amp; !fs.existsSync(directory)) {
               fs.mkdirSync(directory);
           }
@@ -367,7 +363,7 @@ class Git extends EventEmitter {
 
             self.exists(repo, (ex) => {
                 const anyListeners = self.listeners('head').length > 0;
-                const dup = httpDuplex(req, res);
+                const dup = new httpDuplex(req, res);
                 dup.exists = ex;
                 dup.repo = repo;
                 dup.cwd = self.dirMap(repo);

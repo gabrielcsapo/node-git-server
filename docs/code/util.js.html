@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Git.html">Git</a></li><li><a href="Service.html">Service</a></li></ul><h3>Modules</h3><ul><li><a href="module-lib_util.html">lib/util</a><ul class='methods'><li data-type='method'><a href="module-lib_util.html#~basicAuth">basicAuth</a></li><li data-type='method'><a href="module-lib_util.html#~createAction">createAction</a></li><li data-type='method'><a href="module-lib_util.html#~noCache">noCache</a></li><li data-type='method'><a href="module-lib_util.html#~onExit">onExit</a></li><li data-type='method'><a href="module-lib_util.html#~parseGitName">parseGitName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#exists">exists</a></li><li><a href="global.html#handle">handle</a></li><li><a href="global.html#list">list</a></li><li><a href="global.html#mkdir">mkdir</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Git.html">Git</a></li><li><a href="HttpDuplex.html">HttpDuplex</a></li><li><a href="Service.html">Service</a></li></ul><h3>Modules</h3><ul><li><a href="module-lib_util.html">lib/util</a><ul class='methods'><li data-type='method'><a href="module-lib_util.html#~basicAuth">basicAuth</a></li><li data-type='method'><a href="module-lib_util.html#~createAction">createAction</a></li><li data-type='method'><a href="module-lib_util.html#~noCache">noCache</a></li><li data-type='method'><a href="module-lib_util.html#~onExit">onExit</a></li><li data-type='method'><a href="module-lib_util.html#~parseGitName">parseGitName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#exists">exists</a></li><li><a href="global.html#handle">handle</a></li><li><a href="global.html#list">list</a></li><li><a href="global.html#mkdir">mkdir</a></li></ul>
 </nav>
 
 <div id="main">
@@ -41,7 +41,7 @@
  * @module lib/util
  */
 
-const httpDuplex = require('http-duplex');
+const httpDuplex = require('./http-duplex');
 const { spawn } = require('child_process');
 
 const Service = require('./service');
@@ -125,7 +125,7 @@ const Util = {
   },
   infoResponse: function infoResponse(opts, req, res) {
     var self = opts.repos;
-    var dup = httpDuplex(req, res);
+    var dup = new httpDuplex(req, res);
     dup.cwd = self.dirMap(opts.repo);
     dup.repo = opts.repo;
 

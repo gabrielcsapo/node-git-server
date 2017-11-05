@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Service - Documentation</title>
+    <title>HttpDuplex - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Service</h1>
+    <h1 class="page-title">HttpDuplex</h1>
     
 
     
@@ -40,7 +40,7 @@
 <header>
     
         <h2>
-        Service
+        HttpDuplex
         </h2>
         
     
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="Service"><span class="type-signature"></span>new Service<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="HttpDuplex"><span class="type-signature"></span>new HttpDuplex<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="service.js.html">service.js</a>, <a href="service.js.html#line20">line 20</a>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -104,6 +104,12 @@
 
 
 
+<div class="description">
+    <p>Updated/Simplified http-duplex replacement.
+Creates a unified stream from the passed in streams input and output.
+Generally meant to combine http.req (input) and http.res (output) streams</p>
+</div>
+
 
 
 
@@ -138,9 +144,208 @@
 
 
     <ul>
-        <li><a href="HttpDuplex.html">HttpDuplex</a></li>
+        <li>EventEmitter</li>
     </ul>
 
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        HttpDuplex
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="HttpDuplex"><span class="type-signature"></span>new HttpDuplex<span class="signature">(input, output)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line17">line 17</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Constructs a proxy object over input and output.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">stream.readable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>http request object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>output</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">stream.writeable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>http response object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
 
     
 

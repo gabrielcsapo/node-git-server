@@ -1,12 +1,14 @@
 {
   "name": "node-git-server",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "🎡 A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
-  "contributors": [{
+  "contributors": [
+    {
       "name": "echopoint",
       "email": "echopoint <echopoint@tutanota.com>"
-  }],
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gabrielcsapo/node-git-server/issues"
@@ -36,6 +38,6 @@
     "jsdoc": "^3.5.5",
     "tap": "^10.7.2",
     "tape": "^4.8.0",
-    "tryitout": "^0.3.8"
+    "tryitout": "^1.0.0"
   }
 }
