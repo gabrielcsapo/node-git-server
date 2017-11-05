@@ -3,6 +3,10 @@
   "version": "0.3.2",
   "description": "🎡 A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
+  "contributors": [{
+      "name": "echopoint",
+      "email": "echopoint <echopoint@tutanota.com>"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gabrielcsapo/node-git-server/issues"
@@ -23,7 +27,6 @@
     "generate-docs": "tryitout --template=landing --output=./docs && jsdoc -c jsdoc.json"
   },
   "dependencies": {
-    "http-duplex": "~0.0.2",
     "through": "^2.3.8"
   },
   "devDependencies": {
