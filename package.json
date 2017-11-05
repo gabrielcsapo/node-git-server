@@ -4,8 +4,8 @@
   "description": "🎡 A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
   "contributors": [{
-      name: "echopoint",
-      email: "echopoint <echopoint@tutanota.com>"
+      "name": "echopoint",
+      "email": "echopoint <echopoint@tutanota.com>"
   }],
   "license": "MIT",
   "bugs": {
