@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Git.html">Git</a></li><li><a href="HttpDuplex.html">HttpDuplex</a></li><li><a href="Service.html">Service</a></li></ul><h3>Modules</h3><ul><li><a href="module-lib_util.html">lib/util</a><ul class='methods'><li data-type='method'><a href="module-lib_util.html#~basicAuth">basicAuth</a></li><li data-type='method'><a href="module-lib_util.html#~createAction">createAction</a></li><li data-type='method'><a href="module-lib_util.html#~noCache">noCache</a></li><li data-type='method'><a href="module-lib_util.html#~onExit">onExit</a></li><li data-type='method'><a href="module-lib_util.html#~parseGitName">parseGitName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#exists">exists</a></li><li><a href="global.html#handle">handle</a></li><li><a href="global.html#list">list</a></li><li><a href="global.html#mkdir">mkdir</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Git.html">Git</a></li><li><a href="HttpDuplex.html">HttpDuplex</a><ul class='methods'><li data-type='method'><a href="HttpDuplex.html#addTrailers">addTrailers</a></li><li data-type='method'><a href="HttpDuplex.html#cork">cork</a></li><li data-type='method'><a href="HttpDuplex.html#destroy">destroy</a></li><li data-type='method'><a href="HttpDuplex.html#end">end</a></li><li data-type='method'><a href="HttpDuplex.html#getHeader">getHeader</a></li><li data-type='method'><a href="HttpDuplex.html#pause">pause</a></li><li data-type='method'><a href="HttpDuplex.html#removeHeader">removeHeader</a></li><li data-type='method'><a href="HttpDuplex.html#resume">resume</a></li><li data-type='method'><a href="HttpDuplex.html#setDefaultEncoding">setDefaultEncoding</a></li><li data-type='method'><a href="HttpDuplex.html#setEncoding">setEncoding</a></li><li data-type='method'><a href="HttpDuplex.html#setHeader">setHeader</a></li><li data-type='method'><a href="HttpDuplex.html#uncork">uncork</a></li><li data-type='method'><a href="HttpDuplex.html#write">write</a></li><li data-type='method'><a href="HttpDuplex.html#writeContinue">writeContinue</a></li><li data-type='method'><a href="HttpDuplex.html#writeHead">writeHead</a></li><li data-type='method'><a href="HttpDuplex.html#writeHeader">writeHeader</a></li></ul></li><li><a href="Service.html">Service</a></li></ul><h3>Modules</h3><ul><li><a href="module-lib_util.html">lib/util</a><ul class='methods'><li data-type='method'><a href="module-lib_util.html#~basicAuth">basicAuth</a></li><li data-type='method'><a href="module-lib_util.html#~createAction">createAction</a></li><li data-type='method'><a href="module-lib_util.html#~noCache">noCache</a></li><li data-type='method'><a href="module-lib_util.html#~onExit">onExit</a></li><li data-type='method'><a href="module-lib_util.html#~parseGitName">parseGitName</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="HttpDuplex.html#event:close">close</a></li><li><a href="HttpDuplex.html#event:data">data</a></li><li><a href="HttpDuplex.html#event:drain">drain</a></li><li><a href="HttpDuplex.html#event:end">end</a></li><li><a href="HttpDuplex.html#event:error">error</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#exists">exists</a></li><li><a href="global.html#handle">handle</a></li><li><a href="global.html#list">list</a></li><li><a href="global.html#mkdir">mkdir</a></li></ul>
 </nav>
 
 <div id="main">
@@ -152,6 +152,986 @@
 
     
 
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="connection"><span class="type-signature">(readonly) </span>connection<span class="type-signature"> :net.Socket</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line72">line 72</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#connection">HttpDuplex#connection</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://nodejs.org/api/http.html#http_request_socket">request.Socket</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Reference to the underlying socket for the request connection.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">net.Socket</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="method"><span class="type-signature">(readonly) </span>method<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line136">line 136</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#method">HttpDuplex#method</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://nodejs.org/api/http.html#http_event_request">request</a></li>
+        
+            <li><a href="https://nodejs.org/api/http.html#http_class_http_serverresponse">http.ServerResponse</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Request method of the incoming request.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>'GET', 'DELETE'</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="readable"><span class="type-signature">(readonly) </span>readable<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line145">line 145</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#readable">HttpDuplex#readable</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Is this stream readable.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="req"><span class="type-signature"></span>req<span class="type-signature"> :http.IncomingMessage</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#req">HttpDuplex#req</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://nodejs.org/api/http.html#http_event_request">request</a></li>
+        
+            <li><a href="https://nodejs.org/api/http.html#http_class_http_incomingmessage">http.IncomingMessage</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A IncomingMessage created by http.Server or http.ClientRequest usually passed as the 
+first parameter to the 'request' and 'response' events. Implements Readable Stream interface 
+but may not be a decendant thereof.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">http.IncomingMessage</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="res"><span class="type-signature"></span>res<span class="type-signature"> :http.ServerResponse</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#res">HttpDuplex#res</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://nodejs.org/api/http.html#http_event_request">request</a></li>
+        
+            <li><a href="https://nodejs.org/api/http.html#http_class_http_serverresponse">http.ServerResponse</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Created http.server. Passed as the second parameter to the 'request' event.
+The response implements Writable Stream interface but isn't a descendent thereof.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">http.ServerResponse</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="socket"><span class="type-signature">(readonly) </span>socket<span class="type-signature"> :net.Socket</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line155">line 155</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#socket">HttpDuplex#socket</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://nodejs.org/api/net.html#net_class_net_socket">net.Socket</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>net.Socket object associated with the connection.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">net.Socket</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="statusCode"><span class="type-signature"></span>statusCode<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line166">line 166</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#statusCode">HttpDuplex#statusCode</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>200</li>
+        </ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://nodejs.org/api/http.html#http_response_statuscode">response.statusCode</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The HTTP status code. Generally assigned before sending headers for a response to a client.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>request.statusCode = 404;</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="statusMessage"><span class="type-signature"></span>statusMessage<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line182">line 182</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#statusMessage">HttpDuplex#statusMessage</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>undefined</li>
+        </ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://nodejs.org/api/http.html#http_response_statusmessage">response.statusMessage</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Controls the status message sent to the client as long as an explicit call to response.writeHead() isn't made
+If ignored or the value is undefined, the default message corresponding to the status code will be used.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>request.statusMessage = 'Document Not found';</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="trailers"><span class="type-signature">(readonly) </span>trailers<span class="type-signature"> :object</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line190">line 190</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#trailers">HttpDuplex#trailers</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="HttpDuplex.html#headers">headers</a></li>
+        
+            <li><a href="HttpDuplex.html#addTrailers">addTrailers</a></li>
+        
+            <li><a href="https://nodejs.org/api/http.html#http_message_trailers">message.trailers</a></li>
+        
+            <li><a href="https://nodejs.org/api/http.html#http_response_addtrailers_headers">response.addTrailers</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Request/response trailer headers. Just like <a href="HttpDuplex.html#headers"><code>headers</code></a> except these are only written 
+after the initial response to the client.
+This object is only populated at the 'end' event and only work if a 'transfer-encoding: chunked' 
+header is sent in the initial response.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="upgrade"><span class="type-signature">(readonly) </span>upgrade<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line213">line 213</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#upgrade">HttpDuplex#upgrade</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://nodejs.org/api/http.html#http_event_upgrade_1">upgrade</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Whether or not the client connection has been upgraded</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="url"><span class="type-signature">(readonly) </span>url<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http-duplex.js.html">http-duplex.js</a>, <a href="http-duplex.js.html#line226">line 226</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="HttpDuplex.html#url">HttpDuplex#url</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Request URL string.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5>Examples</h5>
+    
+        <p class="code-caption">A request made as:</p>
+    
+    <pre class="prettyprint"><code>GET /info?check=none HTTP/1.1</code></pre>
+
+        <p class="code-caption">Will return the string</p>
+    
+    <pre class="prettyprint"><code>'/info?check=none'</code></pre>
+
+
+
+        
     
 
     
