@@ -1,3 +1,8 @@
+# Unreleased
+
+- adds extensive docs to Git, Util and Service
+- adds named function to events to trace errors more easily
+
 # 0.3.3 (11/05/2017)
 
 - Removes dependency on http-duplex package replacing w/ internal replacement lib
