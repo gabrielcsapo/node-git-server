@@ -11,11 +11,11 @@ Object.prototype.serialize = function() {
 
 Object.prototype.filterKeys = function(key) {
     var obj = this;
-    Object.keys(this).forEach(function (i) { 
+    Object.keys(this).forEach(function (i) {
         if (i == key)
             delete obj[i];
     });
-    
+
     return obj;
 };
 
@@ -52,7 +52,7 @@ var server = http.createServer(function (req, res) {
                     dup.end(size + '\n');
                 });
             }
-            else fs.createReadStream(__filename).pipe(dup);        
+            else fs.createReadStream(__filename).pipe(dup);
         break;
         case '/info':
             if (dup.method == 'GET') {
@@ -73,7 +73,7 @@ var server = http.createServer(function (req, res) {
                     "Client: {12}\n" +
                     "Socket: {13}\n"
                 ).format (
-                    dup.method, 
+                    dup.method,
                     dup.url,
                     dup.statusCode,
                     dup.upgrade,
@@ -101,7 +101,7 @@ var server = http.createServer(function (req, res) {
     }
 });
 
-test(function (t) {
+test('http-duplex', (t) => {
     t.plan(3);
 
     server.listen(0);
@@ -126,16 +126,16 @@ test(function (t) {
             "Status: 200\n" +
             "Upgrade: false\n" +
             "Http Version 1: 1.1\n" +
-            "Http Version 2: 1.1\n" +            
+            "Http Version 2: 1.1\n" +
             "Headers: \n" +
             "{\n" +
             " \"host\": \"localhost:" + server.address().port + "\",\n" +
             " \"connection\": \"close\"\n" +
-            "}\n" + 
+            "}\n" +
             "Trailers: {}\n" +
-            "Complete: false\n" + 
+            "Complete: false\n" +
             "Readable: true\n" +
-            "Writeable: {10}\n" +            
+            "Writeable: {10}\n" +
             "Connection: [object Object]\n" +
             "Client: [object Object]\n" +
             "Socket: [object Object]\n";
