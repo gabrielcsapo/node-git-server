@@ -1,5 +1,6 @@
-# Unreleased
+# 0.3.4 (11/10/2017)
 
+- updates duplex lib to fix cork, uncork and add some chaining
 - adds extensive docs to Git, Util and Service
 - adds named function to events to trace errors more easily
 
