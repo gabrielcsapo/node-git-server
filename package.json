@@ -26,18 +26,18 @@
     "lint": "eslint .",
     "test": "tape test/*.js",
     "coverage": "tap test/*.js --coverage --coverage-report=lcov",
-    "generate-docs": "tryitout --template=landing --output=./docs && jsdoc -c jsdoc.json"
+    "generate-docs": "tryitout && jsdoc -c jsdoc.json"
   },
   "dependencies": {
     "through": "^2.3.8"
   },
   "devDependencies": {
-    "async": "^2.5.0",
+    "async": "^2.6.0",
     "docdash": "^0.4.0",
-    "eslint": "^4.10.0",
+    "eslint": "^4.11.0",
     "jsdoc": "^3.5.5",
-    "tap": "^10.7.2",
+    "tap": "^10.7.3",
     "tape": "^4.8.0",
-    "tryitout": "^1.0.0"
+    "tryitout": "^1.2.0"
   }
 }
