@@ -31,5 +31,7 @@ module.exports = {
   },
   footer: `
        <div class="text-black">Made with ☕️ by <a href="http://www.gabrielcsapo.com">@gabrielcsapo</a></div>
-    `
+    `,
+  template: 'landing',
+  output: './docs'
 };
