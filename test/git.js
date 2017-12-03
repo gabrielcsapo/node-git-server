@@ -548,13 +548,13 @@ test('git', (t) => {
               });
           },
           (callback) => {
-              const glog = _spawn('git', [ 'log', '--all'], { cwd : repoDir + '/doom.git' });
+              const glog = _spawn('git', [ 'log'], { cwd : repoDir + '/doom.git' });
               glog.on('exit', (code) => {
                   t.equal(code, 128);
                   callback();
               });
               var data = '';
-              glog.stderr.on('data', (buf) => data += buf );
+              glog.stderr.on('data', (buf) => data += buf);
               glog.stderr.on('end', () => {
                   const res = /fatal: bad default revision 'HEAD'/.test(data) || /fatal: your current branch 'master' does not have any commits yet/.test(data);
                   t.ok(res);
@@ -621,9 +621,16 @@ test('git', (t) => {
 
       const repos = new GitServer(repoDir, {
           autoCreate: true,
-          authenticate: (type, repo, username, password, next) => {
-            if(type == 'download', repo == 'doom' && username == 'root' && password == 'root') {
-              next();
+          authenticate: (type, repo, user, next) => {
+
+            if(type == 'download', repo == 'doom') {
+              user((username, password) => {
+                if(username == 'root' && password == 'root') {
+                  next();
+                } else {
+                  next('that is not the correct password');
+                }
+              });
             } else {
               next('that is not the correct password');
             }
@@ -677,12 +684,19 @@ test('git', (t) => {
 
       const repos = new GitServer(repoDir, {
           autoCreate: true,
-          authenticate: (type, repo, username, password) => {
+          authenticate: (type, repo, user) => {
             return new Promise(function(resolve, reject) {
-              if(type == 'download', repo == 'doom' && username == 'root' && password == 'root') {
-                return resolve();
+              if(type == 'download', repo == 'doom') {
+                user((username, password) => {
+                  if(username == 'root' && password == 'root') {
+                    return resolve();
+                  } else {
+                    return reject('that is not the correct password');
+                  }
+                });
+              } else {
+                return reject('that is not the correct password');
               }
-              return reject('that is not the correct password');
             });
           }
       });

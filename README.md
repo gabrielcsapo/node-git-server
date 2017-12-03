@@ -22,9 +22,15 @@ npm install node-git-server
 const Server = require('node-git-server');
 const repo = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
-    authenticate: (type, repo, username, password, next) => {
-      console.log(type, repo, username, password);
-      next();
+    authenticate: (type, repo, user, next) => {
+      if(type == 'upload') {
+        user((username, password) => {
+          console.log(username, password);
+          next();
+        });
+      } else {
+        next();
+      }
     }
 });
 const port = process.env.PORT || 7005;

@@ -6,9 +6,16 @@ const port = process.env.PORT || 7005;
 
 const git = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
     autoCreate: true,
-    authenticate: (type, repo, username, password, next) => {
-      console.log(type, repo, username, password); // eslint-disable-line
-      next();
+    authenticate: (type, repo, user, next) => {
+      console.log(type, repo); // eslint-disable-line
+      if(type == 'upload') {
+        user((username, password) => {
+          console.log(username, password); // eslint-disable-line
+          next();
+        });
+      } else {
+        next();
+      }
     }
 });
 
