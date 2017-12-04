@@ -1,3 +1,8 @@
+# Unreleased
+
+- [BREAKING] changes the interface for authentication to make it more flexible
+- when error is sent back to client ensure error is string
+
 # 0.3.4 (11/10/2017)
 
 - updates duplex lib to fix cork, uncork and add some chaining
