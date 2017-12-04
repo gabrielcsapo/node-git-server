@@ -1,4 +1,4 @@
-# Unreleased
+# 0.4.0 (12/03/2017)
 
 - [BREAKING] changes the interface for authentication to make it more flexible
 - when error is sent back to client ensure error is string
