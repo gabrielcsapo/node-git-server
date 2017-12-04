@@ -48,6 +48,9 @@
     <section class="readme">
         <article><h1>node-git-server</h1><blockquote>
 <p>🎡 A configurable git server written in Node.js</p>
+<blockquote>
+<p>there be 🐲 here! The API's and functionality are still be cemented, anything before a 1.0.0 release will be subject to change. </p>
+</blockquote>
 </blockquote>
 <p><a href="https://www.npmjs.com/package/node-git-server"><img src="https://img.shields.io/npm/v/node-git-server.svg" alt="Npm Version"></a>
 <a href="https://travis-ci.org/gabrielcsapo/node-git-server"><img src="https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master" alt="Build Status"></a>
@@ -57,7 +60,7 @@
 <a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm"></a>
 <a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm"></a></p>
 <h1>Install</h1><pre class="prettyprint source"><code>npm install node-git-server</code></pre><h1>Usage</h1><pre class="prettyprint source lang-javascript"><code>const Server = require('node-git-server');
-const repo = new Server(path.resolve(__dirname, 'tmp'), {
+const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
       if(type == 'upload') {
