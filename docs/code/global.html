@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>Global - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,80 +27,255 @@
 
 <div id="main">
     
+    <h1 class="page-title">Global</h1>
+    
 
     
 
 
 
+
+<section>
+
+<header>
+    
+        <h2>
+        
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+        
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="getType"><span class="type-signature"></span>getType<span class="signature">(service)</span><span class="type-signature"> &rarr; {String}</span></h4>
+
     
 
 
 
 
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line239">line 239</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
 
+
+<div class="description">
+    <p>returns the typeof service being process</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>service</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Service.html">Service</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the service type</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>will respond with either upload or download</li>
+</ul>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
 
     
 
 
-    <section class="readme">
-        <article><h1>node-git-server</h1><blockquote>
-<p>🎡 A configurable git server written in Node.js</p>
-</blockquote>
-<p><a href="https://www.npmjs.com/package/node-git-server"><img src="https://img.shields.io/npm/v/node-git-server.svg" alt="Npm Version"></a>
-<a href="https://travis-ci.org/gabrielcsapo/node-git-server"><img src="https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master" alt="Build Status"></a>
-<a href="https://lcov-server.gabrielcsapo.com/coverage/github%2Ecom/gabrielcsapo/node-git-server"><img src="https://lcov-server.gabrielcsapo.com/badge/github%2Ecom/gabrielcsapo/node-git-server.svg" alt="Coverage Status"></a>
-<a href="https://starbuck.gabrielcsapo.com/github/gabrielcsapo/node-git-server"><img src="https://starbuck.gabrielcsapo.com/badge/github/gabrielcsapo/node-git-server/status.svg" alt="Dependency Status"></a>
-<a href="https://starbuck.gabrielcsapo.com/github/gabrielcsapo/node-git-server#info=devDependencies"><img src="https://starbuck.gabrielcsapo.com/badge/github/gabrielcsapo/node-git-server/dev-status.svg" alt="devDependency Status"></a>
-<a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm"></a>
-<a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm"></a></p>
-<h1>Install</h1><pre class="prettyprint source"><code>npm install node-git-server</code></pre><h1>Usage</h1><pre class="prettyprint source lang-javascript"><code>const Server = require('node-git-server');
-const repo = new Server(path.resolve(__dirname, 'tmp'), {
-    autoCreate: true,
-    authenticate: (type, repo, user, next) => {
-      if(type == 'upload') {
-        user((username, password) => {
-          console.log(username, password);
-          next();
-        });
-      } else {
-        next();
-      }
-    }
-});
-const port = process.env.PORT || 7005;
+        
+    
 
-repos.on('push', (push) => {
-    console.log('push ' + push.repo + '/' + push.commit
-        + ' (' + push.branch + ')'
-    );
-    push.accept();
-});
+    
 
-repos.on('fetch', (fetch) => {
-    console.log('fetch ' + fetch.commit);
-    fetch.accept();
-});
+    
+</article>
 
-repos.listen(port, () => {
-    console.log(`node-git-server running at http://localhost:${port}`)
-});</code></pre><p>then start up the node-git-server server...</p>
-<pre class="prettyprint source"><code>$ node example/index.js</code></pre><p>meanwhile...</p>
-<pre class="prettyprint source"><code>$ git push http://localhost:7005/beep master
-Counting objects: 356, done.
-Delta compression using up to 2 threads.
-Compressing objects: 100% (133/133), done.
-Writing objects: 100% (356/356), 46.20 KiB, done.
-Total 356 (delta 210), reused 355 (delta 210)
-To http://localhost:7005/beep
- * [new branch]      master -> master</code></pre><p>For more information please visit the <a href="http://www.gabrielcsapo.com/node-git-server/code/index.html">docs</a></p>
-<h1>Philosophy</h1><p>This library is aimed to have a zero dependency footprint. If you are reading this and you see dependencies, help to remove them 🐒.</p>
-<h1>Thanks</h1><p>This is a hard fork from <a href="https://github.com/substack/pushover">pushover</a>.</p></article>
-    </section>
-
-
+</section>
 
 
 
