@@ -8,7 +8,7 @@ const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
       console.log(type, repo); // eslint-disable-line
-      if(type == 'upload') {
+      if(type == 'push') {
         user((username, password) => {
           console.log(username, password); // eslint-disable-line
           next();

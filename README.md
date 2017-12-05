@@ -2,7 +2,7 @@
 
 > 🎡 A configurable git server written in Node.js
 
->> there be 🐲 here! The API's and functionality are still be cemented, anything before a 1.0.0 release will be subject to change. 
+>> there be 🐲 here! The API's and functionality are still be cemented, anything before a 1.0.0 release will be subject to change.
 
 [![Npm Version](https://img.shields.io/npm/v/node-git-server.svg)](https://www.npmjs.com/package/node-git-server)
 [![Build Status](https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master)](https://travis-ci.org/gabrielcsapo/node-git-server)
@@ -25,7 +25,7 @@ const Server = require('node-git-server');
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
-      if(type == 'upload') {
+      if(type == 'push') {
         user((username, password) => {
           console.log(username, password);
           next();
