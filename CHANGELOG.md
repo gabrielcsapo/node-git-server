@@ -1,3 +1,7 @@
+# 0.4.1 (12/04/2017)
+
+- fixes type to be the same as the event names
+
 # 0.4.0 (12/03/2017)
 
 - [BREAKING] changes the interface for authentication to make it more flexible
