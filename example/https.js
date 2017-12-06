@@ -1,4 +1,4 @@
-const Server = require('./lib/git');
+const Server = require('../git');
 const path = require('path');
 const fs = require('fs');
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
