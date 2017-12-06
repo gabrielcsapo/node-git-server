@@ -40,6 +40,6 @@ var options = {
 	cert: fs.readFileSync('./certificate.pem') //Certificate For HTTPS
 };
 
-repos.listen(port, options, (port, protocol) => {
+repos.listen(port, options, (error, result, port, protocol) => {
   console.log(`node-git-server running at ${protocol}://localhost:${port}`)
 });
