@@ -1,3 +1,9 @@
+// You Can Use The Commands Below To Generate A Self Signed Certificate For Use With This Tutorial
+// These Commands Require That You have 'openssl' installed on your system
+// openssl genrsa -out privatekey.pem 1024
+// openssl req -new -key privatekey.pem -out certrequest.csr
+// openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
+
 const Server = require('../');
 const path = require('path');
 const fs = require('fs');
