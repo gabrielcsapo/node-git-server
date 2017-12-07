@@ -466,20 +466,28 @@ class Git extends EventEmitter {
    * starts a git server on the given port
    * @method listen
    * @memberof Git
+   * @param  {String}   type     - the type of server you want. Can be either 'http' or 'https'
    * @param  {Array}   options     - the configuration of the webserver
    * @param  {Function} callback - the function to call when server is started or error has occured
    */
-  listen(options, callback) {
+  listen(type, options, callback) {
     var self = this;
-    if(typeof options != 'object') {
+    if(typeof type != 'string') {
       callback("V0.4.2 Requires The First Argument Of Listen To Be An Array Of Options. Please Check The Examples To Update Your Code!");
     } else {
-      if(options.type == 'http') {
-        this.server = http.createServer(function(req, res) {
-            self.handle(req, res);
-        });
-        this.server.listen(options.port, callback);
-      } else if (options.type == 'https') {
+      if(type == 'http') {
+        if(typeof options == 'number') {
+          this.server = http.createServer(function(req, res) {
+              self.handle(req, res);
+          });
+          this.server.listen(options, callback);
+        } else {
+          this.server = http.createServer(function(req, res) {
+              self.handle(req, res);
+          });
+          this.server.listen(options.port, callback);
+        }
+      } else if (type == 'https') {
         if(options.cert != undefined && options.key != undefined) {
           this.server = https.createServer(options, function(req, res) {
               self.handle(req, res);
