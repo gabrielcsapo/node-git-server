@@ -34,9 +34,8 @@ repos.on('fetch', (fetch) => {
 });
 
 //HTTPS Server On Port 7006
-repos.listen({
+repos.listen('https', {
    port: 7006,
-   type: 'https',
    key: fs.readFileSync('./privatekey.pem'),
    cert: fs.readFileSync('./certificate.pem')
 }, (error, result) => {
@@ -45,10 +44,7 @@ repos.listen({
 });
 
 //HTTP Server On Port 7005
-repos.listen({
-   port: 7005,
-   type: 'http'
-}, (error, result) => {
+repos.listen('http', 7005, (error, result) => {
   if(error) return console.error(`failed to start git-server because of error ${error}`);
   console.log(`node-git-server running at http://localhost:7005`);
 });
