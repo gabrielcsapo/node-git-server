@@ -13,7 +13,7 @@ process.argv.slice(2).forEach((arg) => {
       type = 'https';
     break;
   }
-})
+});
 
 const fs = require('fs');
 const path = require('path');
