@@ -26,11 +26,11 @@
 </nav>
 
 <div id="main">
-    
-    <h1 class="page-title">Git</h1>
-    
 
-    
+    <h1 class="page-title">Git</h1>
+
+
+
 
 
 
@@ -38,66 +38,66 @@
 <section>
 
 <header>
-    
+
         <h2>
         Git
         </h2>
-        
-    
+
+
 </header>
 
 <article>
     <div class="container-overview">
-    
-        
 
-    
+
+
+
 
     <h4 class="name" id="Git"><span class="type-signature"></span>new Git<span class="signature">(repoDir, options)</span><span class="type-signature"></span></h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line111">line 111</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
@@ -119,157 +119,157 @@
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repoDir</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 |
 
 <span class="param-type">function</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>Create a new repository collection from the directory <code>repoDir</code>. <code>repoDir</code> should be entirely empty except for git repo directories. If <code>repoDir</code> is a function, <code>repoDir(repo)</code> will be used to dynamically resolve project directories. The return value of <code>repoDir(repo)</code> should be a string path specifying where to put the string <code>repo</code>. Make sure to return the same value for <code>repo</code> every time since <code>repoDir(repo)</code> will be called multiple times.</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>options that can be applied on the new instance being created</p>
                 <h6>Properties</h6>
-                
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>autoCreate</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Boolean</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>By default, repository targets will be created if they don't exist. You can
    disable that behavior with <code>options.autoCreate = true</code></p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>authenticate</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">function</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>a function that has the following arguments (repo, username, password, next) and will be called when a request comes through if set</p>
 <pre class="prettyprint source"><code> authenticate: (type, repo, username, password, next) => {
@@ -288,47 +288,47 @@
  }</code></pre></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>checkout</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Boolean</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>If <code>opts.checkout</code> is true, create and expected checked-out repos instead of bare repos</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -347,13 +347,13 @@
 
 
 
-    
+
     </div>
 
-    
+
         <h3 class="subsection-title">Extends</h3>
 
-        
+
 
 
     <ul>
@@ -361,71 +361,71 @@
     </ul>
 
 
-    
 
-    
 
-    
 
-     
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
         <h3 class="subsection-title">Methods</h3>
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id=".close"><span class="type-signature">(static) </span>close<span class="signature">()</span><span class="type-signature"></span></h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line438">line 438</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line465">line 465</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
@@ -460,56 +460,56 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id=".create"><span class="type-signature">(static) </span>create<span class="signature">(repo, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line197">line 197</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
@@ -531,93 +531,93 @@
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>the name of the repo</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>callback</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">function</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>Optionally get a callback <code>cb(err)</code> to be notified when the repository was created.</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -636,56 +636,56 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id=".exists"><span class="type-signature">(static) </span>exists<span class="signature">(repo, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line169">line 169</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
@@ -707,93 +707,93 @@
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>name of the repo</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>callback</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">function</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>function to be called when finished</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -812,56 +812,56 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id=".handle"><span class="type-signature">(static) </span>handle<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line254">line 254</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
@@ -883,73 +883,73 @@
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>req</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>http request object</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>res</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>http response object</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -968,56 +968,56 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id=".list"><span class="type-signature">(static) </span>list<span class="signature">(callback)</span><span class="type-signature"></span></h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line153">line 153</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
@@ -1039,50 +1039,50 @@
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>callback</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">function</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>function to be called when repositories have been found <code>function(error, repos)</code></p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1101,56 +1101,56 @@
 
 
 
-        
-            
 
-    
 
-    <h4 class="name" id=".listen"><span class="type-signature">(static) </span>listen<span class="signature">(port, callback)</span><span class="type-signature"></span></h4>
 
-    
+
+
+    <h4 class="name" id=".listen"><span class="type-signature">(static) </span>listen<span class="signature">(options, callback)</span><span class="type-signature"></span></h4>
+
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line424">line 424</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line426">line 426</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
@@ -1172,73 +1172,124 @@
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
-                <td class="name"><code>port</code></td>
-            
+
+                <td class="name"><code>options</code></td>
+
 
             <td class="type">
-            
-                
-<span class="param-type">Number</span>
 
 
-            
+<span class="param-type">Array</span>
+
+
+
             </td>
 
-            
 
-            
 
-            <td class="description last"><p>the port to start the server on</p></td>
+
+
+            <td class="description last"><p>the options to start the server with</p>
+              <h6>Options</h6>
+
+              <table class="props">
+                  <thead>
+                  <tr>
+                      <th>Name</th>
+
+                      <th>Type</th>
+
+                      <th class="last">Description</th>
+                  </tr>
+                  </thead>
+
+                  <tbody>
+                      <tr>
+                              <td class="name"><code>port</code></td>
+                          <td class="type">
+              <span class="param-type">Number</span>
+                          </td>
+                          <td class="description last"><p>the port to start the server on. Required</p></td>
+                      </tr>
+
+                      <tr>
+                              <td class="name"><code>type</code></td>
+                          <td class="type">
+              <span class="param-type">String</span>
+                          </td>
+                          <td class="description last"><p>the type of server you want. Can be either 'http' or 'https'. Required</p></td>
+                      </tr>
+
+                      <tr>
+                              <td class="name"><code>cert</code></td>
+                          <td class="type">
+              <span class="param-type">String</span>
+                          </td>
+                          <td class="description last"><p>the contents of the http certificate file. For HTTPS Only</p></td>
+                      </tr>
+
+                      <tr>
+                              <td class="name"><code>key</code></td>
+                          <td class="type">
+              <span class="param-type">String</span>
+                          </td>
+                          <td class="description last"><p>the contents of the http certificate key file. For HTTPS Only</p></td>
+                      </tr>
+
+                  </tbody>
+              </table>
+
+
+            </td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>callback</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">function</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the function to call when server is started or error has occured</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1257,56 +1308,56 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id=".mkdir"><span class="type-signature">(static) </span>mkdir<span class="signature">(dir, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line179">line 179</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
@@ -1328,93 +1379,93 @@
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>dir</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>directory name</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>callback</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">function</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last"><p>callback to be called when finished</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1433,109 +1484,109 @@
 
 
 
-        
-    
 
-    
 
-    
+
+
+
+
         <h3 class="subsection-title">Events</h3>
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id="event:fetch">fetch</h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line48">line 48</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
 
     <h5 class="subsection-title">Properties:</h5>
 
-    
+
 
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>fetch</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="HttpDuplex.html">HttpDuplex</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>an http duplex object (see below) with these extra properties:</p>
                 <h6>Properties</h6>
@@ -1543,75 +1594,75 @@
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the repo</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>commit</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the commit sha</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1627,7 +1678,7 @@
     <h5>Type:</h5>
     <ul>
         <li>
-            
+
 <span class="param-type">Object</span>
 
 
@@ -1639,7 +1690,7 @@
 
 
     <h5>Example</h5>
-    
+
     <pre class="prettyprint"><code>repos.on('fetch', function (fetch) { ... }
 
     Emitted when somebody does a `git fetch` to the repo (which happens whenever you
@@ -1665,101 +1716,101 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id="event:head">head</h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line95">line 95</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
 
     <h5 class="subsection-title">Properties:</h5>
 
-    
+
 
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>head</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="HttpDuplex.html">HttpDuplex</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>an http duplex object (see below) with these extra properties:</p>
                 <h6>Properties</h6>
@@ -1767,52 +1818,52 @@
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the repo</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1828,7 +1879,7 @@
     <h5>Type:</h5>
     <ul>
         <li>
-            
+
 <span class="param-type">Object</span>
 
 
@@ -1840,7 +1891,7 @@
 
 
     <h5>Example</h5>
-    
+
     <pre class="prettyprint"><code>repos.on('head', function (head) { ... }
 
     Emitted when the repo is queried for HEAD before doing other commands.
@@ -1865,101 +1916,101 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id="event:info">info</h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line65">line 65</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
 
     <h5 class="subsection-title">Properties:</h5>
 
-    
+
 
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>info</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="HttpDuplex.html">HttpDuplex</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>an http duplex object (see below) with these extra properties:</p>
                 <h6>Properties</h6>
@@ -1967,52 +2018,52 @@
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the repo</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -2028,7 +2079,7 @@
     <h5>Type:</h5>
     <ul>
         <li>
-            
+
 <span class="param-type">Object</span>
 
 
@@ -2040,7 +2091,7 @@
 
 
     <h5>Example</h5>
-    
+
     <pre class="prettyprint"><code>repos.on('info', function (info) { ... }
 
     Emitted when the repo is queried for info before doing other commands.
@@ -2065,101 +2116,101 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id="event:info">info</h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line80">line 80</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
 
     <h5 class="subsection-title">Properties:</h5>
 
-    
+
 
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>info</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="HttpDuplex.html">HttpDuplex</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>an http duplex object (see below) with these extra properties:</p>
                 <h6>Properties</h6>
@@ -2167,52 +2218,52 @@
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the repo</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -2228,7 +2279,7 @@
     <h5>Type:</h5>
     <ul>
         <li>
-            
+
 <span class="param-type">Object</span>
 
 
@@ -2240,7 +2291,7 @@
 
 
     <h5>Example</h5>
-    
+
     <pre class="prettyprint"><code>repos.on('info', function (info) { ... }
 
     Emitted when the repo is queried for info before doing other commands.
@@ -2265,101 +2316,101 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id="event:push">push</h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line15">line 15</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
 
     <h5 class="subsection-title">Properties:</h5>
 
-    
+
 
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>push</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="HttpDuplex.html">HttpDuplex</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>is a http duplex object (see below) with these extra properties</p>
                 <h6>Properties</h6>
@@ -2367,98 +2418,98 @@
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the repo</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>commit</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the commit sha</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>branch</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the branch</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -2474,7 +2525,7 @@
     <h5>Type:</h5>
     <ul>
         <li>
-            
+
 <span class="param-type">Object</span>
 
 
@@ -2486,7 +2537,7 @@
 
 
     <h5>Example</h5>
-    
+
     <pre class="prettyprint"><code>repos.on('push', function (push) { ... }
 
     Emitted when somebody does a `git push` to the repo.
@@ -2511,101 +2562,101 @@
 
 
 
-        
-            
 
-    
+
+
+
 
     <h4 class="name" id="event:tag">tag</h4>
 
-    
+
 
 
 
 
 <dl class="details">
 
-    
+
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="git.js.html">git.js</a>, <a href="git.js.html#line32">line 32</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </dl>
 
 
 
     <h5 class="subsection-title">Properties:</h5>
 
-    
+
 
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>tag</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="HttpDuplex.html">HttpDuplex</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>an http duplex object (see below) with these extra properties:</p>
                 <h6>Properties</h6>
@@ -2613,98 +2664,98 @@
 <table class="props">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>repo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the repo</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>commit</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the commit sha</p></td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>version</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">String</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last"><p>the string that defines the repo</p></td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -2720,7 +2771,7 @@
     <h5>Type:</h5>
     <ul>
         <li>
-            
+
 <span class="param-type">Object</span>
 
 
@@ -2732,7 +2783,7 @@
 
 
     <h5>Example</h5>
-    
+
     <pre class="prettyprint"><code>repos.on('tag', function (tag) { ... }
 
     Emitted when somebody does a `git push --tags` to the repo.
@@ -2756,8 +2807,8 @@
 
 
 
-        
-    
+
+
 </article>
 
 </section>

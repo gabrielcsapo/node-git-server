@@ -1,3 +1,8 @@
+# 0.4.2 (7/12/2017)
+- Add HTTPS Support To The Git Server
+- Updated The README.md So That The Tutorial Works Without Needing To Be Modified To Work
+- Added An Example Showing How to Use HTTPS
+
 # 0.4.1 (12/04/2017)
 
 - fixes type to be the same as the event names

@@ -22,6 +22,7 @@ npm install node-git-server
 
 ```javascript
 const Server = require('node-git-server');
+const path = require('path');
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
@@ -49,7 +50,7 @@ repos.on('fetch', (fetch) => {
     fetch.accept();
 });
 
-repos.listen(port, () => {
+repos.listen('http', port, (error, result) => {
     console.log(`node-git-server running at http://localhost:${port}`)
 });
 ```

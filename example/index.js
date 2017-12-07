@@ -33,7 +33,7 @@ repos.on('fetch', (fetch) => {
     fetch.accept();
 });
 
-repos.listen(port, (error) => {
+repos.listen('http', port, (error, result) => {
     if(error) return console.error(`failed to start git-server because of error ${error}`); // eslint-disable-line
     console.log(`node-git-server running at http://localhost:${port}`); // eslint-disable-line
     repos.list((err, result) => {
