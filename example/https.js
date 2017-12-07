@@ -33,9 +33,22 @@ repos.on('fetch', (fetch) => {
     fetch.accept();
 });
 
-repos.listen({ httpPort: 7005, httpsPort:7006, key: fs.readFileSync('./privatekey.pem'), cert: fs.readFileSync('./certificate.pem')}, (error, result) => {
-  console.log(result); //Returning Undefined
-  var protocol = "?";
-  var port = "?";
-  console.log(`node-git-server running at ${protocol}://localhost:${port}`)
+//HTTPS Server On Port 7006
+repos.listen({
+   port: 7006,
+   type: 'https',
+   key: fs.readFileSync('./privatekey.pem'),
+   cert: fs.readFileSync('./certificate.pem')
+}, (error, result) => {
+  if(error) return console.error(`failed to start git-server because of error ${error}`);
+  console.log(`node-git-server running at https://localhost:7006`);
+});
+
+//HTTP Server On Port 7005
+repos.listen({
+   port: 7005,
+   type: 'http'
+}, (error, result) => {
+  if(error) return console.error(`failed to start git-server because of error ${error}`);
+  console.log(`node-git-server running at http://localhost:7005`);
 });
