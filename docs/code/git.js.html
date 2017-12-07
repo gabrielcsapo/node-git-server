@@ -26,20 +26,21 @@
 </nav>
 
 <div id="main">
-    
+
     <h1 class="page-title">git.js</h1>
-    
-
-    
 
 
 
-    
+
+
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const fs = require('fs');
 const path = require('path');
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const qs = require('querystring');
 const httpDuplex = require('./http-duplex');
@@ -225,9 +226,9 @@ class Git extends EventEmitter {
   mkdir(dir, callback) {
       // TODO: remove sync operations
       const parts = this.dirMap(dir).split(path.sep);
-      for(var i = 0; i &lt;= parts.length; i++) {
+      for(var i = 0; i <= parts.length; i++) {
           const directory = parts.slice(0, i).join(path.sep);
-          if(directory &amp;&amp; !fs.existsSync(directory)) {
+          if(directory && !fs.existsSync(directory)) {
               fs.mkdirSync(directory);
           }
       }
@@ -278,16 +279,17 @@ class Git extends EventEmitter {
   /**
    * returns the typeof service being process
    * @method getType
-   * @param  {Service} service - the service type
+   * @param  {String} service - the service type
    * @return {String}  - will respond with either upload or download
    */
   getType(service) {
     switch(service) {
       case 'upload-pack':
+        return 'fetch';
       case 'receive-pack':
-        return 'upload';
+        return 'push';
       default:
-        return 'download';
+        return 'unknown';
     }
   }
   /**
@@ -317,7 +319,7 @@ class Git extends EventEmitter {
             }
 
             var service = params.service.replace(/^git-/, '');
-            if (services.indexOf(service) &lt; 0) {
+            if (services.indexOf(service) < 0) {
                 res.statusCode = 405;
                 res.end('service not available');
                 return;
@@ -388,7 +390,7 @@ class Git extends EventEmitter {
                     dup.end();
                 });
 
-                if (!ex &amp;&amp; self.autoCreate) {
+                if (!ex && self.autoCreate) {
                     dup.once('accept', (dir) => {
                         self.create(dir || repo, next);
                     });
@@ -415,7 +417,7 @@ class Git extends EventEmitter {
             var repo = m[1],
                 service = m[2];
 
-            if (services.indexOf(service) &lt; 0) {
+            if (services.indexOf(service) < 0) {
                 res.statusCode = 405;
                 res.end('service not available');
                 return;
@@ -438,7 +440,7 @@ class Git extends EventEmitter {
             });
         },
         (req, res) => {
-            if (req.method !== 'GET' &amp;&amp; req.method !== 'POST') {
+            if (req.method !== 'GET' && req.method !== 'POST') {
                 res.statusCode = 405;
                 res.end('method not supported');
             } else {
@@ -464,15 +466,32 @@ class Git extends EventEmitter {
    * starts a git server on the given port
    * @method listen
    * @memberof Git
-   * @param  {Number}   port     - the port to start the server on
+   * @param  {Array}   options     - the configuration of the webserver
    * @param  {Function} callback - the function to call when server is started or error has occured
    */
-  listen(port, callback) {
-      var self = this;
-      this.server = http.createServer(function(req, res) {
-          self.handle(req, res);
-      });
-      this.server.listen(port, callback);
+  listen(options, callback) {
+    var self = this;
+    if(typeof options != 'object') {
+      callback("V0.4.2 Requires The First Argument Of Listen To Be An Array Of Options. Please Check The Examples To Update Your Code!");
+    } else {
+      if(options.type == 'http') {
+        this.server = http.createServer(function(req, res) {
+            self.handle(req, res);
+        });
+        this.server.listen(options.port, callback);
+      } else if (options.type == 'https') {
+        if(options.cert != undefined && options.key != undefined) {
+          this.server = https.createServer(options, function(req, res) {
+              self.handle(req, res);
+          });
+          this.server.listen(options.port, callback);
+        } else {
+          callback("A Certificate and Key Is Required To Start The HTTPS Server!");
+        }
+      } else {
+        callback("A Varible 'type' need to be in the options and must be set to 'http' or 'https' to set the server type!");
+      }
+    }
   }
   /**
    * closes the server instance

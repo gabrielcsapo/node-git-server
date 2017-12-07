@@ -26,13 +26,6 @@
 </nav>
 
 <div id="main">
-    
-
-    
-
-
-
-    
 
 
 
@@ -42,7 +35,14 @@
 
 
 
-    
+
+
+
+
+
+
+
+
 
 
     <section class="readme">
@@ -60,6 +60,7 @@
 <a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm"></a>
 <a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm"></a></p>
 <h1>Install</h1><pre class="prettyprint source"><code>npm install node-git-server</code></pre><h1>Usage</h1><pre class="prettyprint source lang-javascript"><code>const Server = require('node-git-server');
+const path = require('path');
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
@@ -87,7 +88,7 @@ repos.on('fetch', (fetch) => {
     fetch.accept();
 });
 
-repos.listen(port, () => {
+repos.listen({ port: port, type: 'http' }, (error, result) => {
     console.log(`node-git-server running at http://localhost:${port}`)
 });</code></pre><p>then start up the node-git-server server...</p>
 <pre class="prettyprint source"><code>$ node example/index.js</code></pre><p>meanwhile...</p>
