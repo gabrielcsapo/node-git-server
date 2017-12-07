@@ -21,8 +21,9 @@ npm install node-git-server
 # Usage
 
 ```javascript
-const Server = require('node-git-server');
 const path = require('path');
+const Server = require('node-git-server');
+
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
@@ -39,14 +40,12 @@ const repos = new Server(path.resolve(__dirname, 'tmp'), {
 const port = process.env.PORT || 7005;
 
 repos.on('push', (push) => {
-    console.log('push ' + push.repo + '/' + push.commit
-        + ' (' + push.branch + ')'
-    );
+    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
     push.accept();
 });
 
 repos.on('fetch', (fetch) => {
-    console.log('fetch ' + fetch.commit);
+    console.log(`fetch ${fetch.commit}`);
     fetch.accept();
 });
 
@@ -72,6 +71,20 @@ Writing objects: 100% (356/356), 46.20 KiB, done.
 Total 356 (delta 210), reused 355 (delta 210)
 To http://localhost:7005/beep
  * [new branch]      master -> master
+```
+
+## Example
+
+Running the following command will start up a simple http server:
+
+```
+node example/index.js
+```
+
+If you want to try using https run the following
+
+```
+node example/index.js --https
 ```
 
 For more information please visit the [docs](http://www.gabrielcsapo.com/node-git-server/code/index.html)
