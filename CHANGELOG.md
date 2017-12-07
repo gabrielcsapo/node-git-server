@@ -1,3 +1,7 @@
+# Unreleased
+
+- adds https support
+
 # 0.4.1 (12/04/2017)
 
 - fixes type to be the same as the event names

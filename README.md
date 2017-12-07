@@ -22,6 +22,7 @@ npm install node-git-server
 
 ```javascript
 const Server = require('node-git-server');
+const path = require('path');
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
