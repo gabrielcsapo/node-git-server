@@ -32,14 +32,10 @@ repos.on('fetch', (fetch) => {
     console.log('fetch ' + fetch.commit);
     fetch.accept();
 });
-const port = process.env.PORT || 7005;
 
-var options = {
-  port: 7006, //HTTPS Port
-	key: fs.readFileSync('./privatekey.pem'), //Private Key For HTTPS
-	cert: fs.readFileSync('./certificate.pem') //Certificate For HTTPS
-};
-
-repos.listen(port, options, (error, result, port, protocol) => {
+repos.listen({ httpPort: 7005, httpsPort:7006, key: fs.readFileSync('./privatekey.pem'), cert: fs.readFileSync('./certificate.pem')}, (error, result) => {
+  console.log(result); //Returning Undefined
+  var protocol = "?";
+  var port = "?";
   console.log(`node-git-server running at ${protocol}://localhost:${port}`)
 });
