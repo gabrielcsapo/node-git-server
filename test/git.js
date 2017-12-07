@@ -212,7 +212,7 @@ test('git', (t) => {
           t.equal(dir, 'doom.git');
           return path.join(targetDir, dir);
       });
-      server.listen(port);
+      server.listen({ port: port, type: 'http' });
 
       process.chdir(srcDir);
       async.waterfall([
@@ -591,7 +591,7 @@ test('git', (t) => {
 
       const repos = new GitServer(repoDir);
       const port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
-      repos.listen(port);
+      repos.listen({ port: port, type: 'http'});
 
       process.chdir(srcDir);
       async.waterfall([
@@ -637,7 +637,7 @@ test('git', (t) => {
           }
       });
       const port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
-      repos.listen(port);
+      repos.listen({ port: port, type: 'http'});
 
       process.chdir(srcDir);
       async.waterfall([
@@ -701,7 +701,7 @@ test('git', (t) => {
           }
       });
       const port = Math.floor(Math.random() * ((1<<16) - 1e4)) + 1e4;
-      repos.listen(port);
+      repos.listen({ port: port, type: 'http'});
 
       process.chdir(srcDir);
       async.waterfall([
