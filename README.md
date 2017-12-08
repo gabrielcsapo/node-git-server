@@ -87,6 +87,8 @@ If you want to try using https run the following
 node example/index.js --https
 ```
 
+> When running https with self-signed certs there are two ways to override the git-clients behavior using `git config http.sslVerify false` or `git config --global http.sslCAInfo /path/to/cert.pem`
+
 For more information please visit the [docs](http://www.gabrielcsapo.com/node-git-server/code/index.html)
 
 # Philosophy   
