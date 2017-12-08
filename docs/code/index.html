@@ -49,7 +49,7 @@
         <article><h1>node-git-server</h1><blockquote>
 <p>🎡 A configurable git server written in Node.js</p>
 <blockquote>
-<p>there be 🐲 here! The API's and functionality are still be cemented, anything before a 1.0.0 release will be subject to change. </p>
+<p>there be 🐲 here! The API's and functionality are still be cemented, anything before a 1.0.0 release will be subject to change.</p>
 </blockquote>
 </blockquote>
 <p><a href="https://www.npmjs.com/package/node-git-server"><img src="https://img.shields.io/npm/v/node-git-server.svg" alt="Npm Version"></a>
@@ -59,11 +59,13 @@
 <a href="https://starbuck.gabrielcsapo.com/github/gabrielcsapo/node-git-server#info=devDependencies"><img src="https://starbuck.gabrielcsapo.com/badge/github/gabrielcsapo/node-git-server/dev-status.svg" alt="devDependency Status"></a>
 <a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm"></a>
 <a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm"></a></p>
-<h1>Install</h1><pre class="prettyprint source"><code>npm install node-git-server</code></pre><h1>Usage</h1><pre class="prettyprint source lang-javascript"><code>const Server = require('node-git-server');
+<h1>Install</h1><pre class="prettyprint source"><code>npm install node-git-server</code></pre><h1>Usage</h1><pre class="prettyprint source lang-javascript"><code>const path = require('path');
+const Server = require('node-git-server');
+
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
-      if(type == 'upload') {
+      if(type == 'push') {
         user((username, password) => {
           console.log(username, password);
           next();
@@ -76,14 +78,12 @@ const repos = new Server(path.resolve(__dirname, 'tmp'), {
 const port = process.env.PORT || 7005;
 
 repos.on('push', (push) => {
-    console.log('push ' + push.repo + '/' + push.commit
-        + ' (' + push.branch + ')'
-    );
+    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
     push.accept();
 });
 
 repos.on('fetch', (fetch) => {
-    console.log('fetch ' + fetch.commit);
+    console.log(`fetch ${fetch.commit}`);
     fetch.accept();
 });
 
@@ -98,7 +98,12 @@ Compressing objects: 100% (133/133), done.
 Writing objects: 100% (356/356), 46.20 KiB, done.
 Total 356 (delta 210), reused 355 (delta 210)
 To http://localhost:7005/beep
- * [new branch]      master -> master</code></pre><p>For more information please visit the <a href="http://www.gabrielcsapo.com/node-git-server/code/index.html">docs</a></p>
+ * [new branch]      master -> master</code></pre><h2>Example</h2><p>Running the following command will start up a simple http server:</p>
+<pre class="prettyprint source"><code>node example/index.js</code></pre><p>If you want to try using https run the following</p>
+<pre class="prettyprint source"><code>node example/index.js --https</code></pre><blockquote>
+<p>When running https with self-signed certs there are two ways to override the git-clients behavior using <code>git config http.sslVerify false</code> or <code>git config --global http.sslCAInfo /path/to/cert.pem</code></p>
+</blockquote>
+<p>For more information please visit the <a href="http://www.gabrielcsapo.com/node-git-server/code/index.html">docs</a></p>
 <h1>Philosophy</h1><p>This library is aimed to have a zero dependency footprint. If you are reading this and you see dependencies, help to remove them 🐒.</p>
 <h1>Thanks</h1><p>This is a hard fork from <a href="https://github.com/substack/pushover">pushover</a>.</p></article>
     </section>

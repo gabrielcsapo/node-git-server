@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line111">line 111</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -393,7 +393,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line438">line 438</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line451">line 451</a>
     </li></ul></dd>
     
 
@@ -477,7 +477,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line197">line 197</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line198">line 198</a>
     </li></ul></dd>
     
 
@@ -653,7 +653,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line169">line 169</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -829,7 +829,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line254">line 254</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line256">line 256</a>
     </li></ul></dd>
     
 
@@ -985,7 +985,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line153">line 153</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -1106,7 +1106,7 @@
 
     
 
-    <h4 class="name" id=".listen"><span class="type-signature">(static) </span>listen<span class="signature">(port, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".listen"><span class="type-signature">(static) </span>listen<span class="signature">(port, options<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
 
     
 
@@ -1118,7 +1118,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line424">line 424</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line426">line 426</a>
     </li></ul></dd>
     
 
@@ -1184,6 +1184,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1209,10 +1211,180 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>the port to start the server on</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the options to add extended functionality to the server</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>this is either https or http (the default is http)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Buffer</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the key file for the https server</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cert</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Buffer</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the cert file for the https server</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1231,6 +1403,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1274,7 +1454,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line179">line 179</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -1458,7 +1638,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line48">line 48</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -1682,7 +1862,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line95">line 95</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -1882,7 +2062,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line65">line 65</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -2082,7 +2262,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line80">line 80</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -2282,7 +2462,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line15">line 15</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -2528,7 +2708,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line32">line 32</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
