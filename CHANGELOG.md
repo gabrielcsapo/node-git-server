@@ -1,4 +1,4 @@
-# Unreleased
+# 0.4.2 (12/07/2017)
 
 - adds https support
 

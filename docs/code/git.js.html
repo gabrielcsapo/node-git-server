@@ -40,6 +40,7 @@
             <pre class="prettyprint source linenums"><code>const fs = require('fs');
 const path = require('path');
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const qs = require('querystring');
 const httpDuplex = require('./http-duplex');
@@ -278,16 +279,17 @@ class Git extends EventEmitter {
   /**
    * returns the typeof service being process
    * @method getType
-   * @param  {Service} service - the service type
+   * @param  {String} service - the service type
    * @return {String}  - will respond with either upload or download
    */
   getType(service) {
     switch(service) {
       case 'upload-pack':
+        return 'fetch';
       case 'receive-pack':
-        return 'upload';
+        return 'push';
       default:
-        return 'download';
+        return 'unknown';
     }
   }
   /**
@@ -465,13 +467,24 @@ class Git extends EventEmitter {
    * @method listen
    * @memberof Git
    * @param  {Number}   port     - the port to start the server on
+   * @param  {Object=}   options  - the options to add extended functionality to the server
+   * @param  {String=}   options.type - this is either https or http (the default is http)
+   * @param  {Buffer|String=}   options.key - the key file for the https server
+   * @param  {Buffer|String=}   options.cert - the cert file for the https server
    * @param  {Function} callback - the function to call when server is started or error has occured
    */
-  listen(port, callback) {
-      var self = this;
-      this.server = http.createServer(function(req, res) {
+  listen(port, options, callback) {
+      const self = this;
+      if(typeof options == 'function' || !options) {
+        callback = options;
+        options = { type: 'http' };
+      }
+      const createServer = options.type == 'http' ? http.createServer : https.createServer.bind(this, options);
+
+      this.server = createServer(function(req, res) {
           self.handle(req, res);
       });
+
       this.server.listen(port, callback);
   }
   /**
