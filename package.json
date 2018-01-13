@@ -34,10 +34,10 @@
   "devDependencies": {
     "async": "^2.6.0",
     "docdash": "^0.4.0",
-    "eslint": "^4.11.0",
+    "eslint": "^4.15.0",
     "jsdoc": "^3.5.5",
-    "tap": "^10.7.3",
+    "tap": "^11.0.1",
     "tape": "^4.8.0",
-    "tryitout": "^1.2.0"
+    "tryitout": "^2.0.6"
   }
 }
