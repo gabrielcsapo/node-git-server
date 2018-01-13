@@ -9,7 +9,7 @@ module.exports = {
   body: `
       <div style="width:80%;position: absolute;left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);transform: translate(-50%, -50%);">
         <h3 class="text-center" style="font-weight: 100"> ${description} </h3>
-        <pre style="background-color:rgb(7, 7, 7);color:rgb(228, 228, 228);white-space: pre;text-align:left;width: auto;display:inline-block;">
+        <pre id="code" style="white-space: pre;text-align:left;width: auto;display:inline-block;">
       const Server = require('node-git-server');
       const repo = new Server(path.resolve(__dirname, 'tmp'), {
           autoCreate: true,
@@ -33,5 +33,10 @@ module.exports = {
        <div class="text-black">Made with ☕️ by <a href="http://www.gabrielcsapo.com">@gabrielcsapo</a></div>
     `,
   template: 'landing',
-  output: './docs'
+  output: './docs',
+  externals: [
+    "./docs/krayon.css",
+    "./docs/krayon.min.js",
+    "./docs/main.js"
+  ]
 };
