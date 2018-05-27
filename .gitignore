@@ -6,3 +6,4 @@ coverage
 example/test
 example/tmp
 package-lock.json
+.vs/
