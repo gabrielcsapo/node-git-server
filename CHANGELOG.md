@@ -1,3 +1,7 @@
+# 0.4.3 (04/30/2018)
+
+- removes deprecated `Buffer` interface
+
 # 0.4.2 (12/07/2017)
 
 - adds https support
