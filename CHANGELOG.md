@@ -1,3 +1,7 @@
+# 0.5.0 (11/27/2018)
+
+- adds `log` functionality for event streams and response streams
+
 # 0.4.3 (04/30/2018)
 
 - removes deprecated `Buffer` interface
