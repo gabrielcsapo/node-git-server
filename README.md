@@ -20,6 +20,109 @@ npm install node-git-server
 
 # Usage
 
+## Simple
+
+```javascript
+const path = require('path');
+const Server = require('node-git-server');
+
+const repos = new Server(path.resolve(__dirname, 'tmp'), {
+    autoCreate: true
+});
+const port = process.env.PORT || 7005;
+
+repos.on('push', (push) => {
+    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
+    push.accept();
+});
+
+repos.on('fetch', (fetch) => {
+    console.log(`fetch ${fetch.commit}`);
+    fetch.accept();
+});
+
+repos.listen(port, () => {
+    console.log(`node-git-server running at http://localhost:${port}`)
+});
+```
+
+then start up the node-git-server server...
+
+```
+$ node example/index.js
+```
+
+meanwhile...
+
+```
+$ git push http://localhost:7005/beep master
+Counting objects: 356, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (133/133), done.
+Writing objects: 100% (356/356), 46.20 KiB, done.
+Total 356 (delta 210), reused 355 (delta 210)
+To http://localhost:7005/beep
+ * [new branch]      master -> master
+```
+
+## Sending logs
+
+```javascript
+const path = require('path');
+const Server = require('node-git-server');
+
+const repos = new Server(path.resolve(__dirname, 'tmp'), {
+    autoCreate: true
+});
+const port = process.env.PORT || 7005;
+
+repos.on('push', (push) => {
+    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
+
+    repos.list((err, results) => {
+        push.log(' ');
+        push.log('Hey!');
+        push.log('Checkout these other repos:');
+        for(const repo of results) {
+          push.log(`- ${repo}`);
+        }
+        push.log(' ');
+    });
+
+    push.accept();
+});
+
+repos.listen(port, () => {
+    console.log(`node-git-server running at http://localhost:${port}`)
+});
+```
+
+then start up the node-git-server server...
+
+```
+$ node example/index.js
+```
+
+meanwhile...
+
+```
+$ git push http://localhost:7005/beep master
+Counting objects: 356, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (133/133), done.
+Writing objects: 100% (356/356), 46.20 KiB, done.
+Total 356 (delta 210), reused 355 (delta 210)
+remote:  
+remote: Hey!
+remote: Checkout these other repos:
+remote: - test.git
+remote:  
+To http://localhost:7005/test
+   77bb26e..22918d5  master -> master
+```
+
+### Authentication
+
 ```javascript
 const path = require('path');
 const Server = require('node-git-server');
@@ -73,7 +176,7 @@ To http://localhost:7005/beep
  * [new branch]      master -> master
 ```
 
-## Example
+# Example
 
 Running the following command will start up a simple http server:
 
