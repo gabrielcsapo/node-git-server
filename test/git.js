@@ -604,7 +604,7 @@ test('git', (t) => {
 
     const repos = new GitServer(repoDir);
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
-    repos.listen(port);
+    t.equal(repos.listen(port), repos);
 
     process.chdir(srcDir);
     async.waterfall([
