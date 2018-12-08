@@ -10,7 +10,7 @@ const async = require('async');
 const GitServer = require('../');
 
 test('git', (t) => {
-  t.plan(8);
+  t.plan(9);
 
   t.test('create, push to, and clone a repo', (t) => {
     var lastCommit;
@@ -620,6 +620,20 @@ test('git', (t) => {
       t.ok(!err, 'no errors');
       repos.close();
       t.end();
+    });
+  });
+
+  t.test('should return promise that resolves when server is closed if no callback specified', (t) => {
+    const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
+
+    fs.mkdirSync(repoDir, 0700);
+
+    const repos = new GitServer(repoDir);
+    const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
+    repos.listen(port, () => {
+      repos.close().then(() => {
+        t.end();
+      });
     });
   });
 
