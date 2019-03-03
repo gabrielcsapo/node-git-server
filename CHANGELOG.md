@@ -1,3 +1,9 @@
+# 0.5.1 (03/03/2019)
+
+- bump dependencies
+  - tap `^11.0.1` -> `^12.5.3`
+  - tryitout `^2.0.6` -> `^2.1.1`
+
 # 0.5.0 (11/27/2018)
 
 - adds `log` functionality for event streams and response streams
