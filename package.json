@@ -1,6 +1,6 @@
 {
   "name": "node-git-server",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "🎡 A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
   "contributors": [
@@ -36,8 +36,8 @@
     "docdash": "^0.4.0",
     "eslint": "^4.15.0",
     "jsdoc": "^3.5.5",
-    "tap": "^11.0.1",
+    "tap": "^12.5.3",
     "tape": "^4.8.0",
-    "tryitout": "^2.0.6"
+    "tryitout": "^2.1.1"
   }
 }
