@@ -271,13 +271,13 @@
 
             
 
-            <td class="description last"><p>a function that has the following arguments (repo, username, password, next) and will be called when a request comes through if set</p>
-<pre class="prettyprint source"><code> authenticate: (type, repo, username, password, next) => {
+            <td class="description last"><p>a function that has the following arguments ({ type, repo, username, password, headers }, next) and will be called when a request comes through if set</p>
+<pre class="prettyprint source"><code> authenticate: ({ type, repo, username, password, headers }, next) => {
    console.log(type, repo, username, password);
    next();
  }
  // alternatively you can also pass authenticate a promise
- authenticate: (type, repo, username, password, next) => {
+ authenticate: ({ type, repo, username, password, headers }, next) => {
    console.log(type, repo, username, password);
    return new Promise((resolve, reject) => {
     if(username === 'foo') {
@@ -393,7 +393,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line451">line 451</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line456">line 456</a>
     </li></ul></dd>
     
 
@@ -444,6 +444,51 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Promise</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>will resolve or reject when the server closes or fails to close.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1106,7 +1151,7 @@
 
     
 
-    <h4 class="name" id=".listen"><span class="type-signature">(static) </span>listen<span class="signature">(port, options<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".listen"><span class="type-signature">(static) </span>listen<span class="signature">(port, options<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"> &rarr; {<a href="Git.html">Git</a>}</span></h4>
 
     
 
@@ -1118,7 +1163,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="git.js.html">git.js</a>, <a href="git.js.html#line426">line 426</a>
+        <a href="git.js.html">git.js</a>, <a href="git.js.html#line429">line 429</a>
     </li></ul></dd>
     
 
@@ -1435,6 +1480,30 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>the Git instance, useful for chaining</li>
+</ul>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Git.html">Git</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         

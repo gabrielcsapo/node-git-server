@@ -73,7 +73,7 @@ const Util = {
       } else {
           const tokens = req.headers["authorization"].split(" ");
           if (tokens[0] === "Basic") {
-              const splitHash = new Buffer(tokens[1], 'base64').toString('utf8').split(":");
+              const splitHash = Buffer.from(tokens[1], 'base64').toString('utf8').split(":");
               const username = splitHash.shift();
               const password = splitHash.join(":");
               callback(username, password, null);
@@ -123,7 +123,14 @@ const Util = {
       res.write(pack('# service=git-' + service + '\n'));
       res.write('0000');
 
-      const cmd = ['git-' + service, '--stateless-rpc', '--advertise-refs', repoLocation];
+      var cmd = null;
+      var isWin = /^win/.test(process.platform);
+      if (isWin) {
+          cmd = ['git', service, '--stateless-rpc', '--advertise-refs', repoLocation];
+      } else {
+          cmd = ['git-' + service, '--stateless-rpc', '--advertise-refs', repoLocation];
+      }
+      
       const ps = spawn(cmd[0], cmd.slice(1));
       ps.on('error', (err) => {
           dup.emit('error', new Error(`${err.message} running command ${cmd.join(' ')}`));

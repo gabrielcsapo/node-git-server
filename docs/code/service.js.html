@@ -38,14 +38,21 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const through = require('through');
-const HttpDuplex = require('./http-duplex');
 const zlib = require('zlib');
-
+const util = require('util');
+const os = require('os');
 const { spawn } = require('child_process');
+
+const HttpDuplex = require('./http-duplex');
 
 const headerRE = {
   'receive-pack': '([0-9a-fA-F]+) ([0-9a-fA-F]+) refs\/(heads|tags)\/(.*?)( |00|\u0000)|^(0000)$', // eslint-disable-line
   'upload-pack': '^\\S+ ([0-9a-fA-F]+)'
+};
+
+const packSideband = s => {
+  const n = (4 + s.length).toString(16);
+  return Array(4 - n.length + 1).join('0') + n + s;
 };
 
 class Service extends HttpDuplex {
@@ -67,6 +74,7 @@ class Service extends HttpDuplex {
     this.repo = opts.repo;
     this.service = opts.service;
     this.cwd = opts.cwd;
+    this.logs = [];
 
     var buffered = through().pause();
 
@@ -89,7 +97,7 @@ class Service extends HttpDuplex {
     if(req.headers["authorization"]) {
       const tokens = req.headers["authorization"].split(" ");
       if (tokens[0] === "Basic") {
-          const splitHash = new Buffer(tokens[1], 'base64').toString('utf8').split(":");
+          const splitHash = Buffer.from(tokens[1], 'base64').toString('utf8').split(":");
           this.username = splitHash.shift();
       }
     }
@@ -135,35 +143,63 @@ class Service extends HttpDuplex {
 
     self.once('accept', function onAccept() {
         process.nextTick(function() {
-            var cmd = ['git-' + opts.service, '--stateless-rpc', opts.cwd];
-            var ps = spawn(cmd[0], cmd.slice(1));
+            const cmd = os.platform() == 'win32' ?
+              ['git', opts.service, '--stateless-rpc', opts.cwd]
+            :
+              ['git-' + opts.service, '--stateless-rpc', opts.cwd];
+
+            const ps = spawn(cmd[0], cmd.slice(1));
+
             ps.on('error', function(err) {
               self.emit('error', new Error(`${err.message} running command ${cmd.join(' ')}`));
             });
 
             self.emit('service', ps);
 
-            var respStream = through(function(c) {
-                if (self.listeners('response').length === 0) return this.queue(c);
+            var respStream = through(function write(c) {
+                if (self.listeners('response').length === 0) {
+                  if(self.logs.length > 0) {
+                    while(self.logs.length > 0) {
+                      this.queue(self.logs.pop());
+                    }
+                  }
+
+                  return this.queue(c);
+                }
                 // prevent git from sending the close signal
                 if (c.length === 4 &amp;&amp; c.toString() === '0000') return;
                 this.queue(c);
-            }, function() {
+            }, function end() {
                 if (self.listeners('response').length > 0) return;
+
                 this.queue(null);
             });
 
+            respStream.log = function() {
+              self.log(...arguments);
+            };
 
             self.emit('response', respStream, function endResponse() {
-                res.queue(new Buffer('0000'));
+                res.queue(Buffer.from('0000'));
                 res.queue(null);
             });
+
             ps.stdout.pipe(respStream).pipe(res);
 
             buffered.pipe(ps.stdin);
             buffered.resume();
 
-            ps.on('exit', self.emit.bind(self, 'exit'));
+            ps.on('exit', () => {
+              if(self.logs.length > 0) {
+                while(self.logs.length > 0) {
+                  respStream.queue(self.logs.pop());
+                }
+                respStream.queue(Buffer.from('0000'));
+                respStream.queue(null);
+              }
+
+              self.emit.bind(self, 'exit');
+            });
         });
     });
 
@@ -171,6 +207,15 @@ class Service extends HttpDuplex {
         res.statusCode = code;
         res.end(msg);
     });
+  }
+
+  log() {
+    const _log = util.format(...arguments);
+    const SIDEBAND = String.fromCharCode(2); // PROGRESS
+    const message = `${SIDEBAND}${_log}\n`;
+    const formattedMessage = Buffer.from(packSideband(message));
+
+    this.logs.unshift(formattedMessage);
   }
   /**
    * reject request in flight

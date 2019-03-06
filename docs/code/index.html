@@ -48,6 +48,8 @@
     <section class="readme">
         <article><h1>node-git-server</h1><blockquote>
 <p>🎡 A configurable git server written in Node.js</p>
+</blockquote>
+<blockquote>
 <blockquote>
 <p>there be 🐲 here! The API's and functionality are still be cemented, anything before a 1.0.0 release will be subject to change.</p>
 </blockquote>
@@ -59,7 +61,76 @@
 <a href="https://starbuck.gabrielcsapo.com/github/gabrielcsapo/node-git-server#info=devDependencies"><img src="https://starbuck.gabrielcsapo.com/badge/github/gabrielcsapo/node-git-server/dev-status.svg" alt="devDependency Status"></a>
 <a href=""><img src="https://img.shields.io/npm/dt/node-git-server.svg" alt="npm"></a>
 <a href=""><img src="https://img.shields.io/npm/dm/node-git-server.svg" alt="npm"></a></p>
-<h1>Install</h1><pre class="prettyprint source"><code>npm install node-git-server</code></pre><h1>Usage</h1><pre class="prettyprint source lang-javascript"><code>const path = require('path');
+<h1>Install</h1><pre class="prettyprint source"><code>npm install node-git-server</code></pre><h1>Usage</h1><h2>Simple</h2><pre class="prettyprint source lang-javascript"><code>const path = require('path');
+const Server = require('node-git-server');
+
+const repos = new Server(path.resolve(__dirname, 'tmp'), {
+    autoCreate: true
+});
+const port = process.env.PORT || 7005;
+
+repos.on('push', (push) => {
+    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
+    push.accept();
+});
+
+repos.on('fetch', (fetch) => {
+    console.log(`fetch ${fetch.commit}`);
+    fetch.accept();
+});
+
+repos.listen(port, () => {
+    console.log(`node-git-server running at http://localhost:${port}`)
+});</code></pre><p>then start up the node-git-server server...</p>
+<pre class="prettyprint source"><code>$ node example/index.js</code></pre><p>meanwhile...</p>
+<pre class="prettyprint source"><code>$ git push http://localhost:7005/beep master
+Counting objects: 356, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (133/133), done.
+Writing objects: 100% (356/356), 46.20 KiB, done.
+Total 356 (delta 210), reused 355 (delta 210)
+To http://localhost:7005/beep
+ * [new branch]      master -> master</code></pre><h2>Sending logs</h2><pre class="prettyprint source lang-javascript"><code>const path = require('path');
+const Server = require('node-git-server');
+
+const repos = new Server(path.resolve(__dirname, 'tmp'), {
+    autoCreate: true
+});
+const port = process.env.PORT || 7005;
+
+repos.on('push', (push) => {
+    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
+
+    repos.list((err, results) => {
+        push.log(' ');
+        push.log('Hey!');
+        push.log('Checkout these other repos:');
+        for(const repo of results) {
+          push.log(`- ${repo}`);
+        }
+        push.log(' ');
+    });
+
+    push.accept();
+});
+
+repos.listen(port, () => {
+    console.log(`node-git-server running at http://localhost:${port}`)
+});</code></pre><p>then start up the node-git-server server...</p>
+<pre class="prettyprint source"><code>$ node example/index.js</code></pre><p>meanwhile...</p>
+<pre class="prettyprint source"><code>$ git push http://localhost:7005/beep master
+Counting objects: 356, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (133/133), done.
+Writing objects: 100% (356/356), 46.20 KiB, done.
+Total 356 (delta 210), reused 355 (delta 210)
+remote:  
+remote: Hey!
+remote: Checkout these other repos:
+remote: - test.git
+remote:  
+To http://localhost:7005/test
+   77bb26e..22918d5  master -> master</code></pre><h3>Authentication</h3><pre class="prettyprint source lang-javascript"><code>const path = require('path');
 const Server = require('node-git-server');
 
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
@@ -98,7 +169,7 @@ Compressing objects: 100% (133/133), done.
 Writing objects: 100% (356/356), 46.20 KiB, done.
 Total 356 (delta 210), reused 355 (delta 210)
 To http://localhost:7005/beep
- * [new branch]      master -> master</code></pre><h2>Example</h2><p>Running the following command will start up a simple http server:</p>
+ * [new branch]      master -> master</code></pre><h1>Example</h1><p>Running the following command will start up a simple http server:</p>
 <pre class="prettyprint source"><code>node example/index.js</code></pre><p>If you want to try using https run the following</p>
 <pre class="prettyprint source"><code>node example/index.js --https</code></pre><blockquote>
 <p>When running https with self-signed certs there are two ways to override the git-clients behavior using <code>git config http.sslVerify false</code> or <code>git config --global http.sslCAInfo /path/to/cert.pem</code></p>
