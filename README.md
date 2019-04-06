@@ -129,7 +129,7 @@ const Server = require('node-git-server');
 
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
-    authenticate: (type, repo, user, next) => {
+    authenticate: ({type, repo, user}, next) => {
       if(type == 'push') {
         user((username, password) => {
           console.log(username, password);
