@@ -1,3 +1,7 @@
+# 0.6.1 (03/03/2019)
+
+- Fixes bug with being able to overwrite git repos that a user doesn't have access to. @masasron
+
 # 0.6.0 (03/03/2019)
 
 - Augments the authenticate function declaration to accept an object as the first argument and a callback for the second. This allows us to make changes without having to cause breaking changes.
