@@ -1,3 +1,7 @@
+# 0.6.2 (08/27/2020)
+
+- Adds `repoTemplatePath` option
+
 # 0.6.1 (03/03/2019)
 
 - Fixes bug with being able to overwrite git repos that a user doesn't have access to. @masasron
