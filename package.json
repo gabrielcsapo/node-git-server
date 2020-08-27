@@ -1,5 +1,5 @@
 {
-  "name": "node-git-server",
+  "name": "@chmac/node-git-server",
   "version": "0.6.1",
   "description": "🎡 A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
