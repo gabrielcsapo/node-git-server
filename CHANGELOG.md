@@ -1,3 +1,7 @@
+# 0.6.3 (08/28/2020)
+
+- Adds `enableCors` option
+
 # 0.6.2 (08/27/2020)
 
 - Adds `repoTemplatePath` option
