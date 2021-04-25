@@ -687,7 +687,7 @@ test('git', (t) => {
         });
 
         clone.on('close', function(code) {
-          t.equal(error, `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://root:world@localhost:${port}/doom.git doom1/': Empty reply from server\n`);
+          t.equal(error, `Cloning into \'doom.git doom1\'...\nfatal: unable to access \'http://localhost:${port}/doom.git doom1/\': The requested URL returned error: 400\n`);
           t.equal(code, 128);
           callback();
         });
@@ -757,7 +757,7 @@ test('git', (t) => {
         });
 
         clone.on('close', function(code) {
-          t.equal(error, `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://root:world@localhost:${port}/doom.git doom1/': Empty reply from server\n`);
+          t.equal(error, `Cloning into \'doom.git doom1\'...\nfatal: unable to access \'http://localhost:${port}/doom.git doom1/\': The requested URL returned error: 400\n`);
           t.equal(code, 128);
           callback();
         });
@@ -821,7 +821,7 @@ test('git', (t) => {
         });
 
         clone.on('close', function(code) {
-          t.equal(error, `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://root:world@localhost:${port}/doom.git doom1/': Empty reply from server\n`);
+          t.equal(error, `Cloning into \'doom.git doom1\'...\nfatal: unable to access \'http://localhost:${port}/doom.git doom1/\': The requested URL returned error: 400\n`);
           t.equal(code, 128);
           callback();
         });
