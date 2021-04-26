@@ -133,7 +133,11 @@ const repos = new Server(path.resolve(__dirname, 'tmp'), {
       if(type == 'push') {
         user((username, password) => {
           console.log(username, password);
-          next();
+          if (accountName === '42' && password === '42') {
+            next();
+          } else {
+            next('wrong password');
+          }
         });
       } else {
         next();

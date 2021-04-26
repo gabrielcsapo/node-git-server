@@ -29,7 +29,11 @@ const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
       if(type == 'push') {
         user((username, password) => {
           console.log(username, password); // eslint-disable-line
-          next();
+          if (accountName === '42' && password === '42') {
+            next();
+          } else {
+            next('wrong password');
+          }
         });
       } else {
         next();
