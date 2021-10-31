@@ -23,8 +23,9 @@
     "node": ">= 6"
   },
   "scripts": {
-    "lint": "eslint .",
-    "test": "tape test/*.js",
+    "lint": "eslint src/*",
+    "test": "npm run build && tape test/*.js",
+    "build": "tsc",
     "coverage": "tap test/*.js --coverage --coverage-report=lcov",
     "generate-docs": "tryitout && jsdoc -c jsdoc.json"
   },
@@ -32,12 +33,20 @@
     "through": "^2.3.8"
   },
   "devDependencies": {
+    "@types/node": "^15.6.1",
+    "@types/through": "^0.0.30",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "async": "^2.6.0",
     "docdash": "^0.4.0",
-    "eslint": "^4.15.0",
+    "eslint": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jsdoc": "^3.5.5",
-    "tap": "^12.5.3",
-    "tape": "^4.8.0",
-    "tryitout": "^2.1.1"
+    "prettier": "^2.4.1",
+    "tap": "^15.0.10",
+    "tape": "^5.3.1",
+    "tryitout": "^2.1.1",
+    "typescript": "^4.4.4"
   }
 }

@@ -1,6 +1,11 @@
-const EventEmitter = require('events');
-
-class HttpDuplex extends EventEmitter {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HttpDuplex = void 0;
+const events_1 = __importDefault(require("events"));
+class HttpDuplex extends events_1.default {
     /**
      * Constructs a proxy object over input and output resulting in a unified stream.
      * Generally meant to combine request and response streams in the http.request event
@@ -20,59 +25,41 @@ class HttpDuplex extends EventEmitter {
      */
     constructor(input, output) {
         super();
-
-        /**
-          * A IncomingMessage created by http.Server or http.ClientRequest usually passed as the
-          * first parameter to the 'request' and 'response' events. Implements Readable Stream interface
-          * but may not be a decendant thereof.
-          * @type {http.IncomingMessage}
-          * @see {@link https://nodejs.org/api/http.html#http_event_request|request}
-          * @see {@link https://nodejs.org/api/http.html#http_class_http_incomingmessage|http.IncomingMessage}
-          *
-          */
         this.req = input;
-
-        /**
-          * Created http.server. Passed as the second parameter to the 'request' event.
-          * The response implements Writable Stream interface but isn't a descendent thereof.
-          * @type {http.ServerResponse}
-          * @see {@link https://nodejs.org/api/http.html#http_event_request|request}
-          * @see {@link https://nodejs.org/api/http.html#http_class_http_serverresponse|http.ServerResponse}
-          */
         this.res = output;
-
-        var self = this;
-
         // request / input proxy events
-        ['data', 'end', 'error', 'close'].forEach(function (name) {
-            self.req.on(name, self.emit.bind(self, name));
+        ["data", "end", "error", "close"].forEach((name) => {
+            this.req.on(name, this.emit.bind(this, name));
         });
-
         // respone / output proxy events
-        ['error', 'drain'].forEach(function (name) {
-            self.res.on(name, self.emit.bind(self, name));
+        ["error", "drain"].forEach((name) => {
+            this.res.on(name, this.emit.bind(this, name));
         });
     }
-
-    // input / request wrapping
-    get client() {
-        return this.req.client;
+    end() {
+        throw new Error("Method not implemented.");
     }
-
+    destroy() {
+        throw new Error("Method not implemented.");
+    }
+    accept() {
+        throw new Error("Method not implemented.");
+    }
+    reject(code, msg) {
+        throw new Error("Method not implemented.");
+    }
     get complete() {
         return this.req.complete;
     }
-
     /**
-      * Reference to the underlying socket for the request connection.
-      * @type {net.Socket}
-      * @readonly
-      * @see {@link https://nodejs.org/api/http.html#http_request_socket|request.Socket}
-      */
+     * Reference to the underlying socket for the request connection.
+     * @type {net.Socket}
+     * @readonly
+     * @see {@link https://nodejs.org/api/http.html#http_request_socket|request.Socket}
+     */
     get connection() {
         return this.req.connection;
     }
-
     /**
      * Request/response headers. Key-value pairs of header names and values. Header names are always lower-case.
      * @name headers
@@ -85,7 +72,6 @@ class HttpDuplex extends EventEmitter {
     get headers() {
         return this.req.headers;
     }
-
     /**
      * Requested HTTP Version sent by the client. Usually either '1.0' or '1.1'
      * @name httpVersion
@@ -98,7 +84,6 @@ class HttpDuplex extends EventEmitter {
     get httpVersion() {
         return this.req.httpVersion;
     }
-
     /**
      * First integer in the httpVersion string
      * @name httpVersionMajor
@@ -111,7 +96,6 @@ class HttpDuplex extends EventEmitter {
     get httpVersionMajor() {
         return this.req.httpVersionMajor;
     }
-
     /**
      * Second integer ni the httpVersion string
      * @name httpVersionMinor
@@ -124,19 +108,17 @@ class HttpDuplex extends EventEmitter {
     get httpVersionMinor() {
         return this.req.httpVersionMinor;
     }
-
     /**
-      * Request method of the incoming request.
-      * @type {String}
-      * @see {@link https://nodejs.org/api/http.html#http_event_request|request}
-      * @see {@link https://nodejs.org/api/http.html#http_class_http_serverresponse|http.ServerResponse}
-      * @example 'GET', 'DELETE'
-      * @readonly
-      */
+     * Request method of the incoming request.
+     * @type {String}
+     * @see {@link https://nodejs.org/api/http.html#http_event_request|request}
+     * @see {@link https://nodejs.org/api/http.html#http_class_http_serverresponse|http.ServerResponse}
+     * @example 'GET', 'DELETE'
+     * @readonly
+     */
     get method() {
         return this.req.method;
     }
-
     /**
      * Is this stream readable.
      * @type {Boolean}
@@ -145,17 +127,15 @@ class HttpDuplex extends EventEmitter {
     get readable() {
         return this.req.readable;
     }
-
     /**
-      * net.Socket object associated with the connection.
-      * @type net.Socket
-      * @see {@link https://nodejs.org/api/net.html#net_class_net_socket|net.Socket}
-      * @readonly
-      */
+     * net.Socket object associated with the connection.
+     * @type net.Socket
+     * @see {@link https://nodejs.org/api/net.html#net_class_net_socket|net.Socket}
+     * @readonly
+     */
     get socket() {
         return this.req.socket;
     }
-
     /**
      * The HTTP status code. Generally assigned before sending headers for a response to a client.
      * @type {Number}
@@ -166,11 +146,9 @@ class HttpDuplex extends EventEmitter {
     get statusCode() {
         return this.res.statusCode;
     }
-
     set statusCode(val) {
         this.res.statusCode = val;
     }
-
     /**
      * Controls the status message sent to the client as long as an explicit call to response.writeHead() isn't made
      * If ignored or the value is undefined, the default message corresponding to the status code will be used.
@@ -182,11 +160,9 @@ class HttpDuplex extends EventEmitter {
     get statusMessage() {
         return this.res.statusMessage;
     }
-
     set statusMessage(val) {
         this.res.statusMessage = val;
     }
-
     /**
      * Request/response trailer headers. Just like {@link headers} except these are only written
      * after the initial response to the client.
@@ -203,17 +179,6 @@ class HttpDuplex extends EventEmitter {
     get trailers() {
         return this.req.trailers;
     }
-
-    /**
-      * Whether or not the client connection has been upgraded
-      * @type {Boolean}
-      * @see {@link https://nodejs.org/api/http.html#http_event_upgrade_1|upgrade}
-      * @readonly
-      */
-    get upgrade() {
-        return this.req.upgrade;
-    }
-
     /**
      * Request URL string.
      * @example <caption>A request made as:</caption>
@@ -226,12 +191,10 @@ class HttpDuplex extends EventEmitter {
     get url() {
         return this.req.url;
     }
-
     // output / response wrapping
     get writable() {
         return this.res.writable;
     }
-
     /**
      * Sends a response header to the client request. Must only be called one time and before calling response.end().
      * @method writeHead
@@ -245,7 +208,7 @@ class HttpDuplex extends EventEmitter {
      * @example var content = 'Under Construction...';
      * response.writeHead(200, {
      *     'Content-Length': Buffer.byteLength(content),
-     *     'Content-Type': 'text/plain' 
+     *     'Content-Type': 'text/plain'
      * });
      * response.end(content);
      */
@@ -253,7 +216,6 @@ class HttpDuplex extends EventEmitter {
         this.res.writeHead(statusCode, statusMessage, headers);
         return this;
     }
-
     /**
      * Buffers written data in memory. This data will be flushed when either the uncork or end methods are called.
      * @method cork
@@ -269,10 +231,9 @@ class HttpDuplex extends EventEmitter {
      * request.uncork();
      */
     cork() {
-        this.res.connection.cork();
+        this.res.connection?.cork();
         return this;
     }
-
     /**
      * Flushes all data buffered since cork() was called.
      * @method uncork
@@ -283,28 +244,36 @@ class HttpDuplex extends EventEmitter {
      * @see {@link https://nodejs.org/api/stream.html#stream_writable_uncork|stream.Writeable.uncork}
      */
     uncork() {
-        this.res.connection.uncork();
+        this.res.connection?.uncork();
         return this;
     }
 }
-
+exports.HttpDuplex = HttpDuplex;
 // proxy request methods
-['pause', 'resume', 'setEncoding'].forEach(function (name) {
+["pause", "resume", "setEncoding"].forEach(function (name) {
     HttpDuplex.prototype[name] = function () {
+        // eslint-disable-next-line prefer-rest-params
         return this.req[name].apply(this.req, Array.from(arguments));
     };
 });
-
 // proxy respone methods
 [
-    'setDefaultEncoding', 'write', 'end', 'flush', 'writeHeader', 'writeContinue',
-    'setHeader', 'getHeader', 'removeHeader', 'addTrailers'
+    "setDefaultEncoding",
+    "write",
+    "end",
+    "flush",
+    "writeHeader",
+    "writeContinue",
+    "setHeader",
+    "getHeader",
+    "removeHeader",
+    "addTrailers",
 ].forEach(function (name) {
     HttpDuplex.prototype[name] = function () {
+        // eslint-disable-next-line prefer-rest-params
         return this.res[name].apply(this.res, Array.from(arguments));
     };
 });
-
 /**
  * Destroys object and it's bound streams
  * @method destroy
@@ -315,9 +284,6 @@ HttpDuplex.prototype.destroy = function () {
     this.req.destroy();
     this.res.destroy();
 };
-
-module.exports = HttpDuplex;
-
 /**
  * Event emitted when the underlying request connection is closed. This only occurs once per response.
  * @event close
@@ -326,7 +292,6 @@ module.exports = HttpDuplex;
  * @see end
  * @see {@link https://nodejs.org/api/http.html#http_event_close_2|http.IncomingMessage/close}
  */
-
 /**
  * This event is emitted when data on the stream can be consumed. This may occur whenever the stream is switched into
  * flowing mode by calling readable.pipe() or readable.resume() or by attaching a listener this event.<p/>
@@ -340,7 +305,6 @@ module.exports = HttpDuplex;
  * @memberof HttpDuplex
  * @see {@link https://nodejs.org/api/stream.html#stream_event_data|stream.Readable/data}
  */
-
 /**
  * If a call to response.write(chunk) returns false, the drain event will be emitted once it is appropriate to
  * resume writing data to the stream.
@@ -349,7 +313,6 @@ module.exports = HttpDuplex;
  * @memberof HttpDuplex
  * @see {@link https://nodejs.org/api/stream.html#stream_event_drain|stream.Writable/drain}
  */
-
 /**
  * This event is emitted once no more consumable data is left on the readable stream.<p/>
  * *Note*: This is only emitted when all data is completely consumed.
@@ -358,7 +321,6 @@ module.exports = HttpDuplex;
  * @memberof HttpDuplex
  * @see {@link https://nodejs.org/api/stream.html#stream_event_end|stream.Readable/end}
  */
-
 /**
  * This event may be emitted one of the underlying Readable or Writable stream implementations at any time.
  * This may happen in the following cases:
@@ -374,7 +336,6 @@ module.exports = HttpDuplex;
  * @see {@link https://nodejs.org/api/stream.html#stream_event_error_1|stream.Readable/error}
  * @see {@link https://nodejs.org/api/stream.html#stream_event_error|stream.Writeable/error}
  */
-
 /**
  * Adds trailing headers to the response.
  * Trailers will only be emitted if chunked encoding is enabled for the response; otherwise they are discarded.
@@ -388,7 +349,6 @@ module.exports = HttpDuplex;
  * @see {@link https://nodejs.org/api/http.html#http_message_trailers|message.trailers}
  * @see {@link https://nodejs.org/api/http.html#http_response_addtrailers_headers|response.addTrailers}
  */
-
 /**
  * Tells the server the response headers and body have been sent and that the message should be considered complete.
  * This MUST be called on every response.
@@ -402,8 +362,7 @@ module.exports = HttpDuplex;
  * @param {function} callback Function to be called once the response stream is finished
  * @see {@link https://nodejs.org/api/http.html#http_response_end_data_encoding_callback|response.end}
  */
-
- /**
+/**
  * Returns the current value of a header; name is case insensitive.
  * @method getHeader
  * @alias HttpDuplex.getHeader
@@ -414,7 +373,6 @@ module.exports = HttpDuplex;
  * @example
  * let contentType = request.getHeader('Content-Type');
  */
-
 /**
  * Switch readable stream out of flowing mode and stop emitting 'data' events.
  * Any new data that becomes available during this time will stay buffered until resume is called.
@@ -423,7 +381,6 @@ module.exports = HttpDuplex;
  * @memberof HttpDuplex
  * @see {@link https://nodejs.org/api/stream.html#stream_readable_pause|stream.Readable.pause}
  */
-
 /**
  * Remove a header from the response headers.
  * @method removeHeader
@@ -434,7 +391,6 @@ module.exports = HttpDuplex;
  * @example
  * request.removeHeader('Content-Type');
  */
-
 /**
  * Switch readable stream back into flowing mode and restart emitting 'data' events.
  * This can be used to consume all data waiting without processing any of it.
@@ -443,7 +399,6 @@ module.exports = HttpDuplex;
  * @memberof HttpDuplex
  * @see {@link https://nodejs.org/api/stream.html#stream_readable_resume|stream.Readable.resume}
  */
-
 /**
  * Sets the character encoding for data written to the stream.
  * @method setDefaultEncoding
@@ -453,7 +408,6 @@ module.exports = HttpDuplex;
  * @see setEncoding
  * @example request.setDefaultEncoding('utf8');
  */
-
 /**
  * Sets the character encoding for data read from the stream.
  * @method setEncoding
@@ -463,7 +417,6 @@ module.exports = HttpDuplex;
  * @see setDefaultEncoding
  * @example request.setEncoding('utf8');
  */
-
 /**
  * Set a single header. If the header already exists, it will be replaced.
  * It's possible to use an array of strings in place of value to send multiple headers with the same name.
@@ -479,7 +432,6 @@ module.exports = HttpDuplex;
  * @example <caption>Array of string value</caption>
  * request.setHeader('Set-Cookie', ['type=auth', 'language=javascript']);
  */
-
 /**
  * Sends a chunk of the response body. This method may be called multiple times to provide successive parts of the
  * body.
@@ -498,7 +450,6 @@ module.exports = HttpDuplex;
  * @emits {@link event:drain|drain} Emitted when data was buffered and the buffer has become free for use again.
  * @see {@link https://nodejs.org/api/http.html#http_response_write_chunk_encoding_callback|http.ServerResponse.write}
  */
-
 /**
  * Sends an HTTP/1.1 100 Continue message to the client.
  * @method writeContinue
@@ -507,7 +458,6 @@ module.exports = HttpDuplex;
  * @see {@link https://nodejs.org/api/http.html#http_response_writecontinue|response.writeContinue}
  * {@link https://nodejs.org/api/http.html#http_event_checkcontinue|http.Server/checkContinue}
  */
-
 /**
  * __Warning:__ This has been deprecated in node, __don't__ use it. Any apis that require this funtion should be
  * updated to use writeHead insted.

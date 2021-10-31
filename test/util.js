@@ -1,6 +1,6 @@
 const test = require('tape');
 
-const { basicAuth, noCache, parseGitName } = require('../lib/util');
+const { basicAuth, noCache, parseGitName } = require('../dist/util');
 
 test('util', (t) => {
   t.plan(3);
