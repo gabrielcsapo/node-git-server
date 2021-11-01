@@ -1,14 +1,8 @@
-const test = require('tape');
-
 const { basicAuth, noCache, parseGitName } = require('../dist/util');
 
-test('util', (t) => {
-  t.plan(3);
-
-  t.test('basicAuth', (t) => {
-    t.plan(2);
-
-    t.test('should send back basic auth headers', (t) => {
+describe('util', () => {
+  describe('basicAuth', () => {
+    test('should send back basic auth headers', (done) => {
       let code = 0;
       let headers = {};
       let status = 0;
@@ -22,38 +16,37 @@ test('util', (t) => {
         },
         end: function(_status) {
           status = _status;
-          t.equal(code, 401);
-          t.deepEqual(headers, {
+          expect(code).toBe(401);
+          expect(headers).toEqual({
             'Content-Type': 'text/plain',
             'WWW-Authenticate': 'Basic realm="authorization needed"'
           });
-          t.equal(status, '401 Unauthorized');
-          t.end();
+          expect(status).toBe('401 Unauthorized');
+          done();
         }
       };
       basicAuth({
         headers: {}
       }, res, () => {
-        t.fail('should not have entered this callback');
+        expect.fail('should not have entered this callback');
+        done();
       });
     });
 
-    t.test('should accept headers and call callback', (t) => {
-
+    test('should accept headers and call callback', (done) => {
       basicAuth({
         headers: {
           'authorization': 'Basic T3BlbjpTZXNhbWU='
         }
       }, {}, (username, password) => {
-        t.equal(username, 'Open');
-        t.equal(password, 'Sesame');
-        t.end();
+        expect(username).toBe('Open');
+        expect(password).toBe('Sesame');
+        done();
       });
-
     });
   });
 
-  t.test('noCache', (t) => {
+  describe('noCache', () => {
     let headers = {
       'persisted-header': 'I have been here foreveeeerrr'
     };
@@ -64,33 +57,26 @@ test('util', (t) => {
       }
     };
     noCache(res);
-    t.deepEqual(headers, {
+    expect(headers).toEqual({
       'persisted-header': 'I have been here foreveeeerrr',
       'expires': 'Fri, 01 Jan 1980 00:00:00 GMT',
       'pragma': 'no-cache',
       'cache-control': 'no-cache, max-age=0, must-revalidate'
     });
-    t.end();
   });
 
-  t.test('parseGitName', (t) => {
-    t.plan(3);
-
-    t.test('should remove .git from repo name', (t) => {
-      t.equal(parseGitName('test.git'), 'test');
-      t.end();
+  describe('parseGitName', () => {
+    test('should remove .git from repo name', () => {
+      expect(parseGitName('test.git')).toBe('test');
     });
 
-    t.test('should remove .git from the end of repo name but not in the middle', (t) => {
-      t.equal(parseGitName('test.git.git'), 'test.git');
-      t.end();
+    test('should remove .git from the end of repo name but not in the middle', () => {
+      expect(parseGitName('test.git.git')).toBe('test.git');
     });
 
-    t.test('if .git does not exist in the string, don\'t remove it', (t) => {
-      t.equal(parseGitName('test'), 'test');
-      t.end();
+    test('if .git does not exist in the string, don\'t remove it', () => {
+      expect(parseGitName('test')).toBe('test');
     });
-
   });
 
 });

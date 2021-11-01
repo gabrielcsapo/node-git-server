@@ -7,3 +7,4 @@ example/test
 example/tmp
 package-lock.json
 .vs/
+dist

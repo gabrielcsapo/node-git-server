@@ -1,18 +1,15 @@
-const test = require("tape");
-
 const fs = require("fs");
 const path = require("path");
-const spawn = require("child_process").spawn;
-const exec = require("child_process").exec;
+const { spawn, exec } = require("child_process");
 const http = require("http");
 const async = require("async");
 
 const { Git } = require("../");
 
-test("git", (t) => {
-  t.plan(10);
+describe("git", () => {
+  expect.assertions(10);
 
-  t.test("create, push to, and clone a repo", (t) => {
+  test("create, push to, and clone a repo", (done) => {
     var lastCommit;
 
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
@@ -21,9 +18,9 @@ test("git", (t) => {
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
-    fs.mkdirSync(repoDir, 0700);
-    fs.mkdirSync(srcDir, 0700);
-    fs.mkdirSync(dstDir, 0700);
+    fs.mkdirSync(repoDir, '0700');
+    fs.mkdirSync(srcDir, '0700');
+    fs.mkdirSync(dstDir, '0700');
 
     const repos = new Git(repoDir, {
       autoCreate: true,
@@ -51,7 +48,7 @@ test("git", (t) => {
         },
         (callback) => {
           spawn("git", ["init"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -62,7 +59,7 @@ test("git", (t) => {
         },
         (callback) => {
           spawn("git", ["add", "a.txt"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -80,7 +77,7 @@ test("git", (t) => {
             "http://localhost:" + port + "/xyz/doom",
             "master",
           ]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -89,40 +86,40 @@ test("git", (t) => {
           spawn("git", ["clone", "http://localhost:" + port + "/xyz/doom"]).on(
             "exit",
             (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             }
           );
         },
         (callback) => {
           fs.exists(dstDir + "/doom/a.txt", (ex) => {
-            t.ok(ex, "a.txt exists");
+            expect(ex).toBeTruthy();
             callback();
           });
         },
       ],
       (err) => {
-        t.ok(!err, "no errors");
+        expect(!err).toBeTruthy();
         server.close();
-        t.end();
+        done();
       }
     );
 
     repos.on("push", (push) => {
-      t.equal(push.repo, "xyz/doom", "repo name");
-      t.equal(push.commit, lastCommit, "commit ok");
-      t.equal(push.branch, "master", "master branch");
+      expect(push.repo).toBe("xyz/doom");
+      expect(push.commit).toBe(lastCommit);
+      expect(push.branch).toBe("master");
 
-      t.equal(push.headers.host, "localhost:" + port, "http host");
-      t.equal(push.method, "POST", "is a post");
-      t.equal(push.url, "/xyz/doom/git-receive-pack", "receive pack");
+      expect(push.headers.host).toBe("localhost:" + port);
+      expect(push.method).toBe("POST");
+      expect(push.url).toBe("/xyz/doom/git-receivee-pack");
 
       push.accept();
     });
   });
 
-  t.test("create, push to, and clone a repo successful", (t) => {
-    t.plan(9);
+  test("create, push to, and clone a repo successful", (done) => {
+    expect.assertions(9);
 
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
       16
@@ -130,9 +127,9 @@ test("git", (t) => {
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
-    fs.mkdirSync(repoDir, 0700);
-    fs.mkdirSync(srcDir, 0700);
-    fs.mkdirSync(dstDir, 0700);
+    fs.mkdirSync(repoDir, '0700');
+    fs.mkdirSync(srcDir, '0700');
+    fs.mkdirSync(dstDir, '0700');
 
     const repos = new Git(repoDir);
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
@@ -146,25 +143,25 @@ test("git", (t) => {
       [
         (callback) => {
           spawn("git", ["init"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
         (callback) => {
           fs.writeFile(srcDir + "/a.txt", "abcd", (err) => {
-            t.ok(!err, "no error on write");
+            expect(!err).toBeTruthy();
             callback();
           });
         },
         (callback) => {
           spawn("git", ["add", "a.txt"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
         (callback) => {
           spawn("git", ["commit", "-am", "a!!"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -174,7 +171,7 @@ test("git", (t) => {
             "http://localhost:" + port + "/doom",
             "master",
           ]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -183,33 +180,33 @@ test("git", (t) => {
           spawn("git", ["clone", "http://localhost:" + port + "/doom"]).on(
             "exit",
             (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             }
           );
         },
         (callback) => {
           fs.stat(dstDir + "/doom/a.txt", (ex) => {
-            t.ok(!ex, "a.txt exists");
+            expect(!ex).toBeTruthy();
             callback();
           });
         },
       ],
       (err) => {
-        t.ok(!err, "no errors");
+        expect(!err).toBeTruthy();
         server.close();
-        t.end();
+        done();
       }
     );
 
     repos.on("push", (push) => {
-      t.equal(push.repo, "doom");
+      expect(push.repo).toBe("doom");
       push.accept();
     });
   });
 
-  test("clone into programatic directories", (t) => {
-    t.plan(21);
+  test("clone into programatic directories", (done) => {
+    expect.assertions(21);
 
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
@@ -221,13 +218,13 @@ test("git", (t) => {
       16
     )}`;
 
-    fs.mkdirSync(repoDir, 0700);
-    fs.mkdirSync(srcDir, 0700);
-    fs.mkdirSync(dstDir, 0700);
-    fs.mkdirSync(targetDir, 0700);
+    fs.mkdirSync(repoDir, '0700');
+    fs.mkdirSync(srcDir, '0700');
+    fs.mkdirSync(dstDir, '0700');
+    fs.mkdirSync(targetDir, '0700');
 
     const server = new Git((dir) => {
-      t.equal(dir, "doom.git");
+      expect(dir).toBe("doom.git");
       return path.join(targetDir, dir);
     });
     server.listen(port);
@@ -237,13 +234,13 @@ test("git", (t) => {
       [
         (callback) => {
           spawn("git", ["init"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
         (callback) => {
           fs.writeFile(srcDir + "/a.txt", "abcd", (err) => {
-            t.ok(!err, "no error on write");
+            expect(!err).toBeTruthy();
             callback();
           });
         },
@@ -251,7 +248,7 @@ test("git", (t) => {
           spawn("git", ["add", "a.txt"], {
             cwd: srcDir,
           }).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -259,7 +256,7 @@ test("git", (t) => {
           spawn("git", ["commit", "-am", "a!!"], {
             cwd: srcDir,
           }).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -271,7 +268,7 @@ test("git", (t) => {
               cwd: srcDir,
             }
           ).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -280,39 +277,39 @@ test("git", (t) => {
           spawn("git", ["clone", "http://localhost:" + port + "/doom.git"]).on(
             "exit",
             (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             }
           );
         },
         (callback) => {
           fs.stat(dstDir + "/doom/a.txt", (ex) => {
-            t.ok(!ex, "a.txt exists");
+            expect(!ex).toBeTruthy();
             callback();
           });
         },
         (callback) => {
           fs.stat(targetDir + "/doom.git/HEAD", (ex) => {
-            t.ok(!ex, "INFO exists");
+            expect(!ex).toBeTruthy();
             callback();
           });
         },
       ],
       (err) => {
-        t.ok(!err, "no errors");
+        expect(!err).toBeTruthy();
         server.close();
-        t.end();
+        done();
       }
     );
 
     server.on("push", (push) => {
-      t.equal(push.repo, "doom.git");
+      expect(push.repo).toBe("doom.git");
       push.accept();
     });
   });
 
-  test("test tagging", (t) => {
-    t.plan(28);
+  test("test tagging", (done) => {
+    expect.assertions(28);
 
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
       16
@@ -321,9 +318,9 @@ test("git", (t) => {
     const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     var lastCommit;
 
-    fs.mkdirSync(repoDir, 0700);
-    fs.mkdirSync(srcDir, 0700);
-    fs.mkdirSync(dstDir, 0700);
+    fs.mkdirSync(repoDir, '0700');
+    fs.mkdirSync(srcDir, '0700');
+    fs.mkdirSync(dstDir, '0700');
 
     const repos = new Git(repoDir, {
       autoCreate: true,
@@ -344,43 +341,43 @@ test("git", (t) => {
         },
         (callback) => {
           spawn("git", ["init"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
         (callback) => {
           fs.writeFile(srcDir + "/a.txt", "abcd", (err) => {
-            t.ok(!err, "no error on write");
+            expect(!err).toBeTruthy();
             callback();
           });
         },
         (callback) => {
           spawn("git", ["add", "a.txt"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
         (callback) => {
           spawn("git", ["commit", "-am", "a!!"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
         (callback) => {
           spawn("git", ["tag", "0.0.1"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
         (callback) => {
           fs.writeFile(srcDir + "/a.txt", "efgh", (err) => {
-            t.ok(!err, "no error on write");
+            expect(!err).toBeTruthy();
             callback();
           });
         },
         (callback) => {
           spawn("git", ["add", "a.txt"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -394,7 +391,7 @@ test("git", (t) => {
         },
         (callback) => {
           spawn("git", ["tag", "0.0.2"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -405,7 +402,7 @@ test("git", (t) => {
             "http://localhost:" + port + "/doom",
             "master",
           ]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -414,53 +411,53 @@ test("git", (t) => {
           spawn("git", ["clone", "http://localhost:" + port + "/doom"]).on(
             "exit",
             (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             }
           );
         },
         (callback) => {
           fs.exists(dstDir + "/doom/a.txt", (ex) => {
-            t.ok(ex, "a.txt exists");
+            expect(ex).toBeTruthy();
             callback();
           });
         },
       ],
       (err) => {
-        t.ok(!err, "no errors");
+        expect(!err).toBeTruthy();
         server.close();
-        t.end();
+        done();
       }
     );
 
     repos.on("push", (push) => {
-      t.equal(push.repo, "doom", "repo name");
-      t.equal(push.commit, lastCommit, "commit ok");
-      t.equal(push.branch, "master", "master branch");
+      expect(push.repo).toBe("doom");
+      expect(push.commit).toBe(lastCommit);
+      expect(push.branch).toBe("master");
 
-      t.equal(push.headers.host, "localhost:" + port, "http host");
-      t.equal(push.method, "POST", "is a post");
-      t.equal(push.url, "/doom/git-receive-pack", "receive pack");
+      expect(push.headers.host).toBe("localhost:" + port);
+      expect(push.method).toBe("POST");
+      expect(push.url).toBe("/doom/git-receive-pack");
 
       push.accept();
     });
 
     var firstTag = true;
     repos.on("tag", (tag) => {
-      t.equal(tag.repo, "doom", "repo name");
-      t.equal(tag.version, "0.0." + (firstTag ? 1 : 2), "tag received");
+      expect(tag.repo).toBe("doom");
+      expect(tag.version).toBe("0.0." + (firstTag ? 1 : 2));
 
-      t.equal(tag.headers.host, "localhost:" + port, "http host");
-      t.equal(tag.method, "POST", "is a post");
-      t.equal(tag.url, "/doom/git-receive-pack", "receive pack");
+      expect(tag.headers.host).toBe("localhost:" + port);
+      expect(tag.method).toBe("POST");
+      expect(tag.url).toBe("/doom/git-receive-pack");
 
       tag.accept();
       firstTag = false;
     });
   });
 
-  t.test("repos list", (t) => {
-    t.plan(2);
+  describe("repos list", () => {
+    expect.assertions(2);
 
     const workingRepoDir = path.resolve(__dirname, "fixtures", "server", "tmp");
     const notWorkingRepoDir = path.resolve(
@@ -470,39 +467,37 @@ test("git", (t) => {
       "temp"
     );
 
-    t.test("should return back with one directory in server", (t) => {
-      t.plan(2);
+    test("should return back with one directory in server", (done) => {
+      expect.assertions(2);
 
       const repos = new Git(workingRepoDir, {
         autoCreate: true,
       });
 
       repos.list((err, results) => {
-        t.ok(err === null, "there is no error");
-        t.deepEqual(["test.git"], results);
-        t.end();
+        expect(err === null).toBeTruthy();
+        expect(["test.git"]).toEqual(results);
+        done();
       });
     });
 
-    t.test("should return back error directory does not exist", (t) => {
-      t.plan(2);
+    test("should return back error directory does not exist", (done) => {
+      expect.assertions(2);
 
       const repos = new Git(notWorkingRepoDir, {
         autoCreate: true,
       });
 
       repos.list((err, results) => {
-        t.ok(err !== null, "there is an error");
-        t.ok(results === undefined);
-        t.end();
+        expect(err !== null).toBeTruthy();
+        expect(results === undefined).toBeTruthy();
+        done();
       });
     });
-
-    t.end();
   });
 
-  test("create, push to, and clone a repo reject", (t) => {
-    t.plan(13);
+  test("create, push to, and clone a repo reject", (done) => {
+    expect.assertions(13);
 
     function _spawn(cmd, args, opts) {
       var ps = spawn(cmd, args, opts);
@@ -522,9 +517,9 @@ test("git", (t) => {
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
-    fs.mkdirSync(repoDir, 0700);
-    fs.mkdirSync(srcDir, 0700);
-    fs.mkdirSync(dstDir, 0700);
+    fs.mkdirSync(repoDir, '0700');
+    fs.mkdirSync(srcDir, '0700');
+    fs.mkdirSync(dstDir, '0700');
 
     const repos = new Git(repoDir, {
       autoCreate: true,
@@ -549,19 +544,19 @@ test("git", (t) => {
         },
         (callback) => {
           _spawn("git", ["init"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
         (callback) => {
           fs.writeFile(srcDir + "/a.txt", "abcd", (err) => {
-            t.ok(!err, "no error on write");
+            expect(!err).toBeTruthy();
             callback();
           });
         },
         (callback) => {
           _spawn("git", ["add", "a.txt"]).on("exit", (code) => {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -579,7 +574,7 @@ test("git", (t) => {
             "http://localhost:" + port + "/doom",
             "master",
           ]).on("exit", (code) => {
-            t.notEqual(code, 0);
+            expect(code).not.toBe(0);
             callback();
           });
         },
@@ -588,7 +583,7 @@ test("git", (t) => {
             cwd: repoDir + "/doom.git",
           });
           glog.on("exit", (code) => {
-            t.equal(code, 128);
+            expect(code).toBe(128);
             callback();
           });
           var data = "";
@@ -599,44 +594,44 @@ test("git", (t) => {
               /fatal: your current branch 'master' does not have any commits yet/.test(
                 data
               );
-            t.ok(res);
+            expect(res).toBeTruthy();
           });
         },
       ],
       (err) => {
-        t.ok(!err, "no errors");
+        expect(!err).toBeTruthy();
         server.close();
-        t.end();
+        done();
       }
     );
 
     repos.on("push", (push) => {
-      t.equal(push.repo, "doom", "repo name");
-      t.equal(push.commit, lastCommit, "commit ok");
-      t.equal(push.branch, "master", "master branch");
+      expect(push.repo).toBe("doom");
+      expect(push.commit).toBe(lastCommit);
+      expect(push.branch).toBe("master");
 
-      t.equal(push.headers.host, "localhost:" + port, "http host");
-      t.equal(push.method, "POST", "is a post");
-      t.equal(push.url, "/doom/git-receive-pack", "receive pack");
+      expect(push.headers.host).toBe("localhost:" + port);
+      expect(push.method).toBe("POST");
+      expect(push.url).toBe("/doom/git-receive-pack");
 
       push.reject(500, "ACCESS DENIED");
     });
   });
 
-  t.test("create git server via listen() command", (t) => {
+  test("create git server via listen() command", (done) => {
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
       16
     )}`;
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
-    fs.mkdirSync(repoDir, 0700);
-    fs.mkdirSync(srcDir, 0700);
-    fs.mkdirSync(dstDir, 0700);
+    fs.mkdirSync(repoDir, '0700');
+    fs.mkdirSync(srcDir, '0700');
+    fs.mkdirSync(dstDir, '0700');
 
     const repos = new Git(repoDir);
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
-    t.equal(repos.listen(port), repos);
+    expect(repos.listen(port)).toBe(repos);
 
     process.chdir(srcDir);
     async.waterfall(
@@ -646,49 +641,49 @@ test("git", (t) => {
           spawn("git", ["clone", "http://localhost:" + port + "/doom"]).on(
             "exit",
             (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             }
           );
         },
       ],
       (err) => {
-        t.ok(!err, "no errors");
+        expect(!err).toBeTruthy();
         repos.close();
-        t.end();
+        done();
       }
     );
   });
 
-  t.test(
+  test(
     "should return promise that resolves when server is closed if no callback specified",
-    (t) => {
+    (done) => {
       const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
         16
       )}`;
 
-      fs.mkdirSync(repoDir, 0700);
+      fs.mkdirSync(repoDir, '0700');
 
       const repos = new Git(repoDir);
       const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
       repos.listen(port, () => {
         repos.close().then(() => {
-          t.end();
+          done();
         });
       });
     }
   );
 
-  t.test("should be able to protect certain routes", (t) => {
+  test("should be able to protect certain routes", (done) => {
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
       16
     )}`;
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
-    fs.mkdirSync(repoDir, 0700);
-    fs.mkdirSync(srcDir, 0700);
-    fs.mkdirSync(dstDir, 0700);
+    fs.mkdirSync(repoDir, '0700');
+    fs.mkdirSync(srcDir, '0700');
+    fs.mkdirSync(dstDir, '0700');
 
     const repos = new Git(repoDir, {
       autoCreate: true,
@@ -720,7 +715,7 @@ test("git", (t) => {
           ]);
 
           clone.on("close", function (code) {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -737,25 +732,24 @@ test("git", (t) => {
           });
 
           clone.on("close", function (code) {
-            t.equal(
-              error,
+            expect(error).toBe(
               `Cloning into \'doom.git doom1\'...\nfatal: unable to access \'http://localhost:${port}/doom.git doom1/\': The requested URL returned error: 400\n`
             );
-            t.equal(code, 128);
+            expect(code).toBe(128);
             callback();
           });
         },
       ],
       (err) => {
-        t.ok(!err, "no errors");
+        expect(!err).toBeTruthy();
         repos.close();
-        t.end();
+        done();
       }
     );
   });
 
-  t.test("should be able to access headers in authenticate", (t) => {
-    t.plan(14);
+  test("should be able to access headers in authenticate", (done) => {
+    expect.assertions(14);
 
     const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
       16
@@ -763,19 +757,19 @@ test("git", (t) => {
     const srcDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
     const dstDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(16)}`;
 
-    fs.mkdirSync(repoDir, 0700);
-    fs.mkdirSync(srcDir, 0700);
-    fs.mkdirSync(dstDir, 0700);
+    fs.mkdirSync(repoDir, '0700');
+    fs.mkdirSync(srcDir, '0700');
+    fs.mkdirSync(dstDir, '0700');
 
     const repos = new Git(repoDir, {
       autoCreate: true,
       authenticate: ({ type, repo, user, headers }, next) => {
         if ((type == "download", repo == "doom")) {
-          t.ok(headers["host"]);
-          t.ok(headers["user-agent"]);
-          t.ok(headers["accept"]);
-          t.ok(headers["pragma"]);
-          t.ok(headers["accept-encoding"]);
+          expect(headers["host"]).toBeTruthy();
+          expect(headers["user-agent"]).toBeTruthy();
+          expect(headers["accept"]).toBeTruthy();
+          expect(headers["pragma"]).toBeTruthy();
+          expect(headers["accept-encoding"]).toBeTruthy();
 
           user((username, password) => {
             if (username == "root" && password == "root") {
@@ -803,7 +797,7 @@ test("git", (t) => {
           ]);
 
           clone.on("close", function (code) {
-            t.equal(code, 0);
+            expect(code).toBe(0);
             callback();
           });
         },
@@ -820,26 +814,25 @@ test("git", (t) => {
           });
 
           clone.on("close", function (code) {
-            t.equal(
-              error,
+            expect(error).toBe(
               `Cloning into \'doom.git doom1\'...\nfatal: unable to access \'http://localhost:${port}/doom.git doom1/\': The requested URL returned error: 400\n`
             );
-            t.equal(code, 128);
+            expect(code).toBe(128);
             callback();
           });
         },
       ],
       (err) => {
-        t.ok(!err, "no errors");
+        expect(!err).toBeTruthy();
         repos.close();
-        t.end();
+        done();
       }
     );
   });
 
-  t.test(
+  test(
     "should be able to protect certain routes with a promised authenticate",
-    (t) => {
+    (done) => {
       const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
         16
       )}`;
@@ -850,9 +843,9 @@ test("git", (t) => {
         16
       )}`;
 
-      fs.mkdirSync(repoDir, 0700);
-      fs.mkdirSync(srcDir, 0700);
-      fs.mkdirSync(dstDir, 0700);
+      fs.mkdirSync(repoDir, '0700');
+      fs.mkdirSync(srcDir, '0700');
+      fs.mkdirSync(dstDir, '0700');
 
       const repos = new Git(repoDir, {
         autoCreate: true,
@@ -886,7 +879,7 @@ test("git", (t) => {
             ]);
 
             clone.on("close", function (code) {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             });
           },
@@ -903,27 +896,26 @@ test("git", (t) => {
             });
 
             clone.on("close", function (code) {
-              t.equal(
-                error,
+              expect(error).toBe(
                 `Cloning into \'doom.git doom1\'...\nfatal: unable to access \'http://localhost:${port}/doom.git doom1/\': The requested URL returned error: 400\n`
               );
-              t.equal(code, 128);
+              expect(code).toBe(128);
               callback();
             });
           },
         ],
         (err) => {
-          t.ok(!err, "no errors");
+          expect(!err).toBeTruthy();
           repos.close();
-          t.end();
+          done();
         }
       );
     }
   );
 
-  t.test(
+  test(
     "should be able to send custom messages to git client (main stream)",
-    (t) => {
+    () => {
       const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
         16
       )}`;
@@ -934,9 +926,9 @@ test("git", (t) => {
         16
       )}`;
 
-      fs.mkdirSync(repoDir, 0700);
-      fs.mkdirSync(srcDir, 0700);
-      fs.mkdirSync(dstDir, 0700);
+      fs.mkdirSync(repoDir, '0700');
+      fs.mkdirSync(srcDir, '0700');
+      fs.mkdirSync(dstDir, '0700');
 
       const repos = new Git(repoDir, {
         autoCreate: true,
@@ -965,7 +957,7 @@ test("git", (t) => {
           },
           (callback) => {
             spawn("git", ["init"]).on("exit", (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             });
           },
@@ -976,7 +968,7 @@ test("git", (t) => {
           },
           (callback) => {
             spawn("git", ["add", "a.txt"]).on("exit", (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             });
           },
@@ -1006,23 +998,23 @@ test("git", (t) => {
             });
 
             push.on("exit", () => {
-              t.ok(logs.join(" ").indexOf("remote: Have a great day!") > -1);
+              expect(logs.join(" ").indexOf("remote: Have a great day!") > -1).toBeTruthy();
               callback();
             });
           },
         ],
         (err) => {
-          t.ok(!err, "no errors");
+          expect(!err).toBeTruthy();
           repos.close();
-          t.end();
+          done();
         }
       );
     }
   );
 
-  t.test(
+  test(
     "should be able to send custom messages to git client (response stream)",
-    (t) => {
+    (done) => {
       const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
         16
       )}`;
@@ -1033,9 +1025,9 @@ test("git", (t) => {
         16
       )}`;
 
-      fs.mkdirSync(repoDir, 0700);
-      fs.mkdirSync(srcDir, 0700);
-      fs.mkdirSync(dstDir, 0700);
+      fs.mkdirSync(repoDir, '0700');
+      fs.mkdirSync(srcDir, '0700');
+      fs.mkdirSync(dstDir, '0700');
 
       const repos = new Git(repoDir, {
         autoCreate: true,
@@ -1067,7 +1059,7 @@ test("git", (t) => {
           },
           (callback) => {
             spawn("git", ["init"]).on("exit", (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             });
           },
@@ -1078,7 +1070,7 @@ test("git", (t) => {
           },
           (callback) => {
             spawn("git", ["add", "a.txt"]).on("exit", (code) => {
-              t.equal(code, 0);
+              expect(code).toBe(0);
               callback();
             });
           },
@@ -1108,15 +1100,15 @@ test("git", (t) => {
             });
 
             push.on("exit", () => {
-              t.ok(logs.join(" ").indexOf("remote: Have a great day!") > -1);
+              expect(logs.join(" ").indexOf("remote: Have a great day!") > -1).toBeTruthy();
               callback();
             });
           },
         ],
         (err) => {
-          t.ok(!err, "no errors");
+          expect(!err).toBeTruthy();
           repos.close();
-          t.end();
+          done();
         }
       );
     }
