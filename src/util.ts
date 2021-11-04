@@ -4,8 +4,13 @@ import EventEmitter from "events";
 
 import { Git } from "./git";
 import { HttpDuplex } from "./http-duplex";
-import { Service, ServiceOptions } from "./service";
+import { Service } from "./service";
 import { ServiceString } from "./types";
+
+export function packSideband(s: string): string {
+  const n = (4 + s.length).toString(16);
+  return Array(4 - n.length + 1).join("0") + n + s;
+}
 
 /**
  * adds headers to the response object to add cache control
@@ -47,32 +52,6 @@ export function basicAuth(
   }
 }
 /**
- * returns when process has fully exited
- * @param  ps - event emitter to listen to
- * @param  callback - function(code, signature)
- */
-export function onExit(
-  ps: EventEmitter,
-  callback: (code: number, signature: string) => void
-) {
-  let code: number;
-  let sig: string;
-  let pending = 3;
-
-  const onend = () => {
-    if (--pending === 0) {
-      callback(code, sig);
-    }
-  };
-
-  ps.on("exit", (c, s) => {
-    code = c;
-    sig = s;
-  });
-
-  ps.on("exit", onend);
-}
-/**
  * execute given git operation and respond
  * @param  dup  - duplex object to catch errors
  * @param  service - the method that is responding infoResponse (push, pull, clone)
@@ -85,12 +64,7 @@ export function serviceRespond(
   repoLocation: string,
   res: http.ServerResponse
 ) {
-  const pack = (s: string): string => {
-    const n = (4 + s.length).toString(16);
-    return Array(4 - n.length + 1).join("0") + n + s;
-  };
-
-  res.write(pack("# service=git-" + service + "\n"));
+  res.write(packSideband("# service=git-" + service + "\n"));
   res.write("0000");
 
   const isWin = /^win/.test(process.platform);
@@ -124,6 +98,15 @@ export function infoResponse(
   req: http.IncomingMessage,
   res: http.ServerResponse
 ) {
+  function next() {
+    res.setHeader(
+      "content-type",
+      "application/x-git-" + service + "-advertisement"
+    );
+    noCache(res);
+    serviceRespond(git, service, git.dirMap(repo), res);
+  }
+
   const dup = new HttpDuplex(req, res);
   dup.cwd = git.dirMap(repo);
   dup.repo = repo;
@@ -138,35 +121,25 @@ export function infoResponse(
 
   const anyListeners = git.listeners("info").length > 0;
 
-  git.exists(repo, (ex) => {
-    dup.exists = ex;
+  const exists = git.exists(repo);
+  dup.exists = exists;
 
-    if (!ex && git.autoCreate) {
-      dup.once("accept", () => {
-        git.create(repo, next);
-      });
+  if (!exists && git.autoCreate) {
+    dup.once("accept", () => {
+      git.create(repo, next);
+    });
 
-      git.emit("info", dup);
-      if (!anyListeners) dup.accept();
-    } else if (!ex) {
-      res.statusCode = 404;
-      res.setHeader("content-type", "text/plain");
-      res.end("repository not found");
-    } else {
-      dup.once("accept", next);
-      git.emit("info", dup);
+    git.emit("info", dup);
+    if (!anyListeners) dup.accept();
+  } else if (!exists) {
+    res.statusCode = 404;
+    res.setHeader("content-type", "text/plain");
+    res.end("repository not found");
+  } else {
+    dup.once("accept", next);
+    git.emit("info", dup);
 
-      if (!anyListeners) dup.accept();
-    }
-  });
-
-  function next() {
-    res.setHeader(
-      "content-type",
-      "application/x-git-" + service + "-advertisement"
-    );
-    noCache(res);
-    serviceRespond(git, service, git.dirMap(repo), res);
+    if (!anyListeners) dup.accept();
   }
 }
 /**
@@ -187,7 +160,7 @@ export function parseGitName(repo: string): string {
  * @return a service instance
  */
 export function createAction(
-  opts: ServiceOptions,
+  opts: any,
   req: http.IncomingMessage,
   res: http.ServerResponse
 ): Service {

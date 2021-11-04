@@ -14,7 +14,6 @@ import {
   parseGitName,
   createAction,
   infoResponse,
-  onExit,
   basicAuth,
   noCache,
 } from "./util";
@@ -220,24 +219,16 @@ export class Git extends EventEmitter {
    * @param  repo - name of the repo
    * @param  callback - function to be called when finished
    */
-  exists(repo: string, callback: (exists: boolean) => void) {
-    fs.exists(this.dirMap(repo), callback);
+  exists(repo: string): boolean {
+    return fs.existsSync(this.dirMap(repo));
   }
   /**
    * Create a subdirectory `dir` in the repo dir with a callback.
    * @param  dir - directory name
    * @param  callback  - callback to be called when finished
    */
-  mkdir(dir: string, callback: () => void) {
-    // TODO: remove sync operations
-    const parts = this.dirMap(dir).split(path.sep);
-    for (let i = 0; i <= parts.length; i++) {
-      const directory = parts.slice(0, i).join(path.sep);
-      if (directory && !fs.existsSync(directory)) {
-        fs.mkdirSync(directory);
-      }
-    }
-    callback();
+  mkdir(dir: string) {
+    fs.mkdirSync(path.dirname(dir), { recursive: true });
   }
   /**
    * Create a new bare repository `repoName` in the instance repository directory.
@@ -261,11 +252,14 @@ export class Git extends EventEmitter {
         _error += chunk;
       });
 
-      onExit(ps, function (code: number) {
+      ps.on("exit", (code) => {
         if (!callback) {
           return;
-        } else if (code) callback(new Error(_error));
-        else callback();
+        } else if (code) {
+          callback(new Error(_error));
+        } else {
+          callback();
+        }
       });
     }
 
@@ -276,21 +270,18 @@ export class Git extends EventEmitter {
 
     if (!/\.git$/.test(repo)) repo += ".git";
 
-    this.exists(repo, (ex) => {
-      if (!ex) {
-        this.mkdir(repo, () => {
-          next(this);
-        });
-      } else {
-        next(this);
-      }
-    });
+    const exists = this.exists(repo);
+
+    if (!exists) {
+      this.mkdir(repo);
+    }
+
+    next(this);
   }
   /**
    * returns the typeof service being process
-   * @method getType
-   * @param  {String} service - the service type
-   * @return {String}  - will respond with either fetch or push
+   * @param  service - the service type
+   * @return will respond with either fetch or push
    */
   getType(service: string) {
     switch (service) {
@@ -305,12 +296,13 @@ export class Git extends EventEmitter {
 
   /**
    * Handle incoming HTTP requests with a connect-style middleware
-   * @method handle
-   * @memberof Git
-   * @param  req - http request object
-   * @param  res - http response object
+   * @param  http request object
+   * @param  http response object
    */
   handle(req: http.IncomingMessage, res: http.ServerResponse) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+
     const handlers = [
       (req: http.IncomingMessage, res: http.ServerResponse) => {
         if (req.method !== "GET") return false;
@@ -384,47 +376,46 @@ export class Git extends EventEmitter {
 
         const next = () => {
           const file = this.dirMap(path.join(m[1], "HEAD"));
-          this.exists(file, (exists) => {
-            if (exists) {
-              fs.createReadStream(file).pipe(res);
-            } else {
-              res.statusCode = 404;
-              res.end("not found");
-            }
-          });
+          const exists = this.exists(file);
+
+          if (exists) {
+            fs.createReadStream(file).pipe(res);
+          } else {
+            res.statusCode = 404;
+            res.end("not found");
+          }
         };
 
-        this.exists(repo, (exists) => {
-          const anyListeners = self.listeners("head").length > 0;
-          const dup = new HttpDuplex(req, res);
-          dup.exists = exists;
-          dup.repo = repo;
-          dup.cwd = this.dirMap(repo);
+        const exists = this.exists(repo);
+        const anyListeners = self.listeners("head").length > 0;
+        const dup = new HttpDuplex(req, res);
+        dup.exists = exists;
+        dup.repo = repo;
+        dup.cwd = this.dirMap(repo);
 
-          dup.accept = dup.emit.bind(dup, "accept");
-          dup.reject = dup.emit.bind(dup, "reject");
+        dup.accept = dup.emit.bind(dup, "accept");
+        dup.reject = dup.emit.bind(dup, "reject");
 
-          dup.once("reject", (code: number) => {
-            dup.statusCode = code || 500;
-            dup.end();
-          });
-
-          if (!exists && self.autoCreate) {
-            dup.once("accept", (dir: string) => {
-              self.create(dir || repo, next);
-            });
-            self.emit("head", dup);
-            if (!anyListeners) dup.accept();
-          } else if (!exists) {
-            res.statusCode = 404;
-            res.setHeader("content-type", "text/plain");
-            res.end("repository not found");
-          } else {
-            dup.once("accept", next);
-            self.emit("head", dup);
-            if (!anyListeners) dup.accept();
-          }
+        dup.once("reject", (code: number) => {
+          dup.statusCode = code || 500;
+          dup.end();
         });
+
+        if (!exists && self.autoCreate) {
+          dup.once("accept", (dir: string) => {
+            self.create(dir || repo, next);
+          });
+          self.emit("head", dup);
+          if (!anyListeners) dup.accept();
+        } else if (!exists) {
+          res.statusCode = 404;
+          res.setHeader("content-type", "text/plain");
+          res.end("repository not found");
+        } else {
+          dup.once("accept", next);
+          self.emit("head", dup);
+          if (!anyListeners) dup.accept();
+        }
       },
       (req: http.IncomingMessage, res: http.ServerResponse) => {
         if (req.method !== "POST") return false;
@@ -480,8 +471,7 @@ export class Git extends EventEmitter {
       },
     ];
     res.setHeader("connection", "close");
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
+
     (function next(ix) {
       const x = handlers[ix].call(self, req, res);
       if (x === false) next(ix + 1);
@@ -489,15 +479,13 @@ export class Git extends EventEmitter {
   }
   /**
    * starts a git server on the given port
-   * @method listen
-   * @memberof Git
    * @param  port  - the port to start the server on
-   * @param  {Object=}   options  - the options to add extended functionality to the server
-   * @param  {String=}   options.type - this is either https or http (the default is http)
-   * @param  {Buffer|String=}   options.key - the key file for the https server
-   * @param  {Buffer|String=}   options.cert - the cert file for the https server
-   * @param  {Function} callback - the function to call when server is started or error has occured
-   * @return {Git}  - the Git instance, useful for chaining
+   * @param  options  - the options to add extended functionality to the server
+   * @param  options.type - this is either https or http (the default is http)
+   * @param  options.key - the key file for the https server
+   * @param  options.cert - the cert file for the https server
+   * @param  callback - the function to call when server is started or error has occurred
+   * @return the Git instance, useful for chaining
    */
   listen(port: number, options: GitServerOptions, callback: () => void) {
     if (typeof options == "function" || !options) {
@@ -518,11 +506,9 @@ export class Git extends EventEmitter {
   }
   /**
    * closes the server instance
-   * @method close
-   * @memberof Git
-   * @param {Promise} - will resolve or reject when the server closes or fails to close.
+   * @param will resolve or reject when the server closes or fails to close.
    */
-  close() {
+  close(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.server?.close((err) => {
         err ? reject(err) : resolve("Success");

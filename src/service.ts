@@ -7,6 +7,7 @@ import { spawn } from "child_process";
 
 import { HttpDuplex } from "./http-duplex";
 import { ServiceString } from "./types";
+import { packSideband } from "./util";
 
 const headerRegex: { [key: string]: string } = {
   'receive-pack': '([0-9a-fA-F]+) ([0-9a-fA-F]+) refs\/(heads|tags)\/(.*?)( |00|\u0000)|^(0000)$', // eslint-disable-line
@@ -17,12 +18,6 @@ const decoder: { [key: string]: () => zlib.Gunzip | zlib.Deflate } = {
   gzip: (): zlib.Gunzip => zlib.createGunzip(),
   deflate: (): zlib.Deflate => zlib.createDeflate(),
 };
-
-const packSideband = (s: string): string => {
-  const n = (4 + s.length).toString(16);
-  return Array(4 - n.length + 1).join("0") + n + s;
-};
-
 export interface ServiceOptions {
   repo: string;
   cwd: string;

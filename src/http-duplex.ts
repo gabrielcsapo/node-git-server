@@ -14,6 +14,7 @@ export class HttpDuplex extends EventEmitter {
   reject(code: number, msg: string) {
     throw new Error("Method not implemented.");
   }
+
   /**
    * A IncomingMessage created by http.Server or http.ClientRequest usually passed as the
    * first parameter to the 'request' and 'response' events. Implements Readable Stream interface
@@ -269,7 +270,7 @@ export class HttpDuplex extends EventEmitter {
    * request.uncork();
    */
   cork() {
-    this.res.connection?.cork();
+    this.res.socket?.cork();
     return this;
   }
 
@@ -283,7 +284,7 @@ export class HttpDuplex extends EventEmitter {
    * @see {@link https://nodejs.org/api/stream.html#stream_writable_uncork|stream.Writeable.uncork}
    */
   uncork() {
-    this.res.connection?.uncork();
+    this.res.socket?.uncork();
     return this;
   }
 }
