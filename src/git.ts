@@ -124,8 +124,8 @@ export interface GitOptions {
   autoCreate?: boolean;
   authenticate?: (
     options: GitAuthenticateOptions,
-    callback: (error: Error) => void | undefined
-  ) => Promise<any> | undefined;
+    callback: (error?: Error) => void | undefined
+  ) => void | Promise<any> | undefined;
   checkout?: boolean;
 }
 
@@ -147,8 +147,8 @@ export class Git extends EventEmitter {
   authenticate:
     | ((
         options: GitAuthenticateOptions,
-        callback: (error: Error) => void | undefined
-      ) => Promise<any> | undefined)
+        callback: (error?: Error) => void | undefined
+      ) => void | Promise<any> | undefined)
     | undefined;
 
   autoCreate: boolean;
@@ -180,7 +180,10 @@ export class Git extends EventEmitter {
      }
    * @param  options.checkout - If `opts.checkout` is true, create and expected checked-out repos instead of bare repos
   */
-  constructor(repoDir: string, options: GitOptions = {}) {
+  constructor(
+    repoDir: string | ((dir?: string) => string),
+    options: GitOptions = {}
+  ) {
     super();
 
     if (typeof repoDir === "function") {
@@ -352,7 +355,7 @@ export class Git extends EventEmitter {
           const user = basicAuth.bind(null, req, res);
           const promise = this.authenticate(
             { type, repo: repoName, user, headers },
-            (error: Error) => {
+            (error?: Error) => {
               return next(error);
             }
           );
@@ -487,11 +490,11 @@ export class Git extends EventEmitter {
    * @param  callback - the function to call when server is started or error has occurred
    * @return the Git instance, useful for chaining
    */
-  listen(port: number, options: GitServerOptions, callback: () => void) {
-    if (typeof options == "function" || !options) {
-      callback = options;
+  listen(port: number, options?: GitServerOptions, callback?: () => void) {
+    if (!options) {
       options = { type: "http" };
     }
+
     const createServer =
       options.type == "http"
         ? http.createServer
@@ -502,6 +505,7 @@ export class Git extends EventEmitter {
     });
 
     this.server.listen(port, callback);
+
     return this;
   }
   /**

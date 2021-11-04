@@ -2,7 +2,10 @@ import http from "http";
 import EventEmitter from "events";
 
 export class HttpDuplex extends EventEmitter {
-  end() {
+  setHeader(arg0: string, arg1: string) {
+    throw new Error("Method not implemented.");
+  }
+  end(reason: any) {
     throw new Error("Method not implemented.");
   }
   destroy() {
