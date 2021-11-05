@@ -1,6 +1,5 @@
 import http from "http";
 import { spawn } from "child_process";
-import EventEmitter from "events";
 
 import { Git } from "./git";
 import { HttpDuplex } from "./http-duplex";
