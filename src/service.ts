@@ -1,17 +1,17 @@
-import http from "http";
-import zlib from "zlib";
-import through, { ThroughStream } from "through";
-import util from "util";
-import os from "os";
-import { spawn } from "child_process";
+import http from 'http';
+import zlib from 'zlib';
+import through, { ThroughStream } from 'through';
+import util from 'util';
+import os from 'os';
+import { spawn } from 'child_process';
 
-import { HttpDuplex } from "./http-duplex";
-import { ServiceString } from "./types";
-import { packSideband } from "./util";
+import { HttpDuplex } from './http-duplex';
+import { ServiceString } from './types';
+import { packSideband } from './util';
 
 const headerRegex: { [key: string]: string } = {
   'receive-pack': '([0-9a-fA-F]+) ([0-9a-fA-F]+) refs\/(heads|tags)\/(.*?)( |00|\u0000)|^(0000)$', // eslint-disable-line
-  "upload-pack": "^\\S+ ([0-9a-fA-F]+)",
+  'upload-pack': '^\\S+ ([0-9a-fA-F]+)',
 };
 
 const decoder: { [key: string]: () => zlib.Gunzip | zlib.Deflate } = {
@@ -37,9 +37,7 @@ export class Service extends HttpDuplex {
 
   /**
    * Handles invoking the git-*-pack binaries
-   * @class Service
-   * @extends HttpDuplex
-   * @param  {Object}               opts - options to bootstrap the service object
+   * @param  opts - options to bootstrap the service object
    * @param  req  - http request object
    * @param  res  - http response
    */
@@ -50,11 +48,11 @@ export class Service extends HttpDuplex {
   ) {
     super(req, res);
 
-    let data = "";
+    let data = '';
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
-    this.status = "pending";
+    this.status = 'pending';
     this.repo = opts.repo;
     this.service = opts.service;
     this.cwd = opts.cwd;
@@ -65,7 +63,7 @@ export class Service extends HttpDuplex {
     // stream needed to receive data after decoding, but before accepting
     const ts = through();
 
-    const encoding = req.headers["content-encoding"];
+    const encoding = req.headers['content-encoding'];
 
     if (encoding && decoder[encoding]) {
       // data is compressed with gzip or deflate
@@ -75,22 +73,22 @@ export class Service extends HttpDuplex {
       req.pipe(ts).pipe(buffered);
     }
 
-    if (req.headers["authorization"]) {
-      const tokens = req.headers["authorization"].split(" ");
-      if (tokens[0] === "Basic") {
-        const splitHash = Buffer.from(tokens[1], "base64")
-          .toString("utf8")
-          .split(":");
+    if (req.headers['authorization']) {
+      const tokens = req.headers['authorization'].split(' ');
+      if (tokens[0] === 'Basic') {
+        const splitHash = Buffer.from(tokens[1], 'base64')
+          .toString('utf8')
+          .split(':');
         this.username = splitHash.shift();
       }
     }
 
-    ts.once("data", function onData(chunk: string) {
+    ts.once('data', function onData(chunk: string) {
       data += chunk;
 
-      const ops = data.match(new RegExp(headerRegex[self.service], "gi"));
+      const ops = data.match(new RegExp(headerRegex[self.service], 'gi'));
       if (!ops) return;
-      data = "";
+      data = '';
 
       ops.forEach(function (op) {
         let type;
@@ -98,16 +96,16 @@ export class Service extends HttpDuplex {
 
         if (!m) return;
 
-        if (self.service === "receive-pack") {
+        if (self.service === 'receive-pack') {
           self.last = m[1];
           self.commit = m[2];
 
-          if (m[3] == "heads") {
-            type = "branch";
-            self.evName = "push";
+          if (m[3] == 'heads') {
+            type = 'branch';
+            self.evName = 'push';
           } else {
-            type = "version";
-            self.evName = "tag";
+            type = 'version';
+            self.evName = 'tag';
           }
 
           const headers: { [key: string]: string } = {
@@ -115,38 +113,38 @@ export class Service extends HttpDuplex {
             commit: self.commit,
           };
           headers[type] = (self as any)[type] = m[4];
-          self.emit("header", headers);
-        } else if (self.service === "upload-pack") {
+          self.emit('header', headers);
+        } else if (self.service === 'upload-pack') {
           self.commit = m[1];
-          self.evName = "fetch";
-          self.emit("header", {
+          self.evName = 'fetch';
+          self.emit('header', {
             commit: self.commit,
           });
         }
       });
     });
 
-    self.once("accept", function onAccept() {
+    self.once('accept', function onAccept() {
       process.nextTick(function () {
         const cmd =
-          os.platform() == "win32"
-            ? ["git", opts.service, "--stateless-rpc", opts.cwd]
-            : ["git-" + opts.service, "--stateless-rpc", opts.cwd];
+          os.platform() == 'win32'
+            ? ['git', opts.service, '--stateless-rpc', opts.cwd]
+            : ['git-' + opts.service, '--stateless-rpc', opts.cwd];
 
         const ps = spawn(cmd[0], cmd.slice(1));
 
-        ps.on("error", function (error: Error) {
+        ps.on('error', function (error: Error) {
           self.emit(
-            "error",
-            new Error(`${error.message} running command ${cmd.join(" ")}`)
+            'error',
+            new Error(`${error.message} running command ${cmd.join(' ')}`)
           );
         });
 
-        self.emit("service", ps);
+        self.emit('service', ps);
 
         const respStream = through(
           function write(this: ThroughStream, c) {
-            if (self.listeners("response").length === 0) {
+            if (self.listeners('response').length === 0) {
               if (self.logs.length > 0) {
                 while (self.logs.length > 0) {
                   this.queue(self.logs.pop());
@@ -156,11 +154,11 @@ export class Service extends HttpDuplex {
               return this.queue(c);
             }
             // prevent git from sending the close signal
-            if (c.length === 4 && c.toString() === "0000") return;
+            if (c.length === 4 && c.toString() === '0000') return;
             this.queue(c);
           },
           function end(this: ThroughStream) {
-            if (self.listeners("response").length > 0) return;
+            if (self.listeners('response').length > 0) return;
 
             this.queue(null);
           }
@@ -171,8 +169,8 @@ export class Service extends HttpDuplex {
           (self as any).log(...arguments);
         };
 
-        self.emit("response", respStream, function endResponse() {
-          (res as any).queue(Buffer.from("0000"));
+        self.emit('response', respStream, function endResponse() {
+          (res as any).queue(Buffer.from('0000'));
           (res as any).queue(null);
         });
 
@@ -181,21 +179,21 @@ export class Service extends HttpDuplex {
         buffered.pipe(ps.stdin);
         buffered.resume();
 
-        ps.on("exit", () => {
+        ps.on('exit', () => {
           if (self.logs.length > 0) {
             while (self.logs.length > 0) {
               respStream.queue(self.logs.pop());
             }
-            respStream.queue(Buffer.from("0000"));
+            respStream.queue(Buffer.from('0000'));
             respStream.queue(null);
           }
 
-          self.emit.bind(self, "exit");
+          self.emit.bind(self, 'exit');
         });
       });
     });
 
-    self.once("reject", function onReject(code: number, msg: string) {
+    self.once('reject', function onReject(code: number, msg: string) {
       res.statusCode = code;
       res.end(msg);
     });
@@ -216,22 +214,22 @@ export class Service extends HttpDuplex {
    * @param  msg  - message that should be displayed on the client
    */
   reject(code: number, msg: string) {
-    if (this.status !== "pending") return;
+    if (this.status !== 'pending') return;
 
-    if (msg === undefined && typeof code === "string") {
+    if (msg === undefined && typeof code === 'string') {
       msg = code;
       code = 500;
     }
-    this.status = "rejected";
-    this.emit("reject", code || 500, msg);
+    this.status = 'rejected';
+    this.emit('reject', code || 500, msg);
   }
   /**
    * accepts request to access resource
    */
   accept() {
-    if (this.status !== "pending") return;
+    if (this.status !== 'pending') return;
 
-    this.status = "accepted";
-    this.emit("accept");
+    this.status = 'accepted';
+    this.emit('accept');
   }
 }

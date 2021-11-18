@@ -1,1 +1,1 @@
-export type ServiceString = "upload-pack" | "receive-pack";
+export type ServiceString = 'upload-pack' | 'receive-pack';

@@ -8,3 +8,5 @@ example/tmp
 package-lock.json
 .vs/
 dist
+temp
+etc

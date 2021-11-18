@@ -1,14 +1,14 @@
-import http from "http";
-import { spawn } from "child_process";
+import http from 'http';
+import { spawn } from 'child_process';
 
-import { Git } from "./git";
-import { HttpDuplex } from "./http-duplex";
-import { Service } from "./service";
-import { ServiceString } from "./types";
+import { Git } from './git';
+import { HttpDuplex } from './http-duplex';
+import { Service } from './service';
+import { ServiceString } from './types';
 
 export function packSideband(s: string): string {
   const n = (4 + s.length).toString(16);
-  return Array(4 - n.length + 1).join("0") + n + s;
+  return Array(4 - n.length + 1).join('0') + n + s;
 }
 
 /**
@@ -16,9 +16,9 @@ export function packSideband(s: string): string {
  * @param  res  - http response
  */
 export function noCache(res: http.ServerResponse) {
-  res.setHeader("expires", "Fri, 01 Jan 1980 00:00:00 GMT");
-  res.setHeader("pragma", "no-cache");
-  res.setHeader("cache-control", "no-cache, max-age=0, must-revalidate");
+  res.setHeader('expires', 'Fri, 01 Jan 1980 00:00:00 GMT');
+  res.setHeader('pragma', 'no-cache');
+  res.setHeader('cache-control', 'no-cache, max-age=0, must-revalidate');
 }
 
 /**
@@ -32,19 +32,19 @@ export function basicAuth(
   res: http.ServerResponse,
   callback: (username?: string, password?: string) => void
 ) {
-  if (!req.headers["authorization"]) {
-    res.setHeader("Content-Type", "text/plain");
-    res.setHeader("WWW-Authenticate", 'Basic realm="authorization needed"');
+  if (!req.headers['authorization']) {
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('WWW-Authenticate', 'Basic realm="authorization needed"');
     res.writeHead(401);
-    res.end("401 Unauthorized");
+    res.end('401 Unauthorized');
   } else {
-    const tokens = req.headers["authorization"].split(" ");
-    if (tokens[0] === "Basic") {
-      const splitHash = Buffer.from(tokens[1], "base64")
-        .toString("utf8")
-        .split(":");
+    const tokens = req.headers['authorization'].split(' ');
+    if (tokens[0] === 'Basic') {
+      const splitHash = Buffer.from(tokens[1], 'base64')
+        .toString('utf8')
+        .split(':');
       const username = splitHash.shift();
-      const password = splitHash.join(":");
+      const password = splitHash.join(':');
 
       callback(username, password);
     }
@@ -63,21 +63,21 @@ export function serviceRespond(
   repoLocation: string,
   res: http.ServerResponse
 ) {
-  res.write(packSideband("# service=git-" + service + "\n"));
-  res.write("0000");
+  res.write(packSideband('# service=git-' + service + '\n'));
+  res.write('0000');
 
   const isWin = /^win/.test(process.platform);
 
   const cmd = isWin
-    ? ["git", service, "--stateless-rpc", "--advertise-refs", repoLocation]
-    : ["git-" + service, "--stateless-rpc", "--advertise-refs", repoLocation];
+    ? ['git', service, '--stateless-rpc', '--advertise-refs', repoLocation]
+    : ['git-' + service, '--stateless-rpc', '--advertise-refs', repoLocation];
 
   const ps = spawn(cmd[0], cmd.slice(1));
 
-  ps.on("error", (err) => {
+  ps.on('error', (err) => {
     dup.emit(
-      "error",
-      new Error(`${err.message} running command ${cmd.join(" ")}`)
+      'error',
+      new Error(`${err.message} running command ${cmd.join(' ')}`)
     );
   });
   ps.stdout.pipe(res);
@@ -99,8 +99,8 @@ export function infoResponse(
 ) {
   function next() {
     res.setHeader(
-      "content-type",
-      "application/x-git-" + service + "-advertisement"
+      'content-type',
+      'application/x-git-' + service + '-advertisement'
     );
     noCache(res);
     serviceRespond(git, service, git.dirMap(repo), res);
@@ -110,33 +110,33 @@ export function infoResponse(
   dup.cwd = git.dirMap(repo);
   dup.repo = repo;
 
-  dup.accept = dup.emit.bind(dup, "accept");
-  dup.reject = dup.emit.bind(dup, "reject");
+  dup.accept = dup.emit.bind(dup, 'accept');
+  dup.reject = dup.emit.bind(dup, 'reject');
 
-  dup.once("reject", (code: number) => {
+  dup.once('reject', (code: number) => {
     res.statusCode = code || 500;
     res.end();
   });
 
-  const anyListeners = git.listeners("info").length > 0;
+  const anyListeners = git.listeners('info').length > 0;
 
   const exists = git.exists(repo);
   dup.exists = exists;
 
   if (!exists && git.autoCreate) {
-    dup.once("accept", () => {
+    dup.once('accept', () => {
       git.create(repo, next);
     });
 
-    git.emit("info", dup);
+    git.emit('info', dup);
     if (!anyListeners) dup.accept();
   } else if (!exists) {
     res.statusCode = 404;
-    res.setHeader("content-type", "text/plain");
-    res.end("repository not found");
+    res.setHeader('content-type', 'text/plain');
+    res.end('repository not found');
   } else {
-    dup.once("accept", next);
-    git.emit("info", dup);
+    dup.once('accept', next);
+    git.emit('info', dup);
 
     if (!anyListeners) dup.accept();
   }
@@ -144,19 +144,16 @@ export function infoResponse(
 /**
  * parses a git string and returns the repo name
  * @param  repo - the raw repo name containing .git
- * @return returns the name of the repo
  */
 export function parseGitName(repo: string): string {
-  const locationOfGit = repo.lastIndexOf(".git");
+  const locationOfGit = repo.lastIndexOf('.git');
   return repo.substr(0, locationOfGit > 0 ? locationOfGit : repo.length);
 }
 /**
  * responds with the correct service depending on the action
- * @method createAction
  * @param  opts - options to pass Service
  * @param  req  - http request object
  * @param  res  - http response
- * @return a service instance
  */
 export function createAction(
   opts: any,
