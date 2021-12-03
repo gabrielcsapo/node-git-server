@@ -22,7 +22,7 @@ npm install node-git-server
 
 ```typescript
 import { Git } from 'node-git-server';
-import { join } from 'path;
+import { join } from 'path';
 
 const port = !process.env.PORT || isNaN(process.env.PORT)
   ? 7005
@@ -74,7 +74,7 @@ To http://localhost:7005/beep
 
 ```typescript
 import { Git } from 'node-git-server';
-import { join } from 'path;
+import { join } from 'path';
 
 const port = !process.env.PORT || isNaN(process.env.PORT)
   ? 7005
@@ -139,7 +139,7 @@ To http://localhost:7005/test
 
 ```typescript
 import { Git } from 'node-git-server';
-import { join } from 'path;
+import { join } from 'path';
 
 const port = !process.env.PORT || isNaN(process.env.PORT)
   ? 7005
