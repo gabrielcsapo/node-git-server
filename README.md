@@ -20,21 +20,27 @@ npm install node-git-server
 
 ## Simple
 
-```javascript
-const path = require("path");
-const Server = require("node-git-server");
+```typescript
+import { Git } from 'node-git-server';
+import { join } from 'path;
 
-const repos = new Server(path.resolve(__dirname, "tmp"), {
-  autoCreate: true,
-});
-const port = process.env.PORT || 7005;
+const port = !process.env.PORT || isNaN(process.env.PORT)
+  ? 7005
+  : parseInt(process.env.PORT);
 
-repos.on("push", (push) => {
-  console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
+const repos = new Git(
+  join(__dirname, '../repo'),
+  {
+    autoCreate: true,
+  }
+);
+
+repos.on('push', push => {
+  console.log(`push ${push.repo}/${push.commit} ( ${push.branch} )`);
   push.accept();
 });
 
-repos.on("fetch", (fetch) => {
+repos.on("fetch", fetch => {
   console.log(`fetch ${fetch.commit}`);
   fetch.accept();
 });
@@ -48,6 +54,7 @@ then start up the node-git-server server...
 
 ```
 $ node example/index.js
+node-git-server running at http://localhost:7005
 ```
 
 meanwhile...
@@ -65,29 +72,37 @@ To http://localhost:7005/beep
 
 ## Sending logs
 
-```javascript
-const path = require("path");
-const Server = require("node-git-server");
+```typescript
+import { Git } from 'node-git-server';
+import { join } from 'path;
 
-const repos = new Server(path.resolve(__dirname, "tmp"), {
-  autoCreate: true,
-});
-const port = process.env.PORT || 7005;
+const port = !process.env.PORT || isNaN(process.env.PORT)
+  ? 7005
+  : parseInt(process.env.PORT);
 
-repos.on("push", (push) => {
-  console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
+const repos = new Git(
+  join(__dirname, '../repo'),
+  {
+    autoCreate: true,
+  }
+);
 
-  repos.list((err, results) => {
-    push.log(" ");
-    push.log("Hey!");
-    push.log("Checkout these other repos:");
-    for (const repo of results) {
-      push.log(`- ${repo}`);
-    }
-    push.log(" ");
-  });
+repos.on('push', async push => {
+  console.log(`push ${push.repo}/${push.commit} ( ${push.branch} )`);
 
+  push.log();
+  push.log('Hey!');
+  push.log('Checkout these other repos:');
+  for (const repo of await repo.list()) {
+    push.log(`- ${repo}`);
+  }
+  push.log();
   push.accept();
+});
+
+repos.on("fetch", fetch => {
+  console.log(`fetch ${fetch.commit}`);
+  fetch.accept();
 });
 
 repos.listen(port, () => {
@@ -99,6 +114,7 @@ then start up the node-git-server server...
 
 ```
 $ node example/index.js
+node-git-server running at http://localhost:7005
 ```
 
 meanwhile...
@@ -121,31 +137,34 @@ To http://localhost:7005/test
 
 ### Authentication
 
-```javascript
-const path = require("path");
-const Server = require("node-git-server");
+```typescript
+import { Git } from 'node-git-server';
+import { join } from 'path;
 
-const repos = new Server(path.resolve(__dirname, "tmp"), {
-  autoCreate: true,
-  authenticate: ({ type, repo, user }, next) => {
-    if (type == "push") {
-      user((username, password) => {
+const port = !process.env.PORT || isNaN(process.env.PORT)
+  ? 7005
+  : parseInt(process.env.PORT);
+
+const repos = new Git(
+  join(__dirname, '../repo'),
+  {
+    autoCreate: true,
+    autheficate: ({ type, user }, next) =>
+      type == 'push'
+      ? user(([username, password]) => {
         console.log(username, password);
         next();
-      });
-    } else {
-      next();
-    }
-  },
-});
-const port = process.env.PORT || 7005;
+      })
+      : next()
+  }
+);
 
-repos.on("push", (push) => {
-  console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
+repos.on('push', push => {
+  console.log(`push ${push.repo}/${push.commit} ( ${push.branch} )`);
   push.accept();
 });
 
-repos.on("fetch", (fetch) => {
+repos.on("fetch", fetch => {
   console.log(`fetch ${fetch.commit}`);
   fetch.accept();
 });
@@ -159,6 +178,7 @@ then start up the node-git-server server...
 
 ```
 $ node example/index.js
+node-git-server running at http://localhost:7005
 ```
 
 meanwhile...

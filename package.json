@@ -6,7 +6,7 @@
   "contributors": [
     {
       "name": "echopoint",
-      "email": "echopoint <echopoint@tutanota.com>"
+      "email": "echopoint@tutanota.com"
     }
   ],
   "license": "MIT",
@@ -18,15 +18,16 @@
     "type": "git",
     "url": "git+https://github.com/gabrielcsapo/node-git-server.git"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "engine": {
     "node": ">= 14"
   },
   "scripts": {
     "lint": "eslint src/*",
     "test": "jest",
-    "build": "tsc",
-    "coverage": "jest --coverage"
+    "build": "echo \"\" > ./build-complete.meta && tsc",
+    "coverage": "jest --coverage",
+    "install": "( [ -f ./git-package.meta ] && [ ! -f ./build-complete.meta ] && echo \"\" > ./build-complete.meta && npm install . && tsc ) || echo \"\" > ./build-complete.meta"
   },
   "dependencies": {
     "through": "^2.3.8"
@@ -52,3 +53,5 @@
     "./website"
   ]
 }
+
+

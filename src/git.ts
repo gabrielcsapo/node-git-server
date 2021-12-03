@@ -30,19 +30,20 @@ export interface GitOptions {
   authenticate?: (
     options: GitAuthenticateOptions,
     callback: (error?: Error) => void | undefined
-  ) => void | Promise<any> | undefined;
+  ) => void | Promise<Error | undefined | void> | undefined;
   checkout?: boolean;
 }
 
 export interface GitAuthenticateOptions {
   type: string;
   repo: string;
-  user: (
-    callback: (
-      username?: string | undefined,
-      password?: string | undefined
-    ) => void
-  ) => void;
+  user: (() => Promise<[string | undefined, string | undefined]>) &
+    ((
+      callback: (
+        username?: string | undefined,
+        password?: string | undefined
+      ) => void
+    ) => void);
   headers: http.IncomingHttpHeaders;
 }
 
@@ -88,65 +89,60 @@ export interface HeadData extends HttpDuplex {
 
 export interface GitEvents {
   /**
-  * 
-  * @example
-    repos.on('push', function (push) { ... }
-
-    Emitted when somebody does a `git push` to the repo.
-
-    Exactly one listener must call `push.accept()` or `push.reject()`. If there are
-    no listeners, `push.accept()` is called automatically.
-  *
- */
-  addListener(event: 'push', listener: (push: PushData) => void): this;
+   * @example
+   * repos.on('push', function (push) { ... }
+   *
+   * Emitted when somebody does a `git push` to the repo.
+   *
+   * Exactly one listener must call `push.accept()` or `push.reject()`. If there are
+   * no listeners, `push.accept()` is called automatically.
+   **/
+  on(event: 'push', listener: (push: PushData) => void): this;
 
   /**
-  * @example
-  repos.on('tag', function (tag) { ... }
-
-  Emitted when somebody does a `git push --tags` to the repo.
-  Exactly one listener must call `tag.accept()` or `tag.reject()`. If there are
-  No listeners, `tag.accept()` is called automatically.
-  */
-  addListener(event: 'tag', listener: (tag: TagData) => void): this;
-
-  /**
-  * @example
-    repos.on('fetch', function (fetch) { ... }
-
-    Emitted when somebody does a `git fetch` to the repo (which happens whenever you
-    do a `git pull` or a `git clone`).
-
-    Exactly one listener must call `fetch.accept()` or `fetch.reject()`. If there are
-    no listeners, `fetch.accept()` is called automatically.
-  *
-  */
-  addListener(event: 'fetch', listener: (fetch: FetchData) => void): this;
+   * @example
+   * repos.on('tag', function (tag) { ... }
+   *
+   * Emitted when somebody does a `git push --tags` to the repo.
+   * Exactly one listener must call `tag.accept()` or `tag.reject()`. If there are
+   * No listeners, `tag.accept()` is called automatically.
+   **/
+  on(event: 'tag', listener: (tag: TagData) => void): this;
 
   /**
-  * @example
-    repos.on('info', function (info) { ... }
-
-    Emitted when the repo is queried for info before doing other commands.
-
-    Exactly one listener must call `info.accept()` or `info.reject()`. If there are
-    no listeners, `info.accept()` is called automatically.
-  *
-*/
-
-  addListener(event: 'info', listener: (info: InfoData) => void): this;
+   * @example
+   * repos.on('fetch', function (fetch) { ... }
+   *
+   * Emitted when somebody does a `git fetch` to the repo (which happens whenever you
+   * do a `git pull` or a `git clone`).
+   *
+   * Exactly one listener must call `fetch.accept()` or `fetch.reject()`. If there are
+   * no listeners, `fetch.accept()` is called automatically.
+   **/
+  on(event: 'fetch', listener: (fetch: FetchData) => void): this;
 
   /**
-    * @example
-      repos.on('head', function (head) { ... }
+   * @example
+   * repos.on('info', function (info) { ... }
+   *
+   * Emitted when the repo is queried for info before doing other commands.
+   *
+   * Exactly one listener must call `info.accept()` or `info.reject()`. If there are
+   * no listeners, `info.accept()` is called automatically.
+   **/
+  on(event: 'info', listener: (info: InfoData) => void): this;
 
-      Emitted when the repo is queried for HEAD before doing other commands.
-
-      Exactly one listener must call `head.accept()` or `head.reject()`. If there are
-      no listeners, `head.accept()` is called automatically.
-    *
-  */
-  addListener(event: 'head', listener: (head: HeadData) => void): this;
+  /**
+   * @example
+   * repos.on('head', function (head) { ... }
+   *
+   * Emitted when the repo is queried for HEAD before doing other commands.
+   *
+   * Exactly one listener must call `head.accept()` or `head.reject()`. If there are
+   * no listeners, `head.accept()` is called automatically.
+   *
+   **/
+  on(event: 'head', listener: (head: HeadData) => void): this;
 }
 export class Git extends EventEmitter implements GitEvents {
   dirMap: (dir?: string) => string;
@@ -155,7 +151,7 @@ export class Git extends EventEmitter implements GitEvents {
     | ((
         options: GitAuthenticateOptions,
         callback: (error?: Error) => void | undefined
-      ) => void | Promise<any> | undefined)
+      ) => void | Promise<Error | undefined | void> | undefined)
     | undefined;
 
   autoCreate: boolean;
@@ -214,15 +210,26 @@ export class Git extends EventEmitter implements GitEvents {
    * Get a list of all the repositories
    * @param  {Function} callback function to be called when repositories have been found `function(error, repos)`
    */
-  list(callback: (error: Error | undefined, repos?: string[]) => void) {
-    fs.readdir(this.dirMap(), (error, results) => {
-      if (error) return callback(error);
-      const repos = results.filter((r) => {
-        return r.substring(r.length - 3, r.length) == 'git';
-      }, []);
+  list(callback: (error: Error | undefined, repos?: string[]) => void): void;
+  list(): Promise<string[]>;
+  list(
+    callback?: (error: Error | undefined, repos?: string[]) => void
+  ): Promise<string[]> | void {
+    const execf = (res: (repos: string[]) => void, rej: (err: Error) => void) =>
+      fs.readdir(this.dirMap(), (error, results) => {
+        if (error) return rej(error);
+        const repos = results.filter((r) => {
+          return r.substring(r.length - 3, r.length) == 'git';
+        }, []);
 
-      callback(undefined, repos);
-    });
+        res(repos);
+      });
+    if (callback)
+      return execf(
+        (repos) => callback(void 0, repos),
+        (err) => callback(err, void 0)
+      );
+    else return new Promise<string[]>((res, rej) => execf(res, rej));
   }
   /**
    * Find out whether `repoName` exists in the callback `cb(exists)`.
@@ -339,7 +346,7 @@ export class Git extends EventEmitter implements GitEvents {
         }
 
         const repoName = parseGitName(m[1]);
-        const next = (error?: Error) => {
+        const next = (error?: Error | void) => {
           if (error) {
             res.setHeader('Content-Type', 'text/plain');
             res.setHeader(
@@ -358,9 +365,22 @@ export class Git extends EventEmitter implements GitEvents {
         if (this.authenticate) {
           const type = this.getType(service);
           const headers = req.headers;
-          const user = basicAuth.bind(null, req, res);
+          const user = (
+            callback?: (username?: string, password?: string) => void
+          ) =>
+            callback
+              ? basicAuth(req, res, callback)
+              : new Promise<[string | undefined, string | undefined]>(
+                  (resolve) => basicAuth(req, res, (u, p) => resolve([u, p]))
+                );
+
           const promise = this.authenticate(
-            { type, repo: repoName, user, headers },
+            {
+              type,
+              repo: repoName,
+              user: user as unknown as GitAuthenticateOptions['user'],
+              headers,
+            },
             (error?: Error) => {
               return next(error);
             }
@@ -517,8 +537,8 @@ export class Git extends EventEmitter implements GitEvents {
    * closes the server instance
    * @param will resolve or reject when the server closes or fails to close.
    */
-  close(): Promise<any> {
-    return new Promise((resolve, reject) => {
+  close(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
       this.server?.close((err) => {
         err ? reject(err) : resolve('Success');
       });

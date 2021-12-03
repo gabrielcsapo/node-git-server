@@ -3,7 +3,7 @@ import { spawn } from 'child_process';
 
 import { Git } from './git';
 import { HttpDuplex } from './http-duplex';
-import { Service } from './service';
+import { Service, ServiceOptions } from './service';
 import { ServiceString } from './types';
 
 export function packSideband(s: string): string {
@@ -147,7 +147,7 @@ export function infoResponse(
  */
 export function parseGitName(repo: string): string {
   const locationOfGit = repo.lastIndexOf('.git');
-  return repo.substr(0, locationOfGit > 0 ? locationOfGit : repo.length);
+  return repo.slice(0, locationOfGit > 0 ? locationOfGit : repo.length);
 }
 /**
  * responds with the correct service depending on the action
@@ -156,7 +156,7 @@ export function parseGitName(repo: string): string {
  * @param  res  - http response
  */
 export function createAction(
-  opts: any,
+  opts: ServiceOptions,
   req: http.IncomingMessage,
   res: http.ServerResponse
 ): Service {

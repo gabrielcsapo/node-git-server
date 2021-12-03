@@ -803,7 +803,7 @@ describe('git', () => {
           if (type === 'fetch' && repo === 'doom') {
             user((username, password) => {
               if (username == 'root' && password == 'root') {
-                return resolve('');
+                return resolve(void 0);
               } else {
                 return reject('that is not the correct password');
               }
