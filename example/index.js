@@ -4,56 +4,61 @@
 // openssl req -new -key privatekey.pem -out certrequest.csr
 // openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
 
-let type = "http";
+let type = 'http';
 
 process.argv.slice(2).forEach((arg) => {
   switch (arg) {
-    case "https":
-    case "--https":
-      type = "https";
+    case 'https':
+    case '--https':
+      type = 'https';
       break;
   }
 });
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-const Server = require("../");
+const Server = require('../');
 
 const port = process.env.PORT || 7005;
 
-const repos = new Server(path.normalize(path.resolve(__dirname, "tmp")), {
+const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
   autoCreate: true,
   authenticate: ({ type, repo, user, headers }, next) => {
-      console.log(type, repo, headers); // eslint-disable-line
-    if (type == "push") {
+    console.log(type, repo, headers); // eslint-disable-line
+    if (type == 'push') {
+      // Decide if this user is allowed to perform this action against this repo.
       user((username, password) => {
-          console.log(username, password); // eslint-disable-line
-        next();
+        if (username === '42' && password === '42') {
+          next();
+        } else {
+          next('wrong password');
+        }
       });
     } else {
+      // Check these credentials are correct for this user.
       next();
     }
   },
 });
 
-repos.on("push", (push) => {
+repos.on('push', (push) => {
     console.log(`push ${push.repo} / ${push.commit} ( ${push.branch} )`); // eslint-disable-line
 
   repos.list((err, results) => {
-    push.log(" ");
-    push.log("Hey!");
-    push.log("Checkout these other repos:");
+    push.log(' ');
+    push.log('Hey!');
+    push.log('Checkout these other repos:');
     for (const repo of results) {
       push.log(`- ${repo}`);
     }
-    push.log(" ");
+    push.log(' ');
   });
 
   push.accept();
 });
 
-repos.on("fetch", (fetch) => {
+repos.on('fetch', (fetch) => {
     console.log(`username ${fetch.username}`); // eslint-disable-line
     console.log(`fetch ${fetch.repo}/${fetch.commit}`); // eslint-disable-line
   fetch.accept();
@@ -63,8 +68,8 @@ repos.listen(
   port,
   {
     type,
-    key: fs.readFileSync(path.resolve(__dirname, "privatekey.pem")),
-    cert: fs.readFileSync(path.resolve(__dirname, "certificate.pem")),
+    key: fs.readFileSync(path.resolve(__dirname, 'privatekey.pem')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'certificate.pem')),
   },
   (error) => {
     if(error) return console.error(`failed to start git-server because of error ${error}`); // eslint-disable-line

@@ -21,20 +21,20 @@ npm install node-git-server
 ## Simple
 
 ```javascript
-const path = require("path");
-const Server = require("node-git-server");
+const path = require('path');
+const Server = require('node-git-server');
 
-const repos = new Server(path.resolve(__dirname, "tmp"), {
+const repos = new Server(path.resolve(__dirname, 'tmp'), {
   autoCreate: true,
 });
 const port = process.env.PORT || 7005;
 
-repos.on("push", (push) => {
+repos.on('push', (push) => {
   console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
   push.accept();
 });
 
-repos.on("fetch", (fetch) => {
+repos.on('fetch', (fetch) => {
   console.log(`fetch ${fetch.commit}`);
   fetch.accept();
 });
@@ -66,25 +66,25 @@ To http://localhost:7005/beep
 ## Sending logs
 
 ```javascript
-const path = require("path");
-const Server = require("node-git-server");
+const path = require('path');
+const Server = require('node-git-server');
 
-const repos = new Server(path.resolve(__dirname, "tmp"), {
+const repos = new Server(path.resolve(__dirname, 'tmp'), {
   autoCreate: true,
 });
 const port = process.env.PORT || 7005;
 
-repos.on("push", (push) => {
+repos.on('push', (push) => {
   console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
 
   repos.list((err, results) => {
-    push.log(" ");
-    push.log("Hey!");
-    push.log("Checkout these other repos:");
+    push.log(' ');
+    push.log('Hey!');
+    push.log('Checkout these other repos:');
     for (const repo of results) {
       push.log(`- ${repo}`);
     }
-    push.log(" ");
+    push.log(' ');
   });
 
   push.accept();
@@ -122,30 +122,37 @@ To http://localhost:7005/test
 ### Authentication
 
 ```javascript
-const path = require("path");
-const Server = require("node-git-server");
+const path = require('path');
+const Server = require('node-git-server');
 
-const repos = new Server(path.resolve(__dirname, "tmp"), {
+const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
   autoCreate: true,
-  authenticate: ({ type, repo, user }, next) => {
-    if (type == "push") {
+  authenticate: ({ type, repo, user, headers }, next) => {
+    console.log(type, repo, headers); // eslint-disable-line
+    if (type == 'push') {
+      // Decide if this user is allowed to perform this action against this repo.
       user((username, password) => {
-        console.log(username, password);
-        next();
+        if (username === '42' && password === '42') {
+          next();
+        } else {
+          next('wrong password');
+        }
       });
     } else {
+      // Check these credentials are correct for this user.
       next();
     }
   },
 });
+
 const port = process.env.PORT || 7005;
 
-repos.on("push", (push) => {
+repos.on('push', (push) => {
   console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
   push.accept();
 });
 
-repos.on("fetch", (fetch) => {
+repos.on('fetch', (fetch) => {
   console.log(`fetch ${fetch.commit}`);
   fetch.accept();
 });
