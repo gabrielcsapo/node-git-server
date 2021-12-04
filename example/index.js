@@ -27,6 +27,7 @@ const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
     authenticate: ({ type, repo, user, headers }, next) => {
       console.log(type, repo, headers); // eslint-disable-line
       if(type == 'push') {
+        // Decide if this user is allowed to perform this action against this repo.
         user((username, password) => {
           console.log(username, password); // eslint-disable-line
           if (accountName === '42' && password === '42') {
@@ -36,6 +37,7 @@ const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
           }
         });
       } else {
+        // Check these credentials are correct for this user.
         next();
       }
     }
