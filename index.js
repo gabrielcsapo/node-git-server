@@ -1,1 +1,1 @@
-module.exports = require('./lib/git');
+module.exports = require('./dist/git');

@@ -1,3 +1,8 @@
+# 1.0.0 (11/04/2021)
+
+- Migrates to typescript
+- Removes node support from node@<14
+
 # 0.6.1 (03/03/2019)
 
 - Fixes bug with being able to overwrite git repos that a user doesn't have access to. @masasron
