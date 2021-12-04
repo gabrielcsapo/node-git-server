@@ -131,6 +131,7 @@ const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: ({type, repo, user}, next) => {
       if(type == 'push') {
+        // Decide if this user is allowed to perform this action against this repo.
         user((username, password) => {
           console.log(username, password);
           if (accountName === '42' && password === '42') {
@@ -140,6 +141,7 @@ const repos = new Server(path.resolve(__dirname, 'tmp'), {
           }
         });
       } else {
+        // Check these credentials are correct for this user.
         next();
       }
     }
