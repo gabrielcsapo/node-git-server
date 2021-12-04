@@ -131,11 +131,17 @@ const repos = new Server(path.resolve(__dirname, 'tmp'), {
     autoCreate: true,
     authenticate: ({type, repo, user}, next) => {
       if(type == 'push') {
+        // Decide if this user is allowed to perform this action against this repo.
         user((username, password) => {
           console.log(username, password);
-          next();
+          if (accountName === '42' && password === '42') {
+            next();
+          } else {
+            next('wrong password');
+          }
         });
       } else {
+        // Check these credentials are correct for this user.
         next();
       }
     }
