@@ -111,8 +111,8 @@ describe('git', () => {
       );
     });
 
-      const ex = fs.existsSync(dstDir + '/doom/a.txt');
-      expect(ex).toBeTruthy();
+    const ex = fs.existsSync(dstDir + '/doom/a.txt');
+    expect(ex).toBeTruthy();
 
     server.close();
   });
