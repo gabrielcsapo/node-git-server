@@ -28,7 +28,7 @@
   },
   "scripts": {
     "lint": "eslint src/*",
-    "test": "jest",
+    "test": "jest src/*.test.ts",
     "build": "echo \"\" > ./build-complete.meta && tsc",
     "coverage": "jest --coverage",
     "install": "( [ -f ./git-package.meta ] && [ ! -f ./build-complete.meta ] && echo \"\" > ./build-complete.meta && npm install . && tsc ) || echo \"\" > ./build-complete.meta"

@@ -60,14 +60,12 @@ export class HttpDuplex extends EventEmitter {
     this.res = output;
 
     // request / input proxy events
-    ['close', 'data', 'end', 'error', 'pause', 'readable', 'resume'].forEach(
-      (name) => {
-        this.req.on(name, this.emit.bind(this, name));
-      }
-    );
+    ['data', 'end', 'error', 'close'].forEach((name) => {
+      this.req.on(name, this.emit.bind(this, name));
+    });
 
     // respone / output proxy events
-    ['close', 'drain', 'error', 'finish', 'pipe', 'unpipe'].forEach((name) => {
+    ['error', 'drain'].forEach((name) => {
       this.res.on(name, this.emit.bind(this, name));
     });
   }

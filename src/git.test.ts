@@ -5,7 +5,7 @@ import http from 'http';
 
 import { Git } from './git';
 
-jest.setTimeout(10000);
+jest.setTimeout(15000);
 
 const wrapCallback = (func: { (callback: any): void }) => {
   return new Promise((resolve) => {
@@ -110,12 +110,9 @@ describe('git', () => {
         }
       );
     });
-    await wrapCallback((callback: () => void) => {
-      fs.exists(dstDir + '/doom/a.txt', (ex) => {
-        expect(ex).toBeTruthy();
-        callback();
-      });
-    });
+
+      const ex = fs.existsSync(dstDir + '/doom/a.txt');
+      expect(ex).toBeTruthy();
 
     server.close();
   });
