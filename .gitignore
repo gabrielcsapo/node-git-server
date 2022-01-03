@@ -11,6 +11,3 @@ dist
 temp
 etc
 build-complete.meta
-
-# Too lazy to delete it manually, sorry
-test
