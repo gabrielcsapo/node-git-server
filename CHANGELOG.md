@@ -1,3 +1,8 @@
+# 1.0.0-beta.1 (01/02/2022)
+
+- Migrates to typescript (@5GameMaker @gabrielcsapo)
+- Removes node support from node@<14
+
 # 0.6.1 (03/03/2019)
 
 - Fixes bug with being able to overwrite git repos that a user doesn't have access to. @masasron

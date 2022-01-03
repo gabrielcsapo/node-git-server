@@ -7,3 +7,7 @@ example/test
 example/tmp
 package-lock.json
 .vs/
+dist
+temp
+etc
+build-complete.meta

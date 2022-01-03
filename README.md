@@ -2,8 +2,6 @@
 
 > 🎡 A configurable git server written in Node.js
 
->> there be 🐲 here! The APIs and functionality are still be cemented, anything before a 1.0.0 release will be subject to change.
-
 [![Npm Version](https://img.shields.io/npm/v/node-git-server.svg)](https://www.npmjs.com/package/node-git-server)
 [![Build Status](https://travis-ci.org/gabrielcsapo/node-git-server.svg?branch=master)](https://travis-ci.org/gabrielcsapo/node-git-server)
 [![Coverage Status](https://lcov-server.gabrielcsapo.com/badge/github%2Ecom/gabrielcsapo/node-git-server.svg)](https://lcov-server.gabrielcsapo.com/coverage/github%2Ecom/gabrielcsapo/node-git-server)
@@ -22,27 +20,33 @@ npm install node-git-server
 
 ## Simple
 
-```javascript
-const path = require('path');
-const Server = require('node-git-server');
+```typescript
+import { Git } from 'node-git-server';
+import { join } from 'path';
 
-const repos = new Server(path.resolve(__dirname, 'tmp'), {
-    autoCreate: true
+const port = !process.env.PORT || isNaN(process.env.PORT)
+  ? 7005
+  : parseInt(process.env.PORT);
+
+const repos = new Git(
+  join(__dirname, '../repo'),
+  {
+    autoCreate: true,
+  }
+);
+
+repos.on('push', push => {
+  console.log(`push ${push.repo}/${push.commit} ( ${push.branch} )`);
+  push.accept();
 });
-const port = process.env.PORT || 7005;
 
-repos.on('push', (push) => {
-    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
-    push.accept();
-});
-
-repos.on('fetch', (fetch) => {
-    console.log(`fetch ${fetch.commit}`);
-    fetch.accept();
+repos.on("fetch", fetch => {
+  console.log(`fetch ${fetch.commit}`);
+  fetch.accept();
 });
 
 repos.listen(port, () => {
-    console.log(`node-git-server running at http://localhost:${port}`)
+  console.log(`node-git-server running at http://localhost:${port}`);
 });
 ```
 
@@ -50,6 +54,7 @@ then start up the node-git-server server...
 
 ```
 $ node example/index.js
+node-git-server running at http://localhost:7005
 ```
 
 meanwhile...
@@ -67,33 +72,41 @@ To http://localhost:7005/beep
 
 ## Sending logs
 
-```javascript
-const path = require('path');
-const Server = require('node-git-server');
+```typescript
+import { Git } from 'node-git-server';
+import { join } from 'path';
 
-const repos = new Server(path.resolve(__dirname, 'tmp'), {
-    autoCreate: true
+const port = !process.env.PORT || isNaN(process.env.PORT)
+  ? 7005
+  : parseInt(process.env.PORT);
+
+const repos = new Git(
+  join(__dirname, '../repo'),
+  {
+    autoCreate: true,
+  }
+);
+
+repos.on('push', async push => {
+  console.log(`push ${push.repo}/${push.commit} ( ${push.branch} )`);
+
+  push.log();
+  push.log('Hey!');
+  push.log('Checkout these other repos:');
+  for (const repo of await repo.list()) {
+    push.log(`- ${repo}`);
+  }
+  push.log();
+  push.accept();
 });
-const port = process.env.PORT || 7005;
 
-repos.on('push', (push) => {
-    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
-
-    repos.list((err, results) => {
-        push.log(' ');
-        push.log('Hey!');
-        push.log('Checkout these other repos:');
-        for(const repo of results) {
-          push.log(`- ${repo}`);
-        }
-        push.log(' ');
-    });
-
-    push.accept();
+repos.on("fetch", fetch => {
+  console.log(`fetch ${fetch.commit}`);
+  fetch.accept();
 });
 
 repos.listen(port, () => {
-    console.log(`node-git-server running at http://localhost:${port}`)
+  console.log(`node-git-server running at http://localhost:${port}`);
 });
 ```
 
@@ -101,6 +114,7 @@ then start up the node-git-server server...
 
 ```
 $ node example/index.js
+node-git-server running at http://localhost:7005
 ```
 
 meanwhile...
@@ -112,54 +126,51 @@ Delta compression using up to 2 threads.
 Compressing objects: 100% (133/133), done.
 Writing objects: 100% (356/356), 46.20 KiB, done.
 Total 356 (delta 210), reused 355 (delta 210)
-remote:  
+remote:
 remote: Hey!
 remote: Checkout these other repos:
 remote: - test.git
-remote:  
+remote:
 To http://localhost:7005/test
    77bb26e..22918d5  master -> master
 ```
 
 ### Authentication
 
-```javascript
-const path = require('path');
-const Server = require('node-git-server');
+```typescript
+import { Git } from 'node-git-server';
+import { join } from 'path';
 
-const repos = new Server(path.resolve(__dirname, 'tmp'), {
+const port = !process.env.PORT || isNaN(process.env.PORT)
+  ? 7005
+  : parseInt(process.env.PORT);
+
+const repos = new Git(
+  join(__dirname, '../repo'),
+  {
     autoCreate: true,
-    authenticate: ({type, repo, user}, next) => {
-      if(type == 'push') {
-        // Decide if this user is allowed to perform this action against this repo.
-        user((username, password) => {
-          console.log(username, password);
-          if (accountName === '42' && password === '42') {
-            next();
-          } else {
-            next('wrong password');
-          }
-        });
-      } else {
-        // Check these credentials are correct for this user.
+    autheficate: ({ type, user }, next) =>
+      type == 'push'
+      ? user(([username, password]) => {
+        console.log(username, password);
         next();
-      }
-    }
-});
-const port = process.env.PORT || 7005;
+      })
+      : next()
+  }
+);
 
-repos.on('push', (push) => {
-    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
-    push.accept();
+repos.on('push', push => {
+  console.log(`push ${push.repo}/${push.commit} ( ${push.branch} )`);
+  push.accept();
 });
 
-repos.on('fetch', (fetch) => {
-    console.log(`fetch ${fetch.commit}`);
-    fetch.accept();
+repos.on("fetch", fetch => {
+  console.log(`fetch ${fetch.commit}`);
+  fetch.accept();
 });
 
 repos.listen(port, () => {
-    console.log(`node-git-server running at http://localhost:${port}`)
+  console.log(`node-git-server running at http://localhost:${port}`);
 });
 ```
 
@@ -167,6 +178,7 @@ then start up the node-git-server server...
 
 ```
 $ node example/index.js
+node-git-server running at http://localhost:7005
 ```
 
 meanwhile...
@@ -200,7 +212,7 @@ node example/index.js --https
 
 For more information please visit the [docs](http://www.gabrielcsapo.com/node-git-server/code/index.html)
 
-# Philosophy   
+# Philosophy
 
 This library is aimed to have a zero dependency footprint. If you are reading this and you see dependencies, help to remove them 🐒.
 
