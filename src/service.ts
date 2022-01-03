@@ -143,7 +143,7 @@ export class Service extends HttpDuplex {
         self.emit('service', ps);
 
         const respStream = through(
-          function write(this: ThroughStream, c) {
+          function write(this: ThroughStream, c: any) {
             if (self.listeners('response').length === 0) {
               if (self.logs.length > 0) {
                 while (self.logs.length > 0) {

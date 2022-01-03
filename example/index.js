@@ -18,7 +18,7 @@ process.argv.slice(2).forEach((arg) => {
 const fs = require('fs');
 const path = require('path');
 
-const Server = require('../');
+const { Git : Server } = require("../");
 
 const port = process.env.PORT || 7005;
 
