@@ -55,10 +55,13 @@ String.prototype.streamline = function (ending = '\n') {
 describe('http-duplex', () => {
   let server: Server;
 
+  jest.setTimeout(15000);
+
   beforeEach(() => {
+    console.log('create server');
     server = createServer(function (req, res) {
       const dup = new HttpDuplex(req, res);
-      console.log(dup.method + " " + dup.url); // eslint-disable-line
+      console.log(dup.method + ' ' + dup.url); // eslint-disable-line
       switch (dup.url) {
         case '/':
           dup.setHeader('content-type', 'text/plain');
@@ -70,7 +73,10 @@ describe('http-duplex', () => {
             dup.on('end', function () {
               dup.end(size + '\n');
             });
-          } else createReadStream(__filename).pipe(dup as any);
+          } else {
+            console.log(dup);
+            createReadStream(__filename).pipe(dup as any);
+          }
           break;
         case '/info':
           if (dup.method == 'GET') {
@@ -114,7 +120,7 @@ describe('http-duplex', () => {
           break;
       }
     });
-    server.listen(1010);
+    server.listen(51753);
   });
 
   afterEach(() => {
@@ -122,17 +128,19 @@ describe('http-duplex', () => {
   });
 
   test('should be able to handle requests', (done) => {
-    jest.setTimeout(10000);
-
     expect.assertions(3);
+
+    server.on('error', (e) => {
+      console.log('error', e);
+    });
 
     server.on('listening', async function () {
       const { port } = server.address() as AddressInfo;
 
       const u = `http://localhost:${port}/`;
       console.log(u);
-
       const response = await fetch(u);
+      console.log(response);
       const body = await response.text();
 
       expect(String(body)).toBe(String(selfSrc));
@@ -143,6 +151,7 @@ describe('http-duplex', () => {
         headers: { 'Content-Type': 'application/json' },
       });
       const body1 = await response1.text();
+      console.log(body1);
       expect(body1).toBe('10\n');
 
       const response2 = await fetch(u + 'info');
@@ -160,7 +169,7 @@ describe('http-duplex', () => {
         \\"accept-encoding\\":\\"gzip
         deflate\\"
         \\"connection\\":\\"close\\"
-        \\"host\\":\\"localhost:1010\\"}
+        \\"host\\":\\"localhost:51753\\"}
         Trailers: {}
         Complete: false
         Readable: true
