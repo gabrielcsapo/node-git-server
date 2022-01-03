@@ -1,7 +1,7 @@
 import { HttpDuplex } from './http-duplex';
-import { createServer, Server } from 'http';
+import http, { Server } from 'http';
 import fetch from 'node-fetch';
-import { readFileSync, createReadStream } from 'fs';
+import { readFileSync } from 'fs';
 import { AddressInfo } from 'net';
 
 // eslint-disable-next-line no-undef
@@ -59,23 +59,16 @@ describe('http-duplex', () => {
 
   beforeEach(() => {
     console.log('create server');
-    server = createServer(function (req, res) {
+    server = http.createServer(function (req, res) {
       const dup = new HttpDuplex(req, res);
       console.log(dup.method + ' ' + dup.url); // eslint-disable-line
       switch (dup.url) {
         case '/':
           dup.setHeader('content-type', 'text/plain');
           if (dup.method === 'POST') {
-            let size = 0;
-            dup.on('data', function (buf) {
-              size += buf.length;
-            });
-            dup.on('end', function () {
-              dup.end(size + '\n');
-            });
+            dup.end(dup.headers['content-length']);
           } else {
-            console.log(dup);
-            createReadStream(__filename).pipe(dup as any);
+            dup.end(readFileSync(__filename));
           }
           break;
         case '/info':
@@ -120,7 +113,7 @@ describe('http-duplex', () => {
           break;
       }
     });
-    server.listen(51753);
+    server.listen();
   });
 
   afterEach(() => {
@@ -138,21 +131,18 @@ describe('http-duplex', () => {
       const { port } = server.address() as AddressInfo;
 
       const u = `http://localhost:${port}/`;
-      console.log(u);
       const response = await fetch(u);
-      console.log(response);
       const body = await response.text();
 
       expect(String(body)).toBe(String(selfSrc));
 
       const response1 = await fetch(u, {
-        method: 'post',
+        method: 'POST',
         body: 'beep boop\n',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
       });
       const body1 = await response1.text();
-      console.log(body1);
-      expect(body1).toBe('10\n');
+      expect(body1).toBe('10');
 
       const response2 = await fetch(u + 'info');
       const body2 = await response2.text();
@@ -169,7 +159,7 @@ describe('http-duplex', () => {
         \\"accept-encoding\\":\\"gzip
         deflate\\"
         \\"connection\\":\\"close\\"
-        \\"host\\":\\"localhost:51753\\"}
+        \\"host\\":\\"localhost:${port}\\"}
         Trailers: {}
         Complete: false
         Readable: true
