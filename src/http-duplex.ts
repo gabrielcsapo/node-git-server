@@ -46,7 +46,8 @@ export class HttpDuplex extends EventEmitter {
    * @see {@link https://nodejs.org/api/http.html#http_class_http_incomingmessage|http.IncomingMessage}
    * @see {@link https://nodejs.org/api/http.html#http_class_http_serverresponse|http.ServerResponse}
    * @example <caption> A simple example is shown below </caption>
-    ```
+
+    ```js
     http.createServer(function (req, res) {
         var dup = new HttpDuplex(req, res);
         res.end("Request: " + req.method + " " + req.url);

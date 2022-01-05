@@ -21,6 +21,6 @@ export interface GitOptions
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [authenticate?](./node-git-server.gitoptions.authenticate.md) | (options: [GitAuthenticateOptions](./node-git-server.gitauthenticateoptions.md)<!-- -->, callback: (error?: Error) => void | undefined) => void | Promise\<any> | undefined | <i>(Optional)</i> |
+|  [authenticate?](./node-git-server.gitoptions.authenticate.md) | (options: [GitAuthenticateOptions](./node-git-server.gitauthenticateoptions.md)<!-- -->, callback: (error?: Error) => void | undefined) => void | Promise\<Error | undefined | void> | undefined | <i>(Optional)</i> |
 |  [autoCreate?](./node-git-server.gitoptions.autocreate.md) | boolean | <i>(Optional)</i> |
 |  [checkout?](./node-git-server.gitoptions.checkout.md) | boolean | <i>(Optional)</i> |

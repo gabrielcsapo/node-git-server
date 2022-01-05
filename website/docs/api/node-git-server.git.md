@@ -31,7 +31,7 @@ export declare class Git extends EventEmitter implements GitEvents
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [authenticate](./node-git-server.git.authenticate.md) |  | ((options: [GitAuthenticateOptions](./node-git-server.gitauthenticateoptions.md)<!-- -->, callback: (error?: Error) => void | undefined) => void | Promise\<any> | undefined) | undefined |  |
+|  [authenticate](./node-git-server.git.authenticate.md) |  | ((options: [GitAuthenticateOptions](./node-git-server.gitauthenticateoptions.md)<!-- -->, callback: (error?: Error) => void | undefined) => void | Promise\<Error | undefined | void> | undefined) | undefined |  |
 |  [autoCreate](./node-git-server.git.autocreate.md) |  | boolean |  |
 |  [checkout](./node-git-server.git.checkout.md) |  | boolean | undefined |  |
 |  [dirMap](./node-git-server.git.dirmap.md) |  | (dir?: string) => string |  |
@@ -47,5 +47,6 @@ export declare class Git extends EventEmitter implements GitEvents
 |  [getType(service)](./node-git-server.git.gettype.md) |  | returns the typeof service being process. This will respond with either fetch or push. |
 |  [handle(req, res)](./node-git-server.git.handle.md) |  | Handle incoming HTTP requests with a connect-style middleware |
 |  [list(callback)](./node-git-server.git.list.md) |  | Get a list of all the repositories |
+|  [list()](./node-git-server.git.list_1.md) |  |  |
 |  [listen(port, options, callback)](./node-git-server.git.listen.md) |  | starts a git server on the given port |
 |  [mkdir(dir)](./node-git-server.git.mkdir.md) |  | Create a subdirectory <code>dir</code> in the repo dir with a callback. |

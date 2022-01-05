@@ -16,9 +16,9 @@ closes the server instance
 <b>Signature:</b>
 
 ```typescript
-close(): Promise<any>;
+close(): Promise<string>;
 ```
 
 <b>Returns:</b>
 
-Promise\<any>
+Promise&lt;string&gt;

@@ -21,11 +21,20 @@ constructor(input: http.IncomingMessage, output: http.ServerResponse);
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  input | http.IncomingMessage |  |
-|  output | http.ServerResponse |  |
+| Parameter | Type                 | Description |
+| --------- | -------------------- | ----------- |
+| input     | http.IncomingMessage |             |
+| output    | http.ServerResponse  |             |
 
 ## Example
 
-<caption>A simple example is shown below</caption> http.createServer(function (req, res) { var dup = new HttpDuplex(req, res); res.end("Request: " + req.method + " " + req.url); }<!-- -->).listen(80);
+<caption> A simple example is shown below </caption>
+
+```js
+http
+  .createServer(function (req, res) {
+    var dup = new HttpDuplex(req, res);
+    res.end('Request: ' + req.method + ' ' + req.url);
+  })
+  .listen(80);
+```
