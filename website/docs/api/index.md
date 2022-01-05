@@ -14,6 +14,6 @@ slug: /
 
 ## Packages
 
-|  Package | Description |
-|  --- | --- |
-|  [node-git-server](./node-git-server.md) |  |
+| Package                                 | Description |
+| --------------------------------------- | ----------- |
+| [node-git-server](./node-git-server.md) |             |

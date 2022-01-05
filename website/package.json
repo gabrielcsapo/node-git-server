@@ -1,5 +1,5 @@
 {
-  "name": "website",
+  "name": "node-git-server",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -23,7 +23,10 @@
     "@svgr/webpack": "^5.5.0",
     "clsx": "^1.1.1",
     "docusaurus-plugin-api-extractor": "^0.4.2",
+    "docusaurus-plugin-api-extractor-markdown-documenter": "0.3.2",
     "docusaurus-plugin-search-local": "^0.1.4",
+    "@microsoft/api-extractor": "^7.19.4",
+    "@microsoft/api-documenter": "^7.14.1",
     "file-loader": "^6.2.0",
     "prism-react-renderer": "^1.2.1",
     "react": "^17.0.1",

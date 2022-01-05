@@ -11,10 +11,10 @@ title: HttpDuplex.trailers property
 
 ## HttpDuplex.trailers property
 
-Request/response trailer headers. Just like  except these are only written after the initial response to the client. This object is only populated at the 'end' event and only work if a 'transfer-encoding: chunked' header is sent in the initial response.
+Request/response trailer headers. Just like except these are only written after the initial response to the client. This object is only populated at the 'end' event and only work if a 'transfer-encoding: chunked' header is sent in the initial response.
 
 <b>Signature:</b>
 
 ```typescript
-get trailers(): NodeJS.Dict<string>;
+get trailers(): NodeJS.Dict\<string\>;
 ```

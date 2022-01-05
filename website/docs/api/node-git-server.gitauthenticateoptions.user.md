@@ -14,5 +14,5 @@ title: GitAuthenticateOptions.user property
 <b>Signature:</b>
 
 ```typescript
-user: (callback: (username?: string | undefined, password?: string | undefined) => void) => void;
+user: (() => Promise<[string | undefined, string | undefined]>) & ((callback: (username?: string | undefined, password?: string | undefined) => void) => void);
 ```

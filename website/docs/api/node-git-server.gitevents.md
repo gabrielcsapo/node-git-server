@@ -21,5 +21,8 @@ export interface GitEvents
 
 |  Method | Description |
 |  --- | --- |
-|  [addListener(event, listener)](./node-git-server.gitevents.addlistener.md) |  |
-|  [addListener(event, listener)](./node-git-server.gitevents.addlistener_1.md) |  |
+|  [on(event, listener)](./node-git-server.gitevents.on.md) |  |
+|  [on(event, listener)](./node-git-server.gitevents.on_1.md) |  |
+|  [on(event, listener)](./node-git-server.gitevents.on_2.md) |  |
+|  [on(event, listener)](./node-git-server.gitevents.on_3.md) |  |
+|  [on(event, listener)](./node-git-server.gitevents.on_4.md) |  |

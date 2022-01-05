@@ -35,9 +35,12 @@ title: node-git-server package
 
 |  Interface | Description |
 |  --- | --- |
+|  [FetchData](./node-git-server.fetchdata.md) | an http duplex object (see below) with these extra properties |
 |  [GitAuthenticateOptions](./node-git-server.gitauthenticateoptions.md) |  |
 |  [GitEvents](./node-git-server.gitevents.md) |  |
 |  [GitOptions](./node-git-server.gitoptions.md) |  |
+|  [HeadData](./node-git-server.headdata.md) | an http duplex object (see below) with these extra properties |
+|  [InfoData](./node-git-server.infodata.md) | an http duplex object (see below) with these extra properties |
 |  [PushData](./node-git-server.pushdata.md) | Is a http duplex object (see below) with these extra properties |
 |  [ServiceOptions](./node-git-server.serviceoptions.md) |  |
 |  [TagData](./node-git-server.tagdata.md) | An http duplex object (see below) with these extra properties: |

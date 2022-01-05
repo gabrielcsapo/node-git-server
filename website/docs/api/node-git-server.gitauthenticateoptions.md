@@ -24,4 +24,4 @@ export interface GitAuthenticateOptions
 |  [headers](./node-git-server.gitauthenticateoptions.headers.md) | http.IncomingHttpHeaders |  |
 |  [repo](./node-git-server.gitauthenticateoptions.repo.md) | string |  |
 |  [type](./node-git-server.gitauthenticateoptions.type.md) | string |  |
-|  [user](./node-git-server.gitauthenticateoptions.user.md) | (callback: (username?: string | undefined, password?: string | undefined) => void) => void |  |
+|  [user](./node-git-server.gitauthenticateoptions.user.md) | (() => Promise<\[string | undefined, string | undefined]>) & ((callback: (username?: string | undefined, password?: string | undefined) => void) => void) |  |

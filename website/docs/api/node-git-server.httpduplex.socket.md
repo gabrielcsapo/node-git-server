@@ -16,5 +16,5 @@ net.Socket object associated with the connection.
 <b>Signature:</b>
 
 ```typescript
-get socket(): Socket;
+get socket(): import("net").Socket;
 ```

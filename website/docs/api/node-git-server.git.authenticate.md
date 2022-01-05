@@ -14,5 +14,5 @@ title: Git.authenticate property
 <b>Signature:</b>
 
 ```typescript
-authenticate: ((options: GitAuthenticateOptions, callback: (error?: Error) => void | undefined) => void | Promise<any> | undefined) | undefined;
+authenticate: ((options: GitAuthenticateOptions, callback: (error?: Error) => void | undefined) => void | Promise<Error | undefined | void> | undefined) | undefined;
 ```

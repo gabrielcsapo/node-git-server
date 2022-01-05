@@ -16,5 +16,5 @@ Reference to the underlying socket for the request connection.
 <b>Signature:</b>
 
 ```typescript
-get connection(): Socket;
+get connection(): import("net").Socket;
 ```

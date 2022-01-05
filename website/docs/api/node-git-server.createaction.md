@@ -16,14 +16,14 @@ responds with the correct service depending on the action
 <b>Signature:</b>
 
 ```typescript
-export declare function createAction(opts: any, req: http.IncomingMessage, res: http.ServerResponse): Service;
+export declare function createAction(opts: ServiceOptions, req: http.IncomingMessage, res: http.ServerResponse): Service;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  opts | any | options to pass Service |
+|  opts | [ServiceOptions](./node-git-server.serviceoptions.md) | options to pass Service |
 |  req | http.IncomingMessage | http request object |
 |  res | http.ServerResponse | http response |
 

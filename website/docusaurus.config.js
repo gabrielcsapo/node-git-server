@@ -1,46 +1,46 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+const lightCodeTheme = require('prism-react-renderer/themes/github');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "node-git-server",
-  tagline: "🎡 A configurable git server written in Node.js",
-  url: "https://gabrielcsapo.github.io",
-  baseUrl: "/node-git-server/",
-  onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
-  favicon: "img/favicon.ico",
-  organizationName: "gabrielcsapo",
-  projectName: "node-git-server",
+  title: 'node-git-server',
+  tagline: '🎡 A configurable git server written in Node.js',
+  url: 'https://gabrielcsapo.github.io',
+  baseUrl: '/node-git-server/',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
+  favicon: 'img/favicon.ico',
+  organizationName: 'gabrielcsapo',
+  projectName: 'node-git-server',
   plugins: [
     [
-      require.resolve("docusaurus-plugin-search-local"),
+      require.resolve('docusaurus-plugin-search-local'),
       {
         highlightSearchTermsOnTargetPage: true,
       },
     ],
-    "docusaurus-plugin-api-extractor",
+    'docusaurus-plugin-api-extractor',
   ],
   presets: [
     [
-      "@docusaurus/preset-classic",
+      '@docusaurus/preset-classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
+          sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            "https://github.com/gabrielcsapo/node-git-server/edit/main/website/",
+            'https://github.com/gabrielcsapo/node-git-server/edit/main/website/',
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            "https://github.com/gabrielcsapo/node-git-server/edit/main/website/blog/",
+            'https://github.com/gabrielcsapo/node-git-server/edit/main/website/blog/',
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: require.resolve('./src/css/custom.css'),
         },
       }),
     ],
@@ -50,48 +50,54 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: "My Site",
+        title: 'node-git-server',
         logo: {
-          alt: "My Site Logo",
-          src: "img/logo.svg",
+          alt: 'node-git-server logo',
+          src: 'img/apple-touch-icon.png',
         },
         items: [
           {
-            type: "doc",
-            docId: "intro",
-            position: "left",
-            label: "Tutorial",
+            type: 'doc',
+            docId: 'intro',
+            position: 'left',
+            label: 'Documentation',
           },
           {
-            href: "https://github.com/gabrielcsapo/node-git-server",
-            label: "GitHub",
-            position: "right",
+            type: 'doc',
+            docId: 'api/index',
+            position: 'left',
+            label: 'API',
+          },
+          {
+            href: 'https://github.com/gabrielcsapo/node-git-server',
+            label: 'GitHub',
+            position: 'right',
           },
         ],
       },
       footer: {
-        style: "dark",
+        style: 'dark',
         links: [
           {
-            title: "Docs",
+            title: 'Docs',
             items: [
               {
-                label: "Getting Started",
-                to: "/docs/intro",
+                label: 'Getting Started',
+                to: '/docs/intro',
               },
             ],
           },
           {
-            title: "More",
+            title: 'More',
             items: [
               {
-                label: "GitHub",
-                href: "https://github.com/gabrielcsapo/node-git-server",
+                label: 'GitHub',
+                href: 'https://github.com/gabrielcsapo/node-git-server',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} node-git-server, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

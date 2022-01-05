@@ -14,5 +14,5 @@ title: ServiceString type
 <b>Signature:</b>
 
 ```typescript
-export declare type ServiceString = "upload-pack" | "receive-pack";
+export declare type ServiceString = 'upload-pack' | 'receive-pack';
 ```
