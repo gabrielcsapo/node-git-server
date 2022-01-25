@@ -1,6 +1,6 @@
 import http from 'http';
 import zlib from 'zlib';
-import through, { ThroughStream } from 'through';
+import through from 'through';
 import util from 'util';
 import os from 'os';
 import { spawn } from 'child_process';
@@ -49,8 +49,6 @@ export class Service extends HttpDuplex {
     super(req, res);
 
     let data = '';
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
 
     this.status = 'pending';
     this.repo = opts.repo;
@@ -83,49 +81,49 @@ export class Service extends HttpDuplex {
       }
     }
 
-    ts.once('data', function onData(chunk: string) {
+    ts.once('data', (chunk: string) => {
       data += chunk;
 
-      const ops = data.match(new RegExp(headerRegex[self.service], 'gi'));
+      const ops = data.match(new RegExp(headerRegex[this.service], 'gi'));
       if (!ops) return;
       data = '';
 
-      ops.forEach(function (op) {
+      ops.forEach((op) => {
         let type;
-        const m = op.match(new RegExp(headerRegex[self.service]));
+        const m = op.match(new RegExp(headerRegex[this.service]));
 
         if (!m) return;
 
-        if (self.service === 'receive-pack') {
-          self.last = m[1];
-          self.commit = m[2];
+        if (this.service === 'receive-pack') {
+          this.last = m[1];
+          this.commit = m[2];
 
           if (m[3] == 'heads') {
             type = 'branch';
-            self.evName = 'push';
+            this.evName = 'push';
           } else {
             type = 'version';
-            self.evName = 'tag';
+            this.evName = 'tag';
           }
 
           const headers: { [key: string]: string } = {
-            last: self.last,
-            commit: self.commit,
+            last: this.last,
+            commit: this.commit,
           };
-          headers[type] = (self as any)[type] = m[4];
-          self.emit('header', headers);
-        } else if (self.service === 'upload-pack') {
-          self.commit = m[1];
-          self.evName = 'fetch';
-          self.emit('header', {
-            commit: self.commit,
+          headers[type] = (this as any)[type] = m[4];
+          this.emit('header', headers);
+        } else if (this.service === 'upload-pack') {
+          this.commit = m[1];
+          this.evName = 'fetch';
+          this.emit('header', {
+            commit: this.commit,
           });
         }
       });
     });
 
-    self.once('accept', function onAccept() {
-      process.nextTick(function () {
+    this.once('accept', () => {
+      process.nextTick(() => {
         const cmd =
           os.platform() == 'win32'
             ? ['git', opts.service, '--stateless-rpc', opts.cwd]
@@ -133,43 +131,45 @@ export class Service extends HttpDuplex {
 
         const ps = spawn(cmd[0], cmd.slice(1));
 
-        ps.on('error', function (error: Error) {
-          self.emit(
+        ps.on('error', (error: Error) => {
+          this.emit(
             'error',
             new Error(`${error.message} running command ${cmd.join(' ')}`)
           );
         });
 
-        self.emit('service', ps);
+        this.emit('service', ps);
 
         const respStream = through(
-          function write(this: ThroughStream, c: any) {
-            if (self.listeners('response').length === 0) {
-              if (self.logs.length > 0) {
-                while (self.logs.length > 0) {
-                  this.queue(self.logs.pop());
+          // write
+          (c: any) => {
+            if (this.listeners('response').length === 0) {
+              if (this.logs.length > 0) {
+                while (this.logs.length > 0) {
+                  respStream.queue(this.logs.pop());
                 }
               }
 
-              return this.queue(c);
+              return respStream.queue(c);
             }
             // prevent git from sending the close signal
             if (c.length === 4 && c.toString() === '0000') return;
-            this.queue(c);
+            respStream.queue(c);
           },
-          function end(this: ThroughStream) {
-            if (self.listeners('response').length > 0) return;
+          // read
+          () => {
+            if (this.listeners('response').length > 0) return;
 
-            this.queue(null);
+            respStream.queue(null);
           }
         );
 
-        (respStream as any).log = function () {
+        (respStream as any).log = () => {
           // eslint-disable-next-line prefer-rest-params
-          (self as any).log(...arguments);
+          (this as any).log(...arguments);
         };
 
-        self.emit('response', respStream, function endResponse() {
+        this.emit('response', respStream, function endResponse() {
           (res as any).queue(Buffer.from('0000'));
           (res as any).queue(null);
         });
@@ -180,20 +180,20 @@ export class Service extends HttpDuplex {
         buffered.resume();
 
         ps.on('exit', () => {
-          if (self.logs.length > 0) {
-            while (self.logs.length > 0) {
-              respStream.queue(self.logs.pop());
+          if (this.logs.length > 0) {
+            while (this.logs.length > 0) {
+              respStream.queue(this.logs.pop());
             }
             respStream.queue(Buffer.from('0000'));
             respStream.queue(null);
           }
 
-          self.emit.bind(self, 'exit');
+          this.emit('exit');
         });
       });
     });
 
-    self.once('reject', function onReject(code: number, msg: string) {
+    this.once('reject', function onReject(code: number, msg: string) {
       res.statusCode = code;
       res.end(msg);
     });
