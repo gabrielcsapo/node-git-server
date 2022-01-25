@@ -164,10 +164,7 @@ export class Service extends HttpDuplex {
           }
         );
 
-        (respStream as any).log = () => {
-          // eslint-disable-next-line prefer-rest-params
-          (this as any).log(...arguments);
-        };
+        (respStream as any).log = this.log.bind(this);
 
         this.emit('response', respStream, function endResponse() {
           (res as any).queue(Buffer.from('0000'));
