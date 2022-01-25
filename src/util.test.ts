@@ -1,49 +1,23 @@
-import { basicAuth, noCache, parseGitName } from './util';
+import { parseBasicAuth, BasicAuthError, noCache, parseGitName } from './util';
 
 describe('util', () => {
-  describe('basicAuth', () => {
-    test('should send back basic auth headers', (done) => {
-      const headers: any = {};
-
+  describe('parseBasicAuth', () => {
+    test('should throw error if headers invalid or missing', () => {
       const req: any = {
         headers: {},
       };
 
-      const res: any = {
-        writeHead: function (_code: number) {
-          code = _code;
-        },
-        setHeader: function (key: string | number, value: any) {
-          headers[key] = value;
-        },
-        end: function (_status: number) {
-          status = _status;
-          expect(code).toBe(401);
-          expect(headers).toEqual({
-            'Content-Type': 'text/plain',
-            'WWW-Authenticate': 'Basic realm="authorization needed"',
-          });
-          expect(status).toBe('401 Unauthorized');
-          done();
-        },
-      };
-
-      let code = 0;
-      let status = 0;
-
-      expect(basicAuth(req, res)).toBeUndefined();
+      expect(parseBasicAuth.bind(null, req)).toThrow(new BasicAuthError());
     });
 
-    test('should accept headers and call callback', () => {
+    test('should accept headers and return user & password tuple', () => {
       const req: any = {
         headers: {
           authorization: 'Basic T3BlbjpTZXNhbWU=',
         },
       };
 
-      const res: any = {};
-
-      expect(basicAuth(req, res)).toStrictEqual(['Open', 'Sesame']);
+      expect(parseBasicAuth(req)).toStrictEqual(['Open', 'Sesame']);
     });
   });
 
