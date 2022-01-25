@@ -1,3 +1,7 @@
+# 1.0.0-beta.2 (01/24/2022)
+
+- Avoid using self in service.ts - to avoid issue with through (#95) (@willstott101)
+
 # 1.0.0-beta.1 (01/02/2022)
 
 - Migrates to typescript (@5GameMaker @gabrielcsapo)
