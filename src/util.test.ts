@@ -31,13 +31,10 @@ describe('util', () => {
       let code = 0;
       let status = 0;
 
-      basicAuth(req, res, () => {
-        expect('').not.toEqual('should not have entered this callback');
-        done();
-      });
+      expect(basicAuth(req, res)).toBeUndefined();
     });
 
-    test('should accept headers and call callback', (done) => {
+    test('should accept headers and call callback', () => {
       const req: any = {
         headers: {
           authorization: 'Basic T3BlbjpTZXNhbWU=',
@@ -46,11 +43,7 @@ describe('util', () => {
 
       const res: any = {};
 
-      basicAuth(req, res, (username, password) => {
-        expect(username).toBe('Open');
-        expect(password).toBe('Sesame');
-        done();
-      });
+      expect(basicAuth(req, res)).toStrictEqual(['Open', 'Sesame']);
     });
   });
 

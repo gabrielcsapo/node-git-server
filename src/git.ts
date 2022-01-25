@@ -25,12 +25,9 @@ interface GitServerOptions extends ServerOptions {
   type: 'http' | 'https';
 }
 
-export interface GitOptions {
+export interface GitOptions<T = undefined> {
   autoCreate?: boolean;
-  authenticate?: (
-    options: GitAuthenticateOptions,
-    callback: (error?: Error) => void | undefined
-  ) => void | Promise<Error | undefined | void> | undefined;
+  authenticate?: (options: GitAuthenticateOptions) => Promise<T> | T;
   checkout?: boolean;
 }
 
@@ -50,44 +47,49 @@ export interface GitAuthenticateOptions {
 /**
  * An http duplex object (see below) with these extra properties:
  */
-export interface TagData extends HttpDuplex {
+export interface TagData<T = any> extends HttpDuplex {
   repo: string; // The string that defines the repo
   commit: string; // The string that defines the commit sha
   version: string; // The string that defines the tag being pushed
+  context?: T;
 }
 
 /**
  * Is a http duplex object (see below) with these extra properties
  */
-export interface PushData extends HttpDuplex {
+export interface PushData<T = any> extends HttpDuplex {
   repo: string; // The string that defines the repo
   commit: string; // The string that defines the commit sha
   branch: string; // The string that defines the branch
+  context?: T;
 }
 
 /**
  * an http duplex object (see below) with these extra properties
  */
-export interface FetchData extends HttpDuplex {
+export interface FetchData<T = any> extends HttpDuplex {
   repo: string; // The string that defines the repo
   commit: string; //  The string that defines the commit sha
+  context?: T;
 }
 
 /**
  * an http duplex object (see below) with these extra properties
  */
-export interface InfoData extends HttpDuplex {
+export interface InfoData<T = any> extends HttpDuplex {
   repo: string; // The string that defines the repo
+  context?: T;
 }
 
 /**
  * an http duplex object (see below) with these extra properties
  */
-export interface HeadData extends HttpDuplex {
+export interface HeadData<T = any> extends HttpDuplex {
   repo: string; // The string that defines the repo
+  context?: T;
 }
 
-export interface GitEvents {
+export interface GitEvents<T = any> {
   /**
    * @example
    * repos.on('push', function (push) { ... }
@@ -97,7 +99,7 @@ export interface GitEvents {
    * Exactly one listener must call `push.accept()` or `push.reject()`. If there are
    * no listeners, `push.accept()` is called automatically.
    **/
-  on(event: 'push', listener: (push: PushData) => void): this;
+  on(event: 'push', listener: (push: PushData<T>) => void): this;
 
   /**
    * @example
@@ -107,7 +109,7 @@ export interface GitEvents {
    * Exactly one listener must call `tag.accept()` or `tag.reject()`. If there are
    * No listeners, `tag.accept()` is called automatically.
    **/
-  on(event: 'tag', listener: (tag: TagData) => void): this;
+  on(event: 'tag', listener: (tag: TagData<T>) => void): this;
 
   /**
    * @example
@@ -119,7 +121,7 @@ export interface GitEvents {
    * Exactly one listener must call `fetch.accept()` or `fetch.reject()`. If there are
    * no listeners, `fetch.accept()` is called automatically.
    **/
-  on(event: 'fetch', listener: (fetch: FetchData) => void): this;
+  on(event: 'fetch', listener: (fetch: FetchData<T>) => void): this;
 
   /**
    * @example
@@ -130,7 +132,7 @@ export interface GitEvents {
    * Exactly one listener must call `info.accept()` or `info.reject()`. If there are
    * no listeners, `info.accept()` is called automatically.
    **/
-  on(event: 'info', listener: (info: InfoData) => void): this;
+  on(event: 'info', listener: (info: InfoData<T>) => void): this;
 
   /**
    * @example
@@ -142,17 +144,14 @@ export interface GitEvents {
    * no listeners, `head.accept()` is called automatically.
    *
    **/
-  on(event: 'head', listener: (head: HeadData) => void): this;
+  on(event: 'head', listener: (head: HeadData<T>) => void): this;
 }
-export class Git extends EventEmitter implements GitEvents {
+export class Git<T = any> extends EventEmitter implements GitEvents {
   dirMap: (dir?: string) => string;
 
   authenticate:
-    | ((
-        options: GitAuthenticateOptions,
-        callback: (error?: Error) => void | undefined
-      ) => void | Promise<Error | undefined | void> | undefined)
-    | undefined;
+    | ((options: GitAuthenticateOptions) => Promise<T> | T)
+    | undefined = undefined;
 
   autoCreate: boolean;
   checkout: boolean | undefined;
@@ -185,7 +184,7 @@ export class Git extends EventEmitter implements GitEvents {
   */
   constructor(
     repoDir: string | ((dir?: string) => string),
-    options: GitOptions = {}
+    options: GitOptions<T> = {}
   ) {
     super();
 
@@ -199,9 +198,7 @@ export class Git extends EventEmitter implements GitEvents {
       };
     }
 
-    if (options.authenticate) {
-      this.authenticate = options.authenticate;
-    }
+    this.authenticate = options.authenticate;
 
     this.autoCreate = options.autoCreate === false ? false : true;
     this.checkout = options.checkout;
@@ -253,13 +250,13 @@ export class Git extends EventEmitter implements GitEvents {
    * @param  callback - Optionally get a callback `cb(err)` to be notified when the repository was created.
    */
   create(repo: string, callback: (error?: Error) => void) {
-    function next(self: Git) {
+    const next = () => {
       let ps;
       let _error = '';
 
-      const dir = self.dirMap(repo);
+      const dir = this.dirMap(repo);
 
-      if (self.checkout) {
+      if (this.checkout) {
         ps = spawn('git', ['init', dir]);
       } else {
         ps = spawn('git', ['init', '--bare', dir]);
@@ -278,7 +275,7 @@ export class Git extends EventEmitter implements GitEvents {
           callback();
         }
       });
-    }
+    };
 
     if (typeof callback !== 'function')
       callback = () => {
@@ -293,7 +290,7 @@ export class Git extends EventEmitter implements GitEvents {
       this.mkdir(repo);
     }
 
-    next(this);
+    next();
   }
   /**
    * returns the typeof service being process. This will respond with either fetch or push.
@@ -318,6 +315,8 @@ export class Git extends EventEmitter implements GitEvents {
   handle(req: http.IncomingMessage, res: http.ServerResponse) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
+
+    let context: T | undefined = undefined;
 
     const handlers = [
       (req: http.IncomingMessage, res: http.ServerResponse) => {
@@ -367,27 +366,40 @@ export class Git extends EventEmitter implements GitEvents {
           const headers = req.headers;
           const user = (
             callback?: (username?: string, password?: string) => void
-          ) =>
-            callback
-              ? basicAuth(req, res, callback)
-              : new Promise<[string | undefined, string | undefined]>(
-                  (resolve) => basicAuth(req, res, (u, p) => resolve([u, p]))
-                );
-
-          const promise = this.authenticate(
-            {
-              type,
-              repo: repoName,
-              user: user as unknown as GitAuthenticateOptions['user'],
-              headers,
-            },
-            (error?: Error) => {
-              return next(error);
+          ) => {
+            const basicAuthResult = basicAuth(req, res);
+            if (basicAuthResult && callback) {
+              callback(...basicAuthResult);
             }
-          );
+            if (basicAuthResult) {
+              return new Promise<[string | undefined, string | undefined]>(
+                (resolve) => resolve(basicAuthResult)
+              );
+            }
+            // return new Promise<[string | undefined, string | undefined]>(
+            //   (_, reject) => reject(new Error("Basic auth failed"))
+            // );
+            return new Promise<[string | undefined, string | undefined]>(
+              () => {}
+            );
+          };
+
+          const promise = this.authenticate({
+            type,
+            repo: repoName,
+            user: user,
+            headers,
+          });
 
           if (promise instanceof Promise) {
-            return promise.then(next).catch(next);
+            return promise
+              .then((ctx) => {
+                context = ctx;
+                next();
+              })
+              .catch(next);
+          } else {
+            context = promise;
           }
         } else {
           return next();
@@ -467,14 +479,15 @@ export class Git extends EventEmitter implements GitEvents {
         );
         noCache(res);
 
-        const action = createAction(
+        const action = createAction<T>(
           {
             repo: repo,
             service: service as ServiceString,
             cwd: self.dirMap(repo),
           },
           req,
-          res
+          res,
+          context
         );
 
         action.on('header', () => {
@@ -515,7 +528,11 @@ export class Git extends EventEmitter implements GitEvents {
    * @param  options.cert - the cert file for the https server
    * @param  callback - the function to call when server is started or error has occurred
    */
-  listen(port: number, options?: GitServerOptions, callback?: () => void): Git {
+  listen(
+    port: number,
+    options?: GitServerOptions,
+    callback?: () => void
+  ): this {
     if (!options) {
       options = { type: 'http' };
     }

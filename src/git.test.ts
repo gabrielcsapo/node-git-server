@@ -29,8 +29,9 @@ describe('git', () => {
     fs.mkdirSync(srcDir, '0700');
     fs.mkdirSync(dstDir, '0700');
 
-    const repos = new Git(repoDir, {
+    const repos = new Git<number>(repoDir, {
       autoCreate: true,
+      authenticate: () => 42,
     });
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
     const server = http
@@ -42,6 +43,8 @@ describe('git', () => {
     process.chdir(srcDir);
 
     repos.on('push', (push) => {
+      expect(push.context).toBe(42);
+
       expect(push.repo).toBe('xyz/doom');
       expect(push.commit).toBe(lastCommit);
       expect(push.branch).toBe('master');
@@ -655,17 +658,16 @@ describe('git', () => {
 
     const repos = new Git(repoDir, {
       autoCreate: true,
-      authenticate: ({ type, repo, user }, next) => {
+      authenticate: async ({ type, repo, user }) => {
         if (type === 'fetch' && repo === 'doom') {
-          user((username, password) => {
-            if (username == 'root' && password == 'root') {
-              next();
-            } else {
-              next(new Error('that is not the correct password'));
-            }
-          });
+          const [username, password] = await user();
+          if (username == 'root' && password == 'root') {
+            return;
+          } else {
+            throw new Error('that is not the correct password');
+          }
         } else {
-          next(new Error('that is not the correct password'));
+          throw new Error('that is not the correct password');
         }
       },
     });
@@ -721,9 +723,13 @@ describe('git', () => {
     fs.mkdirSync(srcDir, '0700');
     fs.mkdirSync(dstDir, '0700');
 
-    const repos = new Git(repoDir, {
+    interface Context {
+      username: string;
+    }
+
+    const repos = new Git<Context>(repoDir, {
       autoCreate: true,
-      authenticate: ({ type, repo, user, headers }, next) => {
+      authenticate: async ({ type, repo, user, headers }) => {
         if (type === 'fetch' && repo === 'doom') {
           expect(headers['host']).toBeTruthy();
           expect(headers['user-agent']).toBeTruthy();
@@ -731,15 +737,16 @@ describe('git', () => {
           expect(headers['pragma']).toBeTruthy();
           expect(headers['accept-encoding']).toBeTruthy();
 
-          user((username, password) => {
-            if (username == 'root' && password == 'root') {
-              next();
-            } else {
-              next(new Error('that is not the correct password'));
-            }
-          });
+          const [username, password] = await user();
+          if (username == 'root' && password == 'root') {
+            return {
+              username: username,
+            };
+          } else {
+            throw new Error('that is not the correct password');
+          }
         } else {
-          next(new Error('that is not the correct password'));
+          throw new Error('that is not the correct password');
         }
       },
     });

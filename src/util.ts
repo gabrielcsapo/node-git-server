@@ -29,9 +29,8 @@ export function noCache(res: http.ServerResponse) {
  */
 export function basicAuth(
   req: http.IncomingMessage,
-  res: http.ServerResponse,
-  callback: (username?: string, password?: string) => void
-) {
+  res: http.ServerResponse
+): [string | undefined, string | undefined] | undefined {
   if (!req.headers['authorization']) {
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('WWW-Authenticate', 'Basic realm="authorization needed"');
@@ -45,10 +44,10 @@ export function basicAuth(
         .split(':');
       const username = splitHash.shift();
       const password = splitHash.join(':');
-
-      callback(username, password);
+      return [username, password];
     }
   }
+  return undefined;
 }
 /**
  * execute given git operation and respond
@@ -58,7 +57,7 @@ export function basicAuth(
  * @param  res  - http response
  */
 export function serviceRespond(
-  dup: HttpDuplex | Git,
+  dup: HttpDuplex | Git<any>,
   service: ServiceString,
   repoLocation: string,
   res: http.ServerResponse
@@ -91,7 +90,7 @@ export function serviceRespond(
  * @param  res  - http response
  */
 export function infoResponse(
-  git: Git,
+  git: Git<any>,
   repo: string,
   service: ServiceString,
   req: http.IncomingMessage,
@@ -155,12 +154,13 @@ export function parseGitName(repo: string): string {
  * @param  req  - http request object
  * @param  res  - http response
  */
-export function createAction(
+export function createAction<T>(
   opts: ServiceOptions,
   req: http.IncomingMessage,
-  res: http.ServerResponse
-): Service {
-  const service = new Service(opts, req, res);
+  res: http.ServerResponse,
+  context: T | undefined
+): Service<T> {
+  const service = new Service(opts, req, res, context);
 
   // TODO: see if this works or not
   // Object.keys(opts).forEach((key) => {
