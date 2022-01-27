@@ -1,4 +1,8 @@
-# 1.0.0-beta.2 (01/24/2022)
+# 1.0.0-beta.30 (01/26/2022)
+
+- Bugfix: Fix logging on response streams. (#96) (@willstott101)
+
+# 1.0.0-beta.21 (01/24/2022)
 
 - Avoid using self in service.ts - to avoid issue with through (#95) (@willstott101)
 
