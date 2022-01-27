@@ -13,7 +13,7 @@ import {
   parseGitName,
   createAction,
   packSideband,
-  parseBasicAuth,
+  basicAuth,
   BasicAuthError,
   noCache,
 } from './util';
@@ -150,16 +150,19 @@ export class Git<T = any> extends EventEmitter implements GitEvents<T> {
    * @param  options - options that can be applied on the new instance being created
    * @param  options.autoCreate - By default, repository targets will be created if they don't exist. You can
    disable that behavior with `options.autoCreate = true`
-   * @param  options.authenticate - an optionally async function that has the following arguments ({ type, repo, getUser, headers }) and will be called when a request comes through, if set
+   * @param  options.authenticate - an optionally async function that has the following arguments ({ type, repo, getUser, headers }) and will be called when a request comes through, if set.
    *
-     authenticate: ({ type, repo, getUser, headers }) => {
-       console.log(type, repo);
-     }
-     // alternatively you can also pass authenticate an async function
      authenticate: async ({ type, repo, getUser, headers }) => {
        const [username, password] = await getUser();
-       console.log(type, repo, username, password);
-       if (username !== 'foo') throw new Error("Wrong password!");
+       // Check user credentials
+       if (password !== 's3cure!') throw new Error("Wrong password!");
+       // Return a context value which can be used to authorize requests in the more specific event handlers (such as 'push')
+       // The value you return here will eb accessible
+       if (username === 'admin') {
+         return { protectedBranches: [] };
+       } else {
+         return { protectedBranches: ["main", "hotfix/*"] };
+       }
      }
    * @param  options.checkout - If `opts.checkout` is true, create and expect checked-out repos instead of bare repos
   */
@@ -490,7 +493,7 @@ export class Git<T = any> extends EventEmitter implements GitEvents<T> {
       const type = this.getType(info.service);
       const headers = req.headers;
       const getUser = async () => {
-        return parseBasicAuth(req);
+        return basicAuth(req);
       };
 
       try {

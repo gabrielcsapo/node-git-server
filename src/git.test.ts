@@ -3,7 +3,7 @@ import path from 'path';
 import { spawn, exec, SpawnOptionsWithoutStdio } from 'child_process';
 import http from 'http';
 
-import { Git } from './git';
+import { Git, GitAuthenticateOptions } from './git';
 
 jest.setTimeout(15000);
 
@@ -31,8 +31,8 @@ describe('git', () => {
 
     const repos = new Git<string>(repoDir, {
       autoCreate: true,
-      authenticate: (opts) => {
-        return 'my request context';
+      authenticate: (options: GitAuthenticateOptions) => {
+        return `my request context for repo: ${options.repo}`;
       },
     });
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
@@ -45,7 +45,7 @@ describe('git', () => {
     process.chdir(srcDir);
 
     repos.on('push', (push) => {
-      expect(push.context).toBe('my request context');
+      expect(push.context).toBe('my request context for repo: xyz/doom');
 
       expect(push.repo).toBe('xyz/doom');
       expect(push.commit).toBe(lastCommit);

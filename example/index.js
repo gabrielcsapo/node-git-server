@@ -24,20 +24,19 @@ const port = process.env.PORT || 7005;
 
 const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
   autoCreate: true,
-  authenticate: ({ type, repo, user, headers }, next) => {
+  authenticate: async ({ type, repo, getUser, headers }) => {
     console.log(type, repo, headers); // eslint-disable-line
     if (type == 'push') {
+      const [username, password] = await getUser();
       // Decide if this user is allowed to perform this action against this repo.
-      user((username, password) => {
-        if (username === '42' && password === '42') {
-          next();
-        } else {
-          next('wrong password');
-        }
-      });
-    } else {
-      // Check these credentials are correct for this user.
-      next();
+      if (username === '42' && password === '42') {
+        // This return value can be whatever you want - it is accessible from events.
+        return {
+          protectedBranches: ["docs", "main"],
+        };
+      } else {
+        throw Error('wrong password');
+      }
     }
   },
 });
@@ -55,7 +54,12 @@ repos.on('push', (push) => {
     push.log(' ');
   });
 
-  push.accept();
+  if (push.context.protectedBranches.indexOf(push.branch) !== -1) {
+    push.log('You do not have permission to write to this branch');
+    push.reject();
+  } else {
+    push.accept();
+  }
 });
 
 repos.on('fetch', (fetch) => {

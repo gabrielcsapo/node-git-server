@@ -25,7 +25,7 @@ export class BasicAuthError extends Error {}
  * @param  res  - http response
  * @param  callback - function(username, password)
  */
-export function parseBasicAuth(
+export function basicAuth(
   req: http.IncomingMessage
 ): [string | undefined, string | undefined] {
   if (req.headers['authorization']) {

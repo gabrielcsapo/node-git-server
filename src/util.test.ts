@@ -1,13 +1,13 @@
-import { parseBasicAuth, BasicAuthError, noCache, parseGitName } from './util';
+import { basicAuth, BasicAuthError, noCache, parseGitName } from './util';
 
 describe('util', () => {
-  describe('parseBasicAuth', () => {
+  describe('basicAuth', () => {
     test('should throw error if headers invalid or missing', () => {
       const req: any = {
         headers: {},
       };
 
-      expect(parseBasicAuth.bind(null, req)).toThrow(new BasicAuthError());
+      expect(basicAuth.bind(null, req)).toThrow(new BasicAuthError());
     });
 
     test('should accept headers and return user & password tuple', () => {
@@ -17,7 +17,7 @@ describe('util', () => {
         },
       };
 
-      expect(parseBasicAuth(req)).toStrictEqual(['Open', 'Sesame']);
+      expect(basicAuth(req)).toStrictEqual(['Open', 'Sesame']);
     });
   });
 
