@@ -1,7 +1,7 @@
 import http from 'http';
 import EventEmitter from 'events';
 
-export class HttpDuplex extends EventEmitter {
+export class HttpDuplex<T = any> extends EventEmitter {
   setHeader(arg0: string, arg1: string) {
     throw new Error('Method not implemented.');
   }
@@ -54,7 +54,11 @@ export class HttpDuplex extends EventEmitter {
     }).listen(80);
     ```
    */
-  constructor(input: http.IncomingMessage, output: http.ServerResponse) {
+  constructor(
+    input: http.IncomingMessage,
+    output: http.ServerResponse,
+    public context?: T | undefined
+  ) {
     super();
 
     this.req = input;

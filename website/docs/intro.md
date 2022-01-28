@@ -123,6 +123,14 @@ To http://localhost:7005/test
 
 #### Authentication
 
+Every request runs through the `authenticate` callback given to the `Git` constructor.
+
+This callback is passed fairly generic information, and should throw an error if the
+user given credentials are invalid.
+
+`authenticate` can return a `context` object which the more specific event listeners
+(such as `'push'`) can use to perform fine-grained authorization checks.
+
 ```typescript
 import { Git } from 'node-git-server';
 import { join } from 'path';
@@ -132,20 +140,29 @@ const port =
     ? 7005
     : parseInt(process.env.PORT);
 
-const repos = new Git(join(__dirname, '../repo'), {
+interface MyRequestContext {
+  userInfo: MyUserInfo;
+}
+
+const repos = new Git<MyRequestContext>(join(__dirname, '../repo'), {
   autoCreate: true,
-  autheficate: ({ type, user }, next) =>
-    type == 'push'
-      ? user(([username, password]) => {
-          console.log(username, password);
-          next();
-        })
-      : next(),
+  authenticate: async ({ type, getUser }): Promise<MyRequestContext> => {
+    const [username, password] = await getUser();
+    // Check these use credentials in your own system
+    const info = await getUsersInfo(username, password);
+    if (!info) throw new Error("username or password incorrect");
+    return {
+      userInfo: info,
+    };
+  }
 });
 
 repos.on('push', (push) => {
   console.log(`push ${push.repo}/${push.commit} ( ${push.branch} )`);
-  push.accept();
+  if (push.context?.userInfo.canPushToBranch(push.branch))
+    push.accept();
+  else
+    push.reject();
 });
 
 repos.on('fetch', (fetch) => {

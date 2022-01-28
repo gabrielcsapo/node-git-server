@@ -24,7 +24,7 @@ export interface ServiceOptions {
   service: ServiceString;
 }
 
-export class Service extends HttpDuplex {
+export class Service<T> extends HttpDuplex<T> {
   status: string;
   repo: string;
   service: string;
@@ -44,9 +44,10 @@ export class Service extends HttpDuplex {
   constructor(
     opts: ServiceOptions,
     req: http.IncomingMessage,
-    res: http.ServerResponse
+    res: http.ServerResponse,
+    context: T | undefined
   ) {
-    super(req, res);
+    super(req, res, context);
 
     let data = '';
 
