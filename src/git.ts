@@ -29,7 +29,7 @@ export interface GitOptions<T> {
 }
 
 export interface GitAuthenticateOptions {
-  type: string;
+  type: 'fetch' | 'push' | 'info';
   repo: string;
   getUser: () => Promise<[string | undefined, string | undefined]>;
   headers: http.IncomingHttpHeaders;
@@ -277,7 +277,7 @@ export class Git<T = any> extends EventEmitter implements GitEvents<T> {
     next();
   }
   /**
-   * returns the typeof service being process. This will respond with either fetch or push.
+   * returns the type of service being processed.
    * @param  service - the service type
    */
   getType(service: string | null): 'fetch' | 'push' | 'info' {
