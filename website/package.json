@@ -1,0 +1,48 @@
+{
+  "name": "node-git-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "api-extractor": "DOCUSAURUS_PLUGIN_API_EXTRACTOR_PROJECT_FOLDER_OVERRIDE=../ docusaurus api-extractor:run -s ./src -o api",
+    "start": "DOCUSAURUS_PLUGIN_API_EXTRACTOR_PROJECT_FOLDER_OVERRIDE=../ docusaurus start",
+    "lint": "echo 'none'",
+    "test": "echo 'none'",
+    "build": "DOCUSAURUS_PLUGIN_API_EXTRACTOR_PROJECT_FOLDER_OVERRIDE=../ docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "DOCUSAURUS_PLUGIN_API_EXTRACTOR_PROJECT_FOLDER_OVERRIDE=../ docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids"
+  },
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-beta.14",
+    "@docusaurus/preset-classic": "2.0.0-beta.14",
+    "@mdx-js/react": "^1.6.21",
+    "@svgr/webpack": "^5.5.0",
+    "clsx": "^1.1.1",
+    "docusaurus-plugin-api-extractor": "^0.4.3",
+    "docusaurus-plugin-api-extractor-markdown-documenter": "0.3.3",
+    "docusaurus-plugin-search-local": "^0.1.4",
+    "@microsoft/api-extractor": "^7.18.16",
+    "@microsoft/api-documenter": "^7.13.68",
+    "file-loader": "^6.2.0",
+    "prism-react-renderer": "^1.2.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "url-loader": "^4.1.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -20,6 +20,7 @@ npm install node-git-server
 
 # Usage
 
+<<<<<<< HEAD
 ## Simple
 
 ```javascript
@@ -195,6 +196,11 @@ node example/index.js --https
 For more information please visit the [docs](http://www.gabrielcsapo.com/node-git-server/code/index.html)
 
 # Philosophy   
+=======
+Please visit our docs [https://gabrielcsapo.github.io/node-git-server](https://gabrielcsapo.github.io/node-git-server)!
+
+# Philosophy
+>>>>>>> upstream/main
 
 This library is aimed to have a zero dependency footprint. If you are reading this and you see dependencies, help to remove them 🐒.
 

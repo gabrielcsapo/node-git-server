@@ -7,70 +7,79 @@
 let type = 'http';
 
 process.argv.slice(2).forEach((arg) => {
-  switch(arg) {
+  switch (arg) {
     case 'https':
     case '--https':
       type = 'https';
-    break;
+      break;
   }
 });
 
 const fs = require('fs');
 const path = require('path');
 
-const Server = require('../');
+const { Git : Server } = require("../");
 
 const port = process.env.PORT || 7005;
 
 const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
-    autoCreate: true,
-    authenticate: ({ type, repo, user, headers }, next) => {
-      console.log(type, repo, headers); // eslint-disable-line
-      if(type == 'push') {
-        user((username, password) => {
-          console.log(username, password); // eslint-disable-line
+  autoCreate: true,
+  authenticate: ({ type, repo, user, headers }, next) => {
+    console.log(type, repo, headers); // eslint-disable-line
+    if (type == 'push') {
+      // Decide if this user is allowed to perform this action against this repo.
+      user((username, password) => {
+        if (username === '42' && password === '42') {
           next();
-        });
-      } else {
-        next();
-      }
+        } else {
+          next('wrong password');
+        }
+      });
+    } else {
+      // Check these credentials are correct for this user.
+      next();
     }
+  },
 });
 
 repos.on('push', (push) => {
     console.log(`push ${push.repo} / ${push.commit} ( ${push.branch} )`); // eslint-disable-line
 
-    repos.list((err, results) => {
-        push.log(' ');
-        push.log('Hey!');
-        push.log('Checkout these other repos:');
-        for(const repo of results) {
-          push.log(`- ${repo}`);
-        }
-        push.log(' ');
-    });
+  repos.list((err, results) => {
+    push.log(' ');
+    push.log('Hey!');
+    push.log('Checkout these other repos:');
+    for (const repo of results) {
+      push.log(`- ${repo}`);
+    }
+    push.log(' ');
+  });
 
-    push.accept();
+  push.accept();
 });
 
 repos.on('fetch', (fetch) => {
     console.log(`username ${fetch.username}`); // eslint-disable-line
     console.log(`fetch ${fetch.repo}/${fetch.commit}`); // eslint-disable-line
-    fetch.accept();
+  fetch.accept();
 });
 
-repos.listen(port, {
-  type,
-  key: fs.readFileSync(path.resolve(__dirname, 'privatekey.pem')),
-  cert: fs.readFileSync(path.resolve(__dirname, 'certificate.pem'))
-}, (error) => {
+repos.listen(
+  port,
+  {
+    type,
+    key: fs.readFileSync(path.resolve(__dirname, 'privatekey.pem')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'certificate.pem')),
+  },
+  (error) => {
     if(error) return console.error(`failed to start git-server because of error ${error}`); // eslint-disable-line
     console.log(`node-git-server running at ${type}://localhost:${port}`); // eslint-disable-line
     repos.list((err, result) => {
-        if (!result) {
+      if (!result) {
             console.log("No repositories available..."); // eslint-disable-line
-        } else {
+      } else {
             console.log(result); // eslint-disable-line
-        }
+      }
     });
-});
+  }
+);

@@ -1,12 +1,20 @@
 {
   "name": "node-git-server",
+<<<<<<< HEAD
   "version": "0.6.0",
+=======
+  "version": "1.0.0-beta.30",
+>>>>>>> upstream/main
   "description": "🎡 A configurable git server written in Node.js",
   "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
   "contributors": [
     {
       "name": "echopoint",
-      "email": "echopoint <echopoint@tutanota.com>"
+      "email": "echopoint@tutanota.com"
+    },
+    {
+      "name": "Buj Itself",
+      "email": "primary@buj-dev.site"
     }
   ],
   "license": "MIT",
@@ -18,20 +26,29 @@
     "type": "git",
     "url": "git+https://github.com/gabrielcsapo/node-git-server.git"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "engine": {
-    "node": ">= 6"
+    "node": ">= 14"
   },
   "scripts": {
+<<<<<<< HEAD
     "lint": "eslint .",
     "test": "tape test/*.js",
     "coverage": "tap test/*.js --coverage --coverage-report=lcov",
     "generate-docs": "tryitout && jsdoc -c jsdoc.json"
+=======
+    "lint": "eslint src/*",
+    "test": "jest src/*.test.ts",
+    "build": "echo \"\" > ./build-complete.meta && tsc",
+    "coverage": "jest --coverage",
+    "install": "( [ -f ./git-package.meta ] && [ ! -f ./build-complete.meta ] && echo \"\" > ./build-complete.meta && npm install . && tsc ) || echo \"\" > ./build-complete.meta"
+>>>>>>> upstream/main
   },
   "dependencies": {
     "through": "^2.3.8"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "async": "^2.6.0",
     "docdash": "^0.4.0",
     "eslint": "^4.15.0",
@@ -39,5 +56,22 @@
     "tap": "^12.5.3",
     "tape": "^4.8.0",
     "tryitout": "^2.1.1"
+=======
+    "@types/jest": "^27.4.0",
+    "@types/node": "^15.6.1",
+    "@types/node-fetch": "^2.5.12",
+    "@types/through": "^0.0.30",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.4.5",
+    "node-fetch": "^2.6.6",
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+>>>>>>> upstream/main
   }
 }
