@@ -16,11 +16,9 @@
 
 ```
 npm install node-git-server
-```
 
 # Usage
 
-<<<<<<< HEAD
 ## Simple
 
 ```javascript

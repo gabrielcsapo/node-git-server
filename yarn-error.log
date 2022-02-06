@@ -1,0 +1,91 @@
+Arguments: 
+  /home/james/.nvm/versions/node/v14.19.0/bin/node /home/james/.nvm/versions/node/v14.19.0/bin/yarn
+
+PATH: 
+  /home/james/.nvm/versions/node/v14.19.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.UbuntuonWindows_2004.2021.825.0_x64__79rhkp1fndgsc:/mnt/c/windows/system32:/mnt/c/windows:/mnt/c/windows/System32/Wbem:/mnt/c/windows/System32/WindowsPowerShell/v1.0/:/mnt/c/windows/System32/OpenSSH/:/mnt/c/Users/stora/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Program Files/Go/bin:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/WireGuard/:/mnt/c/Users/stora/.cargo/bin:/mnt/c/Users/stora/AppData/Local/Programs/Python/Python310/Scripts/:/mnt/c/Users/stora/AppData/Local/Programs/Python/Python310/:/mnt/c/Users/stora/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/stora/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/stora/go/bin:/mnt/c/Users/stora/bin:/mnt/c/Program Files (x86)/Nmap:/mnt/c/Users/stora/.dotnet/tools:/snap/bin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  14.19.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  SyntaxError: /home/james/git/node-git-server/package.json: Unexpected string in JSON at position 1157
+      at JSON.parse (<anonymous>)
+      at /home/james/.nvm/versions/node/v14.19.0/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/home/james/.nvm/versions/node/v14.19.0/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /home/james/.nvm/versions/node/v14.19.0/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "node-git-server",
+    "version": "1.0.0-beta.30",
+    "description": "🎡 A configurable git server written in Node.js",
+    "author": "Gabriel J. Csapo <gabecsapo@gmail.com>",
+    "contributors": [
+      {
+        "name": "echopoint",
+        "email": "echopoint@tutanota.com"
+      },
+      {
+        "name": "Buj Itself",
+        "email": "primary@buj-dev.site"
+      }
+    ],
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/gabrielcsapo/node-git-server/issues"
+    },
+    "homepage": "https://github.com/gabrielcsapo/node-git-server#readme",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/gabrielcsapo/node-git-server.git"
+    },
+    "main": "dist/index.js",
+    "engine": {
+      "node": ">= 14"
+    },
+    "scripts": {
+      "lint": "eslint .",
+      "test": "tape test/*.js",
+      "coverage": "tap test/*.js --coverage --coverage-report=lcov",
+      "generate-docs": "tryitout && jsdoc -c jsdoc.json"
+    },
+    "dependencies": {
+      "through": "^2.3.8"
+    },
+    "devDependencies": {
+      "async": "^2.6.0",
+      "docdash": "^0.4.0",
+      "eslint": "^4.15.0",
+      "jsdoc": "^3.5.5",
+      "tap": "^12.5.3",
+      "tape": "^4.8.0",
+      "tryitout": "^2.1.1"
+      "@types/jest": "^27.4.0",
+      "@types/node": "^15.6.1",
+      "@types/node-fetch": "^2.5.12",
+      "@types/through": "^0.0.30",
+      "@typescript-eslint/eslint-plugin": "^5.0.0",
+      "@typescript-eslint/parser": "^5.0.0",
+      "eslint-config-prettier": "^8.3.0",
+      "eslint-plugin-prettier": "^4.0.0",
+      "jest": "^27.4.5",
+      "node-fetch": "^2.6.6",
+      "prettier": "^2.5.1",
+      "ts-jest": "^27.0.7",
+      "ts-node": "^10.4.0",
+      "typescript": "^4.5.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
