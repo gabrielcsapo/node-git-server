@@ -16,10 +16,10 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   lint:
-    name: "Lint"
+    name: 'Lint'
     runs-on: ubuntu-latest
 
-    steps: 
+    steps:
       - uses: actions/checkout@v1
       - uses: volta-cli/action@v1
         with:

@@ -5,8 +5,6 @@ import http from 'http';
 
 import { Git } from './git';
 
-jest.setTimeout(15000);
-
 const wrapCallback = (func: { (callback: any): void }) => {
   return new Promise((resolve) => {
     func(resolve);
@@ -39,8 +37,6 @@ describe('git', () => {
       })
       .listen(port);
 
-    process.chdir(srcDir);
-
     repos.on('push', (push) => {
       expect(push.repo).toBe('xyz/doom');
       expect(push.commit).toBe(lastCommit);
@@ -64,7 +60,7 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['init']).on('exit', (code) => {
+      spawn('git', ['init'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -77,38 +73,36 @@ describe('git', () => {
     });
 
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['add', 'a.txt']).on('exit', (code) => {
+      spawn('git', ['add', 'a.txt'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['commit', '-am', 'a!!']).on('exit', () => {
-        exec('git log | head -n1', (err, stdout) => {
+      spawn('git', ['commit', '-am', 'a!!'], { cwd: srcDir }).on('exit', () => {
+        exec('git log | head -n1', { cwd: srcDir }, (err, stdout) => {
           lastCommit = stdout.split(/\s+/)[1];
           callback();
         });
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', [
-        'push',
-        'http://localhost:' + port + '/xyz/doom',
-        'master',
-      ]).on('exit', (code) => {
+      spawn(
+        'git',
+        ['push', 'http://localhost:' + port + '/xyz/doom', 'master'],
+        { cwd: srcDir }
+      ).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      spawn('git', ['clone', 'http://localhost:' + port + '/xyz/doom']).on(
-        'exit',
-        (code) => {
-          expect(code).toBe(0);
-          callback();
-        }
-      );
+      spawn('git', ['clone', 'http://localhost:' + port + '/xyz/doom'], {
+        cwd: dstDir,
+      }).on('exit', (code) => {
+        expect(code).toBe(0);
+        callback();
+      });
     });
 
     const ex = fs.existsSync(dstDir + '/doom/a.txt');
@@ -142,10 +136,8 @@ describe('git', () => {
       push.accept();
     });
 
-    process.chdir(srcDir);
-
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['init']).on('exit', (code) => {
+      spawn('git', ['init'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -157,19 +149,13 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['add', 'a.txt']).on('exit', (code) => {
+      spawn('git', ['add', 'a.txt'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['commit', '-am', 'a!!']).on('exit', (code) => {
-        expect(code).toBe(0);
-        callback();
-      });
-    });
-    await wrapCallback((callback: () => void) => {
-      spawn('git', ['push', 'http://localhost:' + port + '/doom', 'master']).on(
+      spawn('git', ['commit', '-am', 'a!!'], { cwd: srcDir }).on(
         'exit',
         (code) => {
           expect(code).toBe(0);
@@ -178,14 +164,20 @@ describe('git', () => {
       );
     });
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      spawn('git', ['clone', 'http://localhost:' + port + '/doom']).on(
-        'exit',
-        (code) => {
-          expect(code).toBe(0);
-          callback();
-        }
-      );
+      spawn('git', ['push', 'http://localhost:' + port + '/doom', 'master'], {
+        cwd: srcDir,
+      }).on('exit', (code) => {
+        expect(code).toBe(0);
+        callback();
+      });
+    });
+    await wrapCallback((callback: () => void) => {
+      spawn('git', ['clone', 'http://localhost:' + port + '/doom'], {
+        cwd: dstDir,
+      }).on('exit', (code) => {
+        expect(code).toBe(0);
+        callback();
+      });
     });
     await wrapCallback((callback: () => void) => {
       fs.stat(dstDir + '/doom/a.txt', (ex) => {
@@ -228,9 +220,8 @@ describe('git', () => {
       push.accept();
     });
 
-    process.chdir(srcDir);
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['init']).on('exit', (code) => {
+      spawn('git', ['init'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -270,14 +261,12 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      spawn('git', ['clone', 'http://localhost:' + port + '/doom.git']).on(
-        'exit',
-        (code) => {
-          expect(code).toBe(0);
-          callback();
-        }
-      );
+      spawn('git', ['clone', 'http://localhost:' + port + '/doom.git'], {
+        cwd: dstDir,
+      }).on('exit', (code) => {
+        expect(code).toBe(0);
+        callback();
+      });
     });
     await wrapCallback((callback: () => void) => {
       fs.stat(dstDir + '/doom/a.txt', (ex) => {
@@ -343,14 +332,13 @@ describe('git', () => {
       firstTag = false;
     });
 
-    process.chdir(srcDir);
     await wrapCallback((callback: () => void) => {
       repos.create('doom', () => {
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['init']).on('exit', (code) => {
+      spawn('git', ['init'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -362,19 +350,22 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['add', 'a.txt']).on('exit', (code) => {
+      spawn('git', ['add', 'a.txt'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['commit', '-am', 'a!!']).on('exit', (code) => {
-        expect(code).toBe(0);
-        callback();
-      });
+      spawn('git', ['commit', '-am', 'a!!'], { cwd: srcDir }).on(
+        'exit',
+        (code) => {
+          expect(code).toBe(0);
+          callback();
+        }
+      );
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['tag', '0.0.1']).on('exit', (code) => {
+      spawn('git', ['tag', '0.0.1'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -386,45 +377,42 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['add', 'a.txt']).on('exit', (code) => {
+      spawn('git', ['add', 'a.txt'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['commit', '-am', 'a!!']).on('exit', () => {
-        exec('git log | head -n1', (err, stdout) => {
+      spawn('git', ['commit', '-am', 'a!!'], { cwd: srcDir }).on('exit', () => {
+        exec('git log | head -n1', { cwd: srcDir }, (err, stdout) => {
           lastCommit = stdout.split(/\s+/)[1];
           callback();
         });
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['tag', '0.0.2']).on('exit', (code) => {
+      spawn('git', ['tag', '0.0.2'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', [
-        'push',
-        '--tags',
-        'http://localhost:' + port + '/doom',
-        'master',
-      ]).on('exit', (code) => {
+      spawn(
+        'git',
+        ['push', '--tags', 'http://localhost:' + port + '/doom', 'master'],
+        { cwd: srcDir }
+      ).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      spawn('git', ['clone', 'http://localhost:' + port + '/doom']).on(
-        'exit',
-        (code) => {
-          expect(code).toBe(0);
-          callback();
-        }
-      );
+      spawn('git', ['clone', 'http://localhost:' + port + '/doom'], {
+        cwd: dstDir,
+      }).on('exit', (code) => {
+        expect(code).toBe(0);
+        callback();
+      });
     });
     await wrapCallback((callback: () => void) => {
       fs.exists(dstDir + '/doom/a.txt', (ex) => {
@@ -451,33 +439,35 @@ describe('git', () => {
       'temp'
     );
 
-    test('should return back with one directory in server', (done: () => void) => {
-      jest.setTimeout(15000);
-
+    test('should return back with one directory in server', async () => {
       expect.assertions(2);
 
-      const repos = new Git(workingRepoDir, {
-        autoCreate: true,
-      });
+      await new Promise((resolve) => {
+        const repos = new Git(workingRepoDir, {
+          autoCreate: true,
+        });
 
-      repos.list((err, results) => {
-        expect(err).toBeFalsy();
-        expect(['test.git']).toEqual(results);
-        done();
+        repos.list((err, results) => {
+          expect(err).toBeFalsy();
+          expect(['test.git']).toEqual(results);
+          resolve('passed');
+        });
       });
-    });
+    }, 15000);
 
-    test('should return back error directory does not exist', (done: () => void) => {
+    test('should return back error directory does not exist', async () => {
       expect.assertions(2);
 
-      const repos = new Git(notWorkingRepoDir, {
-        autoCreate: true,
-      });
+      await new Promise((resolve) => {
+        const repos = new Git(notWorkingRepoDir, {
+          autoCreate: true,
+        });
 
-      repos.list((err, results) => {
-        expect(err !== null).toBeTruthy();
-        expect(results === undefined).toBeTruthy();
-        done();
+        repos.list((err, results) => {
+          expect(err !== null).toBeTruthy();
+          expect(results === undefined).toBeTruthy();
+          resolve('passed');
+        });
       });
     });
   });
@@ -492,7 +482,8 @@ describe('git', () => {
     ) {
       const ps = spawn(cmd, args, opts);
       ps.on('error', (err) => {
-        console.error( // eslint-disable-line
+        console.error(
+          // eslint-disable-line
           err.message + ' while executing: ' + cmd + ' ' + args?.join(' ')
         );
       });
@@ -520,8 +511,6 @@ describe('git', () => {
     });
     server.listen(port);
 
-    process.chdir(srcDir);
-
     repos.on('push', (push) => {
       expect(push.repo).toBe('doom');
       expect(push.commit).toBe(lastCommit);
@@ -540,7 +529,7 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      _spawn('git', ['init'], {}).on('exit', (code) => {
+      _spawn('git', ['init'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -552,25 +541,26 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      _spawn('git', ['add', 'a.txt'], {}).on('exit', (code) => {
+      _spawn('git', ['add', 'a.txt'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      _spawn('git', ['commit', '-am', 'a!!'], {}).on('exit', () => {
-        exec('git log | head -n1', (err, stdout) => {
-          lastCommit = stdout.split(/\s+/)[1];
-          callback();
-        });
-      });
+      _spawn('git', ['commit', '-am', 'a!!'], { cwd: srcDir }).on(
+        'exit',
+        () => {
+          exec('git log | head -n1', { cwd: srcDir }, (err, stdout) => {
+            lastCommit = stdout.split(/\s+/)[1];
+            callback();
+          });
+        }
+      );
     });
     await wrapCallback((callback: () => void) => {
-      _spawn(
-        'git',
-        ['push', 'http://localhost:' + port + '/doom', 'master'],
-        {}
-      ).on('exit', (code) => {
+      _spawn('git', ['push', 'http://localhost:' + port + '/doom', 'master'], {
+        cwd: srcDir,
+      }).on('exit', (code) => {
         expect(code).not.toBe(0);
         callback();
       });
@@ -612,32 +602,31 @@ describe('git', () => {
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
     expect(repos.listen(port)).toBe(repos);
 
-    process.chdir(srcDir);
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      spawn('git', ['clone', 'http://localhost:' + port + '/doom']).on(
-        'exit',
-        (code) => {
-          expect(code).toBe(0);
-          callback();
-        }
-      );
+      spawn('git', ['clone', 'http://localhost:' + port + '/doom'], {
+        cwd: dstDir,
+      }).on('exit', (code) => {
+        expect(code).toBe(0);
+        callback();
+      });
     });
     repos.close();
   });
 
-  test('should return promise that resolves when server is closed if no callback specified', (done: () => void) => {
-    const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
-      16
-    )}`;
+  test('should return promise that resolves when server is closed if no callback specified', async () => {
+    await new Promise((resolve) => {
+      const repoDir = `/tmp/${Math.floor(Math.random() * (1 << 30)).toString(
+        16
+      )}`;
 
-    fs.mkdirSync(repoDir, '0700');
+      fs.mkdirSync(repoDir, '0700');
 
-    const repos = new Git(repoDir);
-    const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
-    repos.listen(port, undefined, () => {
-      repos.close().then(() => {
-        done();
+      const repos = new Git(repoDir);
+      const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
+      repos.listen(port, undefined, () => {
+        repos.close().then(() => {
+          resolve('passed');
+        });
       });
     });
   });
@@ -672,13 +661,12 @@ describe('git', () => {
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
     repos.listen(port);
 
-    process.chdir(srcDir);
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      const clone = spawn('git', [
-        'clone',
-        `http://root:root@localhost:${port}/doom.git`,
-      ]);
+      const clone = spawn(
+        'git',
+        ['clone', `http://root:root@localhost:${port}/doom.git`],
+        { cwd: dstDir }
+      );
 
       clone.on('close', function (code) {
         expect(code).toBe(0);
@@ -686,11 +674,11 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      const clone = spawn('git', [
-        'clone',
-        `http://root:world@localhost:${port}/doom.git doom1`,
-      ]);
+      const clone = spawn(
+        'git',
+        ['clone', `http://root:world@localhost:${port}/doom.git doom1`],
+        { cwd: dstDir }
+      );
       let error = '';
 
       clone.stderr.on('data', (d) => {
@@ -699,7 +687,7 @@ describe('git', () => {
 
       clone.on('close', function (code) {
         expect(error).toBe(
-          `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://localhost:${port}/doom.git doom1/': The requested URL returned error: 400\n`
+          `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://localhost:${port}/doom.git doom1/': URL using bad/illegal format or missing URL\n`
         );
         expect(code).toBe(128);
         callback();
@@ -746,13 +734,12 @@ describe('git', () => {
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
     repos.listen(port);
 
-    process.chdir(srcDir);
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      const clone = spawn('git', [
-        'clone',
-        `http://root:root@localhost:${port}/doom.git`,
-      ]);
+      const clone = spawn(
+        'git',
+        ['clone', `http://root:root@localhost:${port}/doom.git`],
+        { cwd: dstDir }
+      );
 
       clone.on('close', function (code) {
         expect(code).toBe(0);
@@ -760,11 +747,11 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      const clone = spawn('git', [
-        'clone',
-        `http://root:world@localhost:${port}/doom.git doom1`,
-      ]);
+      const clone = spawn(
+        'git',
+        ['clone', `http://root:world@localhost:${port}/doom.git doom1`],
+        { cwd: dstDir }
+      );
       let error = '';
 
       clone.stderr.on('data', (d) => {
@@ -773,7 +760,7 @@ describe('git', () => {
 
       clone.on('close', function (code) {
         expect(error).toBe(
-          `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://localhost:${port}/doom.git doom1/': The requested URL returned error: 400\n`
+          `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://localhost:${port}/doom.git doom1/': URL using bad/illegal format or missing URL\n`
         );
         expect(code).toBe(128);
         callback();
@@ -814,13 +801,12 @@ describe('git', () => {
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
     repos.listen(port);
 
-    process.chdir(srcDir);
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      const clone = spawn('git', [
-        'clone',
-        `http://root:root@localhost:${port}/doom.git`,
-      ]);
+      const clone = spawn(
+        'git',
+        ['clone', `http://root:root@localhost:${port}/doom.git`],
+        { cwd: dstDir }
+      );
 
       clone.on('close', function (code) {
         expect(code).toBe(0);
@@ -828,11 +814,11 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      process.chdir(dstDir);
-      const clone = spawn('git', [
-        'clone',
-        `http://root:world@localhost:${port}/doom.git doom1`,
-      ]);
+      const clone = spawn(
+        'git',
+        ['clone', `http://root:world@localhost:${port}/doom.git doom1`],
+        { cwd: dstDir }
+      );
       let error = '';
 
       clone.stderr.on('data', (d) => {
@@ -841,7 +827,7 @@ describe('git', () => {
 
       clone.on('close', function (code) {
         expect(error).toBe(
-          `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://localhost:${port}/doom.git doom1/': The requested URL returned error: 400\n`
+          `Cloning into 'doom.git doom1'...\nfatal: unable to access 'http://localhost:${port}/doom.git doom1/': URL using bad/illegal format or missing URL\n`
         );
         expect(code).toBe(128);
         callback();
@@ -876,15 +862,13 @@ describe('git', () => {
 
     repos.listen(port);
 
-    process.chdir(srcDir);
-
     await wrapCallback((callback: () => void) => {
       repos.create('doom', () => {
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['init']).on('exit', (code) => {
+      spawn('git', ['init'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -895,23 +879,23 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['add', 'a.txt']).on('exit', (code) => {
+      spawn('git', ['add', 'a.txt'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['commit', '-m', 'a!!']).on('exit', () => {
+      spawn('git', ['commit', '-m', 'a!!'], { cwd: srcDir }).on('exit', () => {
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
       const logs: any[] = [];
-      const push = spawn('git', [
-        'push',
-        'http://localhost:' + port + '/doom.git',
-        'master',
-      ]);
+      const push = spawn(
+        'git',
+        ['push', 'http://localhost:' + port + '/doom.git', 'master'],
+        { cwd: srcDir }
+      );
 
       push.stdout.on('data', (data) => {
         if (data.toString() !== '') {
@@ -953,7 +937,7 @@ describe('git', () => {
     const port = Math.floor(Math.random() * ((1 << 16) - 1e4)) + 1e4;
 
     repos.on('push', (push) => {
-        console.log(`push ${push.repo}/${push.commit}`); // eslint-disable-line
+      console.log(`push ${push.repo}/${push.commit}`); // eslint-disable-line
 
       push.on('response', (stream: { log: (arg0: string) => void }) => {
         stream.log(' ');
@@ -966,15 +950,13 @@ describe('git', () => {
 
     repos.listen(port);
 
-    process.chdir(srcDir);
-
     await wrapCallback((callback: () => void) => {
       repos.create('doom', () => {
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['init']).on('exit', (code) => {
+      spawn('git', ['init'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -985,23 +967,23 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['add', 'a.txt']).on('exit', (code) => {
+      spawn('git', ['add', 'a.txt'], { cwd: srcDir }).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['commit', '-m', 'a!!']).on('exit', () => {
+      spawn('git', ['commit', '-m', 'a!!'], { cwd: srcDir }).on('exit', () => {
         callback();
       });
     });
     await wrapCallback((callback: () => void) => {
       const logs: any[] = [];
-      const push = spawn('git', [
-        'push',
-        'http://localhost:' + port + '/doom.git',
-        'master',
-      ]);
+      const push = spawn(
+        'git',
+        ['push', 'http://localhost:' + port + '/doom.git', 'master'],
+        { cwd: srcDir }
+      );
 
       push.stdout.on('data', (data) => {
         if (data.toString() !== '') {

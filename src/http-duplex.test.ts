@@ -55,8 +55,6 @@ String.prototype.streamline = function (ending = '\n') {
 describe('http-duplex', () => {
   let server: Server;
 
-  jest.setTimeout(15000);
-
   beforeEach(() => {
     console.log('create server');
     server = http.createServer(function (req, res) {
@@ -120,55 +118,57 @@ describe('http-duplex', () => {
     server.close();
   });
 
-  test('should be able to handle requests', (done) => {
+  test('should be able to handle requests', async () => {
     expect.assertions(3);
 
-    server.on('error', (e) => {
-      console.log('error', e);
-    });
-
-    server.on('listening', async function () {
-      const { port } = server.address() as AddressInfo;
-
-      const u = `http://localhost:${port}/`;
-      const response = await fetch(u);
-      const body = await response.text();
-
-      expect(String(body)).toBe(String(selfSrc));
-
-      const response1 = await fetch(u, {
-        method: 'POST',
-        body: 'beep boop\n',
-        headers: { 'Content-Type': 'text/plain' },
+    await new Promise((resolve) => {
+      server.on('error', (e) => {
+        console.log('error', e);
       });
-      const body1 = await response1.text();
-      expect(body1).toBe('10');
 
-      const response2 = await fetch(u + 'info');
-      const body2 = await response2.text();
+      server.on('listening', async function () {
+        const { port } = server.address() as AddressInfo;
 
-      expect(String(body2.streamline())).toMatchInlineSnapshot(`
-        "Method: GET
-        Path: /info
-        Status: 200
-        Http Version 1: 1.1
-        Http Version 2: 1.1
-        Headers: 
-        {\\"accept\\":\\"*/*\\"
-        \\"user-agent\\":\\"node-fetch/1.0 (+https://github.com/bitinn/node-fetch)\\"
-        \\"accept-encoding\\":\\"gzip
-        deflate\\"
-        \\"connection\\":\\"close\\"
-        \\"host\\":\\"localhost:${port}\\"}
-        Trailers: {}
-        Complete: false
-        Readable: true
-        Writeable: true
-        Connection: [object Object]
-        Socket: [object Object]
-        "
-      `);
-      done();
+        const u = `http://localhost:${port}/`;
+        const response = await fetch(u);
+        const body = await response.text();
+
+        expect(String(body)).toBe(String(selfSrc));
+
+        const response1 = await fetch(u, {
+          method: 'POST',
+          body: 'beep boop\n',
+          headers: { 'Content-Type': 'text/plain' },
+        });
+        const body1 = await response1.text();
+        expect(body1).toBe('10');
+
+        const response2 = await fetch(u + 'info');
+        const body2 = await response2.text();
+
+        expect(String(body2.streamline())).toMatchInlineSnapshot(`
+          "Method: GET
+          Path: /info
+          Status: 200
+          Http Version 1: 1.1
+          Http Version 2: 1.1
+          Headers: 
+          {\\"accept\\":\\"*/*\\"
+          \\"user-agent\\":\\"node-fetch/1.0 (+https://github.com/bitinn/node-fetch)\\"
+          \\"accept-encoding\\":\\"gzip
+          deflate\\"
+          \\"connection\\":\\"close\\"
+          \\"host\\":\\"localhost:${port}\\"}
+          Trailers: {}
+          Complete: false
+          Readable: true
+          Writeable: true
+          Connection: [object Object]
+          Socket: [object Object]
+          "
+        `);
+        resolve('passed');
+      });
     });
   });
 });
