@@ -1,3 +1,7 @@
+# 1.0.0-beta.31 (07/10/2022)
+
+- Removes node support from node@<16 (@gabrielcsapo)
+
 # 1.0.0-beta.30 (01/26/2022)
 
 - Bugfix: Fix logging on response streams. (#96) (@willstott101)
