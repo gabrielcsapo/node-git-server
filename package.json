@@ -30,8 +30,10 @@
     "lint": "eslint .",
     "test": "vitest src/*.test.ts",
     "build": "echo \"\" > ./build-complete.meta && tsc",
+    "prepublish": "npm run build",
     "coverage": "vitest --coverage",
-    "install": "( [ -f ./git-package.meta ] && [ ! -f ./build-complete.meta ] && echo \"\" > ./build-complete.meta && npm install . && tsc ) || echo \"\" > ./build-complete.meta"
+    "install": "( [ -f ./git-package.meta ] && [ ! -f ./build-complete.meta ] && echo \"\" > ./build-complete.meta && npm install . && tsc ) || echo \"\" > ./build-complete.meta",
+    "prepare": "husky install"
   },
   "dependencies": {
     "through": "^2.3.8"
@@ -45,6 +47,7 @@
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
     "node-fetch": "^3.2.6",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4",
