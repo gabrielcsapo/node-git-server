@@ -27,7 +27,7 @@
     "node": ">= 16"
   },
   "scripts": {
-    "lint": "eslint src/*",
+    "lint": "eslint .",
     "test": "vitest src/*.test.ts",
     "build": "echo \"\" > ./build-complete.meta && tsc",
     "coverage": "vitest --coverage",

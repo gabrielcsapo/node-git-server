@@ -18,7 +18,7 @@ process.argv.slice(2).forEach((arg) => {
 const fs = require('fs');
 const path = require('path');
 
-const { Git : Server } = require("../");
+const { Git: Server } = require('../');
 
 const port = process.env.PORT || 7005;
 
@@ -43,7 +43,7 @@ const repos = new Server(path.normalize(path.resolve(__dirname, 'tmp')), {
 });
 
 repos.on('push', (push) => {
-    console.log(`push ${push.repo} / ${push.commit} ( ${push.branch} )`); // eslint-disable-line
+  console.log(`push ${push.repo} / ${push.commit} ( ${push.branch} )`); // eslint-disable-line
 
   repos.list((err, results) => {
     push.log(' ');
@@ -59,8 +59,8 @@ repos.on('push', (push) => {
 });
 
 repos.on('fetch', (fetch) => {
-    console.log(`username ${fetch.username}`); // eslint-disable-line
-    console.log(`fetch ${fetch.repo}/${fetch.commit}`); // eslint-disable-line
+  console.log(`username ${fetch.username}`); // eslint-disable-line
+  console.log(`fetch ${fetch.repo}/${fetch.commit}`); // eslint-disable-line
   fetch.accept();
 });
 
@@ -72,13 +72,16 @@ repos.listen(
     cert: fs.readFileSync(path.resolve(__dirname, 'certificate.pem')),
   },
   (error) => {
-    if(error) return console.error(`failed to start git-server because of error ${error}`); // eslint-disable-line
+    if (error)
+      return console.error(
+        `failed to start git-server because of error ${error}`
+      ); // eslint-disable-line
     console.log(`node-git-server running at ${type}://localhost:${port}`); // eslint-disable-line
     repos.list((err, result) => {
       if (!result) {
-            console.log("No repositories available..."); // eslint-disable-line
+        console.log('No repositories available...'); // eslint-disable-line
       } else {
-            console.log(result); // eslint-disable-line
+        console.log(result); // eslint-disable-line
       }
     });
   }

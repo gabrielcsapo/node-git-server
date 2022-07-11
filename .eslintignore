@@ -1,3 +1,10 @@
 docs
 node_modules
 coverage
+temp
+dist
+etc
+coverage
+build
+fixtures
+example
