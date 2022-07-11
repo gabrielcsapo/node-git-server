@@ -1,3 +1,11 @@
+# 1.0.0 (07/10/2022)
+
+- Removes node support from node@<16 (@gabrielcsapo)
+- Bugfix: Fix logging on response streams. (#96) (@willstott101)
+- Avoid using self in service.ts - to avoid issue with through (#95) (@willstott101)
+- Migrates to typescript (@5GameMaker @gabrielcsapo)
+- Removes node support from node@<14
+
 # 1.0.0-beta.31 (07/10/2022)
 
 - Removes node support from node@<16 (@gabrielcsapo)
