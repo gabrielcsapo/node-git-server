@@ -2,7 +2,7 @@
 
 ## Install
 
-```
+```bash
 npm install node-git-server
 ```
 
@@ -40,14 +40,14 @@ repos.listen(port, () => {
 
 then start up the node-git-server server...
 
-```
+```bash
 $ node example/index.js
 node-git-server running at http://localhost:7005
 ```
 
 meanwhile...
 
-```
+```bash
 $ git push http://localhost:7005/beep master
 Counting objects: 356, done.
 Delta compression using up to 2 threads.
@@ -98,14 +98,14 @@ repos.listen(port, () => {
 
 then start up the node-git-server server...
 
-```
+```bash
 $ node example/index.js
 node-git-server running at http://localhost:7005
 ```
 
 meanwhile...
 
-```
+```bash
 $ git push http://localhost:7005/beep master
 Counting objects: 356, done.
 Delta compression using up to 2 threads.
@@ -160,14 +160,14 @@ repos.listen(port, () => {
 
 then start up the node-git-server server...
 
-```
+```bash
 $ node example/index.js
 node-git-server running at http://localhost:7005
 ```
 
 meanwhile...
 
-```
+```bash
 $ git push http://localhost:7005/beep master
 Counting objects: 356, done.
 Delta compression using up to 2 threads.
@@ -182,13 +182,13 @@ To http://localhost:7005/beep
 
 Running the following command will start up a simple http server:
 
-```
+```bash
 node example/index.js
 ```
 
 If you want to try using https run the following
 
-```
+```bash
 node example/index.js --https
 ```
 
