@@ -511,8 +511,8 @@ export class Git extends EventEmitter implements GitEvents {
    * @param  port  - the port to start the server on
    * @param  options  - the options to add extended functionality to the server
    * @param  options.type - this is either https or http (the default is http)
-   * @param  options.key - the key file for the https server
-   * @param  options.cert - the cert file for the https server
+   * @param  options.key - private key in PEM format for the https server
+   * @param  options.cert - cert chains in PEM format for the https server
    * @param  callback - the function to call when server is started or error has occurred
    */
   listen(port: number, options?: GitServerOptions, callback?: () => void): Git {
