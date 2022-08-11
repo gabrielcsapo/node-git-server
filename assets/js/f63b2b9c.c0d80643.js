@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunknode_git_server=self.webpackChunknode_git_server||[]).push([[264],{7059:e=>{e.exports=JSON.parse('{"banner":"","breadcrumbs":true,"gitRefName":"master","minimal":false,"pluginId":"default","scopes":[]}')}}]);
