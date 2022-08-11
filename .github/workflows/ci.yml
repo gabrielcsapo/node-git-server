@@ -70,6 +70,8 @@ jobs:
         run: |
           git config --global user.email "gabecsapo@gmail.com"
           git config --global user.name "Gabriel J. Csapo"
+          npm install
+          npm run build
           cd website
           npm install
           npm run deploy

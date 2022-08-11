@@ -3,6 +3,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
+const path = require('path');
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
@@ -22,9 +23,16 @@ const config = {
       require.resolve('docusaurus-plugin-search-local'),
       {
         highlightSearchTermsOnTargetPage: true,
+        docsRouteBasePath: ['docs', 'api'],
       },
     ],
-    'docusaurus-plugin-api-extractor',
+    [
+      'docusaurus-plugin-typedoc-api',
+      {
+        projectRoot: path.join(__dirname, '..'),
+        packages: ['.'],
+      },
+    ],
   ],
   presets: [
     [
@@ -32,7 +40,6 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/gabrielcsapo/node-git-server/edit/main/website/',
         },
@@ -65,10 +72,9 @@ const config = {
             label: 'Documentation',
           },
           {
-            type: 'doc',
-            docId: 'api/index',
-            position: 'left',
+            to: 'api',
             label: 'API',
+            position: 'left',
           },
           {
             href: 'https://github.com/gabrielcsapo/node-git-server',
