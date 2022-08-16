@@ -23,6 +23,7 @@ const services = ['upload-pack', 'receive-pack'];
 
 interface GitServerOptions extends ServerOptions {
   type: 'http' | 'https';
+  host?: string;
 }
 
 export interface GitOptions {
@@ -529,7 +530,7 @@ export class Git extends EventEmitter implements GitEvents {
       this.handle(req, res);
     });
 
-    this.server.listen(port, callback);
+    this.server.listen(...(options?.host ? [port, options.host, callback] : [port, callback]));
 
     return this;
   }
