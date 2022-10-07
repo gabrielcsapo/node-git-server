@@ -25,9 +25,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: install dependencies
-        run: npm i
+        run: yarn install
       - name: lint
-        run: npm run lint
+        run: yarn lint
         env:
           CI: true
 
@@ -46,9 +46,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: install dependencies
-        run: npm i
+        run: yarn install
       - name: test
-        run: npm test
+        run: yarn test
         env:
           CI: true
 
@@ -70,8 +70,8 @@ jobs:
         run: |
           git config --global user.email "gabecsapo@gmail.com"
           git config --global user.name "Gabriel J. Csapo"
-          npm install
-          npm run build
+          yarn install
+          yarn build
           cd website
-          npm install
-          npm run deploy
+          yarn install
+          yarn deploy

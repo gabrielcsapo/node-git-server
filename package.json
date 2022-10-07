@@ -30,9 +30,9 @@
     "lint": "eslint .",
     "test": "vitest src/*.test.ts",
     "build": "echo \"\" > ./build-complete.meta && tsc",
-    "prepublish": "npm run build",
+    "prepublish": "yarn build",
     "coverage": "vitest --coverage",
-    "install": "( [ -f ./git-package.meta ] && [ ! -f ./build-complete.meta ] && echo \"\" > ./build-complete.meta && npm install . && tsc ) || echo \"\" > ./build-complete.meta",
+    "install": "( [ -f ./git-package.meta ] && [ ! -f ./build-complete.meta ] && echo \"\" > ./build-complete.meta && yarn install . && tsc ) || echo \"\" > ./build-complete.meta",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -55,5 +55,6 @@
   },
   "volta": {
     "node": "16.15.1"
-  }
+  },
+  "packageManager": "yarn@3.2.4"
 }
