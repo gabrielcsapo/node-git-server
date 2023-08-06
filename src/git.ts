@@ -38,12 +38,12 @@ export interface GitAuthenticateOptions {
   type: string;
   repo: string;
   user: (() => Promise<[string | undefined, string | undefined]>) &
-    ((
-      callback: (
-        username?: string | undefined,
-        password?: string | undefined
-      ) => void
-    ) => void);
+  ((
+    callback: (
+      username?: string | undefined,
+      password?: string | undefined
+    ) => void
+  ) => void);
   headers: http.IncomingHttpHeaders;
 }
 
@@ -149,9 +149,9 @@ export class Git extends EventEmitter implements GitEvents {
 
   authenticate:
     | ((
-        options: GitAuthenticateOptions,
-        callback: (error?: Error) => void | undefined
-      ) => void | Promise<Error | undefined | void> | undefined)
+      options: GitAuthenticateOptions,
+      callback: (error?: Error) => void | undefined
+    ) => void | Promise<Error | undefined | void> | undefined)
     | undefined;
 
   autoCreate: boolean;
@@ -251,19 +251,20 @@ export class Git extends EventEmitter implements GitEvents {
    * Create a new bare repository `repoName` in the instance repository directory.
    * @param  repo - the name of the repo
    * @param  callback - Optionally get a callback `cb(err)` to be notified when the repository was created.
+   * @param  initialBranch - optional name for the initial branch of the repo (instead of using the user's git config)
    */
-  create(repo: string, callback: (error?: Error) => void) {
+  create(repo: string, callback: (error?: Error) => void, initialBranch?: string) {
     function next(self: Git) {
       let ps;
       let _error = '';
 
       const dir = self.dirMap(repo);
+      const gitArgs: string[] = ['init'];
 
-      if (self.checkout) {
-        ps = spawn('git', ['init', dir]);
-      } else {
-        ps = spawn('git', ['init', '--bare', dir]);
-      }
+      initialBranch && gitArgs.push('-b', initialBranch);
+      !self.checkout && gitArgs.push('--bare');
+
+      ps = spawn('git', [...gitArgs, dir]);
 
       ps.stderr.on('data', function (chunk: string) {
         _error += chunk;
@@ -371,8 +372,8 @@ export class Git extends EventEmitter implements GitEvents {
             callback
               ? basicAuth(req, res, callback)
               : new Promise<[string | undefined, string | undefined]>(
-                  (resolve) => basicAuth(req, res, (u, p) => resolve([u, p]))
-                );
+                (resolve) => basicAuth(req, res, (u, p) => resolve([u, p]))
+              );
 
           const promise = this.authenticate(
             {
