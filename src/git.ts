@@ -251,19 +251,20 @@ export class Git extends EventEmitter implements GitEvents {
    * Create a new bare repository `repoName` in the instance repository directory.
    * @param  repo - the name of the repo
    * @param  callback - Optionally get a callback `cb(err)` to be notified when the repository was created.
+   * @param  initialBranch - optional name for the initial branch of the repo (instead of using the user's git config)
    */
-  create(repo: string, callback: (error?: Error) => void) {
+  create(repo: string, callback: (error?: Error) => void, initialBranch?: string) {
     function next(self: Git) {
       let ps;
       let _error = '';
 
       const dir = self.dirMap(repo);
+      const gitArgs: string[] = ['init'];
 
-      if (self.checkout) {
-        ps = spawn('git', ['init', dir]);
-      } else {
-        ps = spawn('git', ['init', '--bare', dir]);
-      }
+      initialBranch && gitArgs.push('-b', initialBranch);
+      !self.checkout && gitArgs.push('--bare');
+
+      ps = spawn('git', [...gitArgs, dir]);
 
       ps.stderr.on('data', function (chunk: string) {
         _error += chunk;
