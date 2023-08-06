@@ -38,12 +38,12 @@ export interface GitAuthenticateOptions {
   type: string;
   repo: string;
   user: (() => Promise<[string | undefined, string | undefined]>) &
-  ((
-    callback: (
-      username?: string | undefined,
-      password?: string | undefined
-    ) => void
-  ) => void);
+    ((
+      callback: (
+        username?: string | undefined,
+        password?: string | undefined
+      ) => void
+    ) => void);
   headers: http.IncomingHttpHeaders;
 }
 
@@ -149,9 +149,9 @@ export class Git extends EventEmitter implements GitEvents {
 
   authenticate:
     | ((
-      options: GitAuthenticateOptions,
-      callback: (error?: Error) => void | undefined
-    ) => void | Promise<Error | undefined | void> | undefined)
+        options: GitAuthenticateOptions,
+        callback: (error?: Error) => void | undefined
+      ) => void | Promise<Error | undefined | void> | undefined)
     | undefined;
 
   autoCreate: boolean;
@@ -261,6 +261,11 @@ export class Git extends EventEmitter implements GitEvents {
       const dir = self.dirMap(repo);
       const gitArgs: string[] = ['init'];
 
+      if (self.checkout) {
+        ps = spawn('git', ['init', dir]);
+      } else {
+        ps = spawn('git', ['init', '--bare', dir]);
+      }
       initialBranch && gitArgs.push('-b', initialBranch);
       !self.checkout && gitArgs.push('--bare');
 
@@ -372,8 +377,8 @@ export class Git extends EventEmitter implements GitEvents {
             callback
               ? basicAuth(req, res, callback)
               : new Promise<[string | undefined, string | undefined]>(
-                (resolve) => basicAuth(req, res, (u, p) => resolve([u, p]))
-              );
+                  (resolve) => basicAuth(req, res, (u, p) => resolve([u, p]))
+                );
 
           const promise = this.authenticate(
             {
