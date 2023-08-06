@@ -261,11 +261,6 @@ export class Git extends EventEmitter implements GitEvents {
       const dir = self.dirMap(repo);
       const gitArgs: string[] = ['init'];
 
-      if (self.checkout) {
-        ps = spawn('git', ['init', dir]);
-      } else {
-        ps = spawn('git', ['init', '--bare', dir]);
-      }
       initialBranch && gitArgs.push('-b', initialBranch);
       !self.checkout && gitArgs.push('--bare');
 
