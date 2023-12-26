@@ -19,7 +19,9 @@ const port =
     ? 7005
     : parseInt(process.env.PORT);
 
-const repos = new Git(join(__dirname, '../repo'), {
+// before running server, create repo directory on the project path
+// does not working '__dirname' in ES6 module
+const repos = new Git(process.cwd() + '/repo'), {
   autoCreate: true,
 });
 
