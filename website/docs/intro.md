@@ -33,7 +33,7 @@ repos.on('fetch', (fetch) => {
   fetch.accept();
 });
 
-repos.listen(port, () => {
+repos.listen(port, {type: 'http'}, () => {
   console.log(`node-git-server running at http://localhost:${port}`);
 });
 ```
