@@ -12,6 +12,13 @@ const wrapCallback = (func: { (callback: any): void }) => {
 };
 
 describe('git', () => {
+  // the default branch was harcoded as 'master'
+  let defautBranch = 'master';
+  // version ^2.28 now has the default branch in the config
+  exec('git config --get init.defaultBranch', (err, stdout) => {
+    if (err == null && stdout !== '') defautBranch = stdout.trim();
+  });
+
   test('create, push to, and clone a repo', async () => {
     expect.assertions(11);
 
@@ -40,7 +47,7 @@ describe('git', () => {
     repos.on('push', (push) => {
       expect(push.repo).toBe('xyz/doom');
       expect(push.commit).toBe(lastCommit);
-      expect(push.branch).toBe('master');
+      expect(push.branch).toBe(defautBranch);
 
       expect(push.headers.host).toBe('localhost:' + port);
       expect(push.method).toBe('POST');
@@ -87,10 +94,9 @@ describe('git', () => {
       });
     });
     await wrapCallback((callback: () => void) => {
-      spawn(
-        'git',
-        ['push', 'http://localhost:' + port + '/xyz/doom', 'master'],
-        { cwd: srcDir }
+      spawn('git',['push', 'http://localhost:' + port + '/xyz/doom', defautBranch], { // eslint-disable-line
+          cwd: srcDir,
+        }
       ).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
@@ -164,9 +170,10 @@ describe('git', () => {
       );
     });
     await wrapCallback((callback: () => void) => {
-      spawn('git', ['push', 'http://localhost:' + port + '/doom', 'master'], {
-        cwd: srcDir,
-      }).on('exit', (code) => {
+      spawn('git', ['push', 'http://localhost:' + port + '/doom', defautBranch], { // eslint-disable-line
+          cwd: srcDir,
+        }
+      ).on('exit', (code) => {
         expect(code).toBe(0);
         callback();
       });
@@ -251,7 +258,7 @@ describe('git', () => {
     await wrapCallback((callback: () => void) => {
       spawn(
         'git',
-        ['push', 'http://localhost:' + port + '/doom.git', 'master'],
+        ['push', 'http://localhost:' + port + '/doom.git', defautBranch],
         {
           cwd: srcDir,
         }
@@ -310,7 +317,7 @@ describe('git', () => {
     repos.on('push', (push) => {
       expect(push.repo).toBe('doom');
       expect(push.commit).toBe(lastCommit);
-      expect(push.branch).toBe('master');
+      expect(push.branch).toBe(defautBranch);
 
       expect(push.headers.host).toBe('localhost:' + port);
       expect(push.method).toBe('POST');
@@ -399,7 +406,7 @@ describe('git', () => {
     await wrapCallback((callback: () => void) => {
       spawn(
         'git',
-        ['push', '--tags', 'http://localhost:' + port + '/doom', 'master'],
+        ['push', '--tags', 'http://localhost:' + port + '/doom', defautBranch],
         { cwd: srcDir }
       ).on('exit', (code) => {
         expect(code).toBe(0);
@@ -514,7 +521,7 @@ describe('git', () => {
     repos.on('push', (push) => {
       expect(push.repo).toBe('doom');
       expect(push.commit).toBe(lastCommit);
-      expect(push.branch).toBe('master');
+      expect(push.branch).toBe(defautBranch);
 
       expect(push.headers.host).toBe('localhost:' + port);
       expect(push.method).toBe('POST');
@@ -558,9 +565,10 @@ describe('git', () => {
       );
     });
     await wrapCallback((callback: () => void) => {
-      _spawn('git', ['push', 'http://localhost:' + port + '/doom', 'master'], {
-        cwd: srcDir,
-      }).on('exit', (code) => {
+      _spawn('git', ['push', 'http://localhost:' + port + '/doom', defautBranch], { // eslint-disable-line
+          cwd: srcDir,
+        }
+      ).on('exit', (code) => {
         expect(code).not.toBe(0);
         callback();
       });
@@ -578,9 +586,9 @@ describe('git', () => {
       glog.stderr.on('end', () => {
         const res =
           /fatal: bad default revision 'HEAD'/.test(data) ||
-          /fatal: your current branch 'master' does not have any commits yet/.test(
-            data
-          );
+          /fatal: your current branch / + defautBranch + / does not have any commits yet/.test(  // eslint-disable-line
+              data
+            );
         expect(res).toBeTruthy();
       });
     });
@@ -893,7 +901,7 @@ describe('git', () => {
       const logs: any[] = [];
       const push = spawn(
         'git',
-        ['push', 'http://localhost:' + port + '/doom.git', 'master'],
+        ['push', 'http://localhost:' + port + '/doom.git', defautBranch],
         { cwd: srcDir }
       );
 
@@ -981,7 +989,7 @@ describe('git', () => {
       const logs: any[] = [];
       const push = spawn(
         'git',
-        ['push', 'http://localhost:' + port + '/doom.git', 'master'],
+        ['push', 'http://localhost:' + port + '/doom.git', defautBranch],
         { cwd: srcDir }
       );
 
