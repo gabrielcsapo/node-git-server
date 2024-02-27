@@ -487,7 +487,21 @@ export class Git extends EventEmitter implements GitEvents {
         });
       },
       (req: http.IncomingMessage, res: http.ServerResponse) => {
-        if (req.method !== 'GET' && req.method !== 'POST') {
+        if (req.method !== 'OPTIONS') return false;
+
+        res.statusCode = 200;
+        res.setHeader('Allow', 'OPTIONS, GET, POST');
+        // preflight
+        res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        res.end();
+      },
+      (req: http.IncomingMessage, res: http.ServerResponse) => {
+        if (
+          req.method !== 'GET' &&
+          req.method !== 'POST' &&
+          req.method !== 'OPTIONS'
+        ) {
           res.statusCode = 405;
           res.end('method not supported');
         } else {
@@ -499,6 +513,7 @@ export class Git extends EventEmitter implements GitEvents {
         res.end('not found');
       },
     ];
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('connection', 'close');
 
     (function next(ix) {
@@ -522,12 +537,14 @@ export class Git extends EventEmitter implements GitEvents {
 
     const createServer =
       options.type == 'http'
-        ? http.createServer
+        ? http.createServer.bind(this, options)
         : https.createServer.bind(this, options);
 
-    this.server = createServer((req, res) => {
-      this.handle(req, res);
-    });
+    this.server = createServer(
+      (req: http.IncomingMessage, res: http.ServerResponse) => {
+        this.handle(req, res);
+      }
+    );
 
     this.server.listen(port, callback);
 
