@@ -33,7 +33,7 @@ repos.on('fetch', (fetch) => {
   fetch.accept();
 });
 
-repos.listen(port, () => {
+repos.listen(port, null, () => {
   console.log(`node-git-server running at http://localhost:${port}`);
 });
 ```
@@ -91,7 +91,7 @@ repos.on('fetch', (fetch) => {
   fetch.accept();
 });
 
-repos.listen(port, () => {
+repos.listen(port, null, () => {
   console.log(`node-git-server running at http://localhost:${port}`);
 });
 ```
@@ -153,7 +153,7 @@ repos.on('fetch', (fetch) => {
   fetch.accept();
 });
 
-repos.listen(port, () => {
+repos.listen(port, null, () => {
   console.log(`node-git-server running at http://localhost:${port}`);
 });
 ```
